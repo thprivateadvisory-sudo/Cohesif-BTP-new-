@@ -1,4 +1,4 @@
-name: Fix copyright in index.html
+name: Fix copyright index.html
 on:
   workflow_dispatch:
 
@@ -12,17 +12,27 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: Restore original index.html and fix copyright
+      - name: Restore and fix index.html
         run: |
           git show 39f9f7f7952e7929a13d258d2708b92371609252:index.html > index.html
-          sed -i 's/\u00a9 2025 Cohesif BTP/\u00a9 2026 Cohesif BTP/g' index.html
-          echo "Verification:"
-          grep "2026 Cohesif BTP" index.html | head -2
+          python3 -c "
+import sys
+with open('index.html', 'r', encoding='utf-8') as f:
+    content = f.read()
+old = '\u00a9 2025 Cohesif BTP \u2014 Membre du Groupe Cohesif'
+new = '\u00a9 2026 Cohesif BTP \u2014 Membre du Groupe Cohesif'
+count = content.count(old)
+content = content.replace(old, new)
+with open('index.html', 'w', encoding='utf-8') as f:
+    f.write(content)
+print(f'Replaced {count} occurrence(s)')
+"
           
       - name: Commit and push
         run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add index.html
+          git diff --staged --stat
           git commit -m "fix: corriger copyright 2025 to 2026 dans index.html footer"
           git push
