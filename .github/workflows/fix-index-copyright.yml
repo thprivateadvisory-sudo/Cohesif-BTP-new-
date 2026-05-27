@@ -1,0 +1,28 @@
+name: Fix copyright in index.html
+on:
+  workflow_dispatch:
+
+jobs:
+  fix-copyright:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Restore original index.html and fix copyright
+        run: |
+          git show 39f9f7f7952e7929a13d258d2708b92371609252:index.html > index.html
+          sed -i 's/\u00a9 2025 Cohesif BTP/\u00a9 2026 Cohesif BTP/g' index.html
+          echo "Verification:"
+          grep "2026 Cohesif BTP" index.html | head -2
+          
+      - name: Commit and push
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add index.html
+          git commit -m "fix: corriger copyright 2025 to 2026 dans index.html footer"
+          git push
