@@ -1,6 +1,8 @@
 name: Fix copyright index.html
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fix-index-copyright.yml']
 
 jobs:
   fix-copyright:
@@ -16,23 +18,24 @@ jobs:
         run: |
           git show 39f9f7f7952e7929a13d258d2708b92371609252:index.html > index.html
           python3 -c "
-import sys
 with open('index.html', 'r', encoding='utf-8') as f:
-    content = f.read()
-old = '\u00a9 2025 Cohesif BTP \u2014 Membre du Groupe Cohesif'
-new = '\u00a9 2026 Cohesif BTP \u2014 Membre du Groupe Cohesif'
-count = content.count(old)
-content = content.replace(old, new)
+    c = f.read()
+c2 = c.replace('\u00a9 2025 Cohesif BTP \u2014 Membre du Groupe Cohesif',
+               '\u00a9 2026 Cohesif BTP \u2014 Membre du Groupe Cohesif')
+count = c.count('\u00a9 2025 Cohesif BTP')
 with open('index.html', 'w', encoding='utf-8') as f:
-    f.write(content)
-print(f'Replaced {count} occurrence(s)')
+    f.write(c2)
+print(f'Fixed {count} occurrences')
 "
           
       - name: Commit and push
         run: |
-          git config user.email "action@github.com"
-          git config user.name "GitHub Action"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
           git add index.html
-          git diff --staged --stat
-          git commit -m "fix: corriger copyright 2025 to 2026 dans index.html footer"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "fix: corriger copyright 2025 to 2026 dans index.html footer"
+            git push
+          fi
