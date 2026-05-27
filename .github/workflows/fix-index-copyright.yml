@@ -13,29 +13,35 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Restore and fix index.html
+      - name: Restore original index.html from git history
         run: |
+          # Get the original index.html from before the bad commit
           git show 39f9f7f7952e7929a13d258d2708b92371609252:index.html > index.html
-          python3 -c "
-with open('index.html', 'r', encoding='utf-8') as f:
-    c = f.read()
-c2 = c.replace('\u00a9 2025 Cohesif BTP \u2014 Membre du Groupe Cohesif',
-               '\u00a9 2026 Cohesif BTP \u2014 Membre du Groupe Cohesif')
-count = c.count('\u00a9 2025 Cohesif BTP')
-with open('index.html', 'w', encoding='utf-8') as f:
-    f.write(c2)
-print(f'Fixed {count} occurrences')
-"
+          echo "File size: $(wc -c < index.html) bytes"
           
-      - name: Commit and push
+      - name: Apply copyright fix
         run: |
+          python3 << 'PYEOF'
+          with open('index.html', 'r', encoding='utf-8') as f:
+              content = f.read()
+          old = '\u00a9 2025 Cohesif BTP \u2014 Membre du Groupe Cohesif'
+          new = '\u00a9 2026 Cohesif BTP \u2014 Membre du Groupe Cohesif'
+          n = content.count(old)
+          content = content.replace(old, new)
+          with open('index.html', 'w', encoding='utf-8') as f:
+              f.write(content)
+          print(f'Replaced {n} occurrences of copyright')
+          PYEOF
+          
+      - name: Verify and commit
+        run: |
+          grep -c "2026 Cohesif BTP" index.html || echo "Not found!"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add index.html
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "fix: corriger copyright 2025 to 2026 dans index.html footer"
-            git push
-          fi
+          git status
+          git diff --staged --stat
+          git commit -m "fix: corriger copyright 2025 to 2026 dans index.html footer" || echo "Nothing to commit"
+          git push || echo "Push failed or nothing to push"
