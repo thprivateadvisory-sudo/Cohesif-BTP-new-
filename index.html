@@ -2688,7 +2688,7 @@
       submitBtn.textContent = 'Localisation en cours…';
     }
 
-    // Tente GPS précis, sinon repli sur IP
+    // GPS précis uniquement — pas de repli IP (évite les fausses villes)
     async function getLocation() {
       return new Promise((resolve) => {
         if (!navigator.geolocation) { resolve(null); return; }
@@ -2709,13 +2709,7 @@
               resolve({ localisation: '', coordonnees: `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}` });
             }
           },
-          async () => {
-            try {
-              const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
-              const geo = await r.json();
-              resolve({ localisation: [geo.city, geo.region, geo.country_name].filter(Boolean).join(', '), coordonnees: '' });
-            } catch { resolve(null); }
-          },
+          () => resolve(null),
           { timeout: 10000 }
         );
       });
