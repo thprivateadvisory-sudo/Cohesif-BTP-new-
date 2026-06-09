@@ -2379,6 +2379,9 @@
             <textarea id="message" name="message" placeholder="Adresse du chantier, surface, délais, budget estimatif…"></textarea>
           </div>
 
+          <input type="hidden" name="localisation" id="field-localisation">
+          <input type="hidden" name="coordonnees" id="field-coordonnees">
+
           <button type="submit" class="btn btn-dark form-submit btn-large">
             Envoyer ma demande →
           </button>
@@ -2678,13 +2681,57 @@
   async function handleSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    const data = new FormData(form);
     const submitBtn = form.querySelector('button[type="submit"]');
 
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Envoi en cours…';
+      submitBtn.textContent = 'Localisation en cours…';
     }
+
+    // Tente GPS précis, sinon repli sur IP
+    async function getLocation() {
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) { resolve(null); return; }
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            try {
+              const { latitude, longitude } = pos.coords;
+              const r = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+                { headers: { 'Accept-Language': 'fr' } }
+              );
+              const place = await r.json();
+              resolve({
+                localisation: place.display_name || '',
+                coordonnees: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+              });
+            } catch {
+              resolve({ localisation: '', coordonnees: `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}` });
+            }
+          },
+          async () => {
+            try {
+              const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
+              const geo = await r.json();
+              resolve({ localisation: [geo.city, geo.region, geo.country_name].filter(Boolean).join(', '), coordonnees: '' });
+            } catch { resolve(null); }
+          },
+          { timeout: 10000 }
+        );
+      });
+    }
+
+    const loc = await getLocation();
+    if (loc) {
+      const f1 = form.querySelector('#field-localisation');
+      const f2 = form.querySelector('#field-coordonnees');
+      if (f1) f1.value = loc.localisation || '';
+      if (f2) f2.value = loc.coordonnees || '';
+    }
+
+    if (submitBtn) submitBtn.textContent = 'Envoi en cours…';
+
+    const data = new FormData(form);
 
     try {
       const res = await fetch('https://formspree.io/f/mbdeypzl', {
