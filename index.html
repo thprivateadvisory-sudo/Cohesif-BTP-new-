@@ -2675,10 +2675,34 @@
   }
 
   // Gestion du formulaire de devis
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const data = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Indique le chargement pendant la récupération de la localisation
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Envoi en cours…';
+    }
+
+    // Récupère IP + localisation via ipapi.co (gratuit, sans clé API)
+    let locationInfo = '';
+    try {
+      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
+      if (res.ok) {
+        const geo = await res.json();
+        const ip = geo.ip || '?';
+        const city = geo.city || '';
+        const region = geo.region || '';
+        const country = geo.country_name || '';
+        const isp = geo.org || '';
+        locationInfo = `\n\n— IP : ${ip}\n— Localisation : ${[city, region, country].filter(Boolean).join(', ')}\n— FAI / Réseau : ${isp}`;
+      }
+    } catch (_) {
+      // Si l'API est inaccessible, on continue sans la localisation
+    }
 
     // Construit un mailto avec les données du formulaire (fonctionne sans backend)
     const subject = `Demande de devis — ${data.get('prenom')} ${data.get('nom')}`;
@@ -2689,7 +2713,7 @@ Je souhaite obtenir un devis pour mon projet.
 — Profil : ${data.get('profil')}
 — Type de projet : ${data.get('service')}
 — Téléphone : ${data.get('telephone')}
-— Email : ${data.get('email')}
+— Email : ${data.get('email')}${locationInfo}
 
 Description du projet :
 ${data.get('message') || '(non renseigné)'}
@@ -2704,6 +2728,11 @@ ${data.get('prenom')} ${data.get('nom')}`;
 
     // Affiche le message de succès
     document.getElementById('form-success').classList.add('show');
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer ma demande →';
+    }
 
     return false;
   }
