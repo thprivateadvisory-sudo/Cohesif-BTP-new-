@@ -2681,53 +2681,23 @@
     const data = new FormData(form);
     const submitBtn = form.querySelector('button[type="submit"]');
 
-    // Indique le chargement pendant la récupération de la localisation
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Envoi en cours…';
     }
 
-    // Récupère IP + localisation via ipapi.co (gratuit, sans clé API)
-    let locationInfo = '';
     try {
-      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
+      const res = await fetch('https://formspree.io/f/mbdeypzl', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
       if (res.ok) {
-        const geo = await res.json();
-        const ip = geo.ip || '?';
-        const city = geo.city || '';
-        const region = geo.region || '';
-        const country = geo.country_name || '';
-        const isp = geo.org || '';
-        locationInfo = `\n\n— IP : ${ip}\n— Localisation : ${[city, region, country].filter(Boolean).join(', ')}\n— FAI / Réseau : ${isp}`;
+        document.getElementById('form-success').classList.add('show');
+        form.reset();
       }
-    } catch (_) {
-      // Si l'API est inaccessible, on continue sans la localisation
-    }
-
-    // Construit un mailto avec les données du formulaire (fonctionne sans backend)
-    const subject = `Demande de devis — ${data.get('prenom')} ${data.get('nom')}`;
-    const body = `Bonjour,
-
-Je souhaite obtenir un devis pour mon projet.
-
-— Profil : ${data.get('profil')}
-— Type de projet : ${data.get('service')}
-— Téléphone : ${data.get('telephone')}
-— Email : ${data.get('email')}${locationInfo}
-
-Description du projet :
-${data.get('message') || '(non renseigné)'}
-
-Cordialement,
-${data.get('prenom')} ${data.get('nom')}`;
-
-    const mailto = `mailto:cohesifbtp@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    // Ouvre le client mail
-    window.location.href = mailto;
-
-    // Affiche le message de succès
-    document.getElementById('form-success').classList.add('show');
+    } catch (_) {}
 
     if (submitBtn) {
       submitBtn.disabled = false;
