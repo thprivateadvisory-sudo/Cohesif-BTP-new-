@@ -1297,6 +1297,32 @@
       }
     }
 
+    /* ── Agent en direct ── */
+    .ai-chat-status.offline::before { background: #94a3b8; }
+    .ai-agent-input-bar {
+      display: none; gap: 8px; align-items: center;
+      padding: 10px 14px; border-top: 1px solid var(--grey-200);
+      background: var(--white); flex-shrink: 0;
+    }
+    .ai-agent-input-bar.active { display: flex; }
+    .ai-agent-input {
+      flex: 1; border: 1px solid var(--grey-300);
+      border-radius: 20px; padding: 9px 14px;
+      font-size: 14px; font-family: inherit;
+      outline: none; background: var(--grey-50);
+    }
+    .ai-agent-input:focus { border-color: var(--accent); }
+    .ai-agent-send {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ai-agent-send svg { width: 16px; height: 16px; }
+    .ai-agent-confirm { margin-top: 8px; padding: 10px 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; }
+    .ai-agent-confirm.online  { background: #dcfce7; color: #166534; }
+    .ai-agent-confirm.offline { background: #f1f5f9; color: #475569; }
+
     /* ──────────────────────────────────── PROMESSES */
 
     .promises-grid {
@@ -2494,7 +2520,7 @@
       </div>
       <div class="ai-chat-info">
         <div class="ai-chat-name">Cohesif Max</div>
-        <div class="ai-chat-status">En ligne · répond rapidement</div>
+        <div class="ai-chat-status" id="ai-chat-status"><span id="ai-status-text">En ligne · répond rapidement</span></div>
       </div>
       <div class="ai-chat-close" onclick="toggleAiChat()">×</div>
     </div>
@@ -2516,7 +2542,16 @@
         <button class="ai-suggestion" onclick="askAi('desamiantage')">⚠️ Désamiantage</button>
         <button class="ai-suggestion" onclick="askAi('partenaire')">🤝 Devenir partenaire</button>
         <button class="ai-suggestion" onclick="askAi('contact')">📞 Contact direct</button>
+        <button class="ai-suggestion" id="ai-agent-btn" onclick="askAgent()">👤 Parler à un agent</button>
       </div>
+    </div>
+
+    <!-- Barre de saisie agent en direct (masquée par défaut) -->
+    <div class="ai-agent-input-bar" id="ai-agent-input-bar">
+      <input class="ai-agent-input" id="ai-agent-input" type="text" placeholder="Votre réponse…" autocomplete="off" maxlength="100" onkeydown="if(event.key==='Enter'){agentSend();}">
+      <button class="ai-agent-send" onclick="agentSend()" aria-label="Envoyer">
+        <svg viewBox="0 0 17 17" fill="none"><path d="M15 8.5L2 2.5l3.2 6-3.2 6 13-6z" fill="white"/></svg>
+      </button>
     </div>
 
     <div class="ai-chat-footer">
@@ -2855,7 +2890,7 @@
     chat.classList.toggle('open');
     bubble.classList.remove('show');
     if (chat.classList.contains('open')) {
-      // Scroll en bas du chat
+      updateAgentStatus();
       setTimeout(() => {
         const body = document.getElementById('ai-chat-body');
         body.scrollTop = body.scrollHeight;
@@ -2916,6 +2951,131 @@
       }, 400);
     }, 800 + Math.random() * 600);
   }
+
+  // ──────────────────── AGENT EN DIRECT ────────────────────
+  var agentState = null; // null | 'await_name' | 'await_phone'
+  var agentInfo  = {};
+
+  function isAgentAvailable() {
+    var now = new Date();
+    var day = now.getDay();            // 0=dim … 6=sam
+    var t   = now.getHours() * 60 + now.getMinutes();
+    if (day >= 1 && day <= 5) return t >= 480 && t < 1080; // Lun–Ven 8h–18h
+    return false;
+  }
+
+  function updateAgentStatus() {
+    var avail    = isAgentAvailable();
+    var statusEl = document.getElementById('ai-chat-status');
+    var statusTx = document.getElementById('ai-status-text');
+    var agentBtn = document.getElementById('ai-agent-btn');
+    if (statusEl) statusEl.classList.toggle('offline', !avail);
+    if (statusTx) statusTx.textContent = avail
+      ? 'Agent disponible · Répond rapidement'
+      : 'Agent hors ligne · Répond sous 24h';
+    if (agentBtn) agentBtn.textContent = avail ? '👤 Parler à un agent' : '👤 Laisser un message';
+  }
+
+  function sendAgentAlert(name, phone) {
+    var fd = new FormData();
+    fd.append('_subject', '🔴 AGENT EN DIRECT — ' + name + ' (' + phone + ')');
+    fd.append('nom', name);
+    fd.append('telephone', phone);
+    fd.append('service', 'Demande agent en direct — Cohesif BTP');
+    fd.append('message',
+      '⚡ DEMANDE DE MISE EN RELATION EN DIRECT\n\n' +
+      'Nom : '       + name  + '\n' +
+      'Téléphone : ' + phone + '\n' +
+      'Heure : '     + new Date().toLocaleString('fr-FR') + '\n' +
+      'Agent disponible : ' + (isAgentAvailable() ? 'OUI (heures ouvrables)' : 'NON — hors horaires')
+    );
+    fetch('https://formspree.io/f/mbdeypzl', {
+      method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
+    });
+  }
+
+  function appendBotMsgAgent(html) {
+    var body   = document.getElementById('ai-chat-body');
+    var typing = document.createElement('div');
+    typing.className = 'ai-msg ai-msg-bot';
+    typing.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+    body.appendChild(typing);
+    body.scrollTop = body.scrollHeight;
+    setTimeout(function() {
+      typing.remove();
+      var msg = document.createElement('div');
+      msg.className = 'ai-msg ai-msg-bot';
+      msg.innerHTML = html;
+      body.appendChild(msg);
+      body.scrollTop = body.scrollHeight;
+    }, 750);
+  }
+
+  function appendUserMsgAgent(text) {
+    var body = document.getElementById('ai-chat-body');
+    var msg  = document.createElement('div');
+    msg.className = 'ai-msg ai-msg-user';
+    msg.textContent = text;
+    body.appendChild(msg);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function showAgentInput(placeholder) {
+    var bar = document.getElementById('ai-agent-input-bar');
+    var inp = document.getElementById('ai-agent-input');
+    if (bar) bar.classList.add('active');
+    if (inp) { inp.placeholder = placeholder; inp.value = ''; setTimeout(function(){ inp.focus(); }, 100); }
+  }
+
+  function hideAgentInput() {
+    var bar = document.getElementById('ai-agent-input-bar');
+    if (bar) bar.classList.remove('active');
+  }
+
+  function askAgent() {
+    var sugg = document.getElementById('ai-suggestions');
+    if (sugg) sugg.style.display = 'none';
+    var avail = isAgentAvailable();
+    agentState = 'await_name';
+    agentInfo  = {};
+    var msg = avail
+      ? '👤 <strong>Un agent est disponible !</strong><br><br>Pour vous mettre en relation, quel est votre <strong>prénom</strong> ?'
+      : '👤 <strong>Nos agents sont hors ligne</strong> pour le moment.<br><small>Horaires : Lun–Ven 8h–18h</small><br><br>Laissez vos coordonnées et nous vous rappelons dès l\'ouverture.<br><br>Votre <strong>prénom</strong> ?';
+    appendBotMsgAgent(msg);
+    setTimeout(function() { showAgentInput('Votre prénom…'); }, 900);
+  }
+
+  function agentSend() {
+    var inp = document.getElementById('ai-agent-input');
+    if (!inp) return;
+    var txt = (inp.value || '').trim();
+    if (!txt) return;
+    inp.value = '';
+    appendUserMsgAgent(txt);
+    if (agentState === 'await_name') {
+      agentInfo.name = txt;
+      agentState = 'await_phone';
+      setTimeout(function() {
+        appendBotMsgAgent('Merci <strong>' + txt.replace(/</g,'&lt;') + '</strong> ! 📞 Votre <strong>numéro de téléphone</strong> ?');
+        showAgentInput('Votre téléphone…');
+      }, 100);
+      return;
+    }
+    if (agentState === 'await_phone') {
+      var name = agentInfo.name, phone = txt;
+      agentState = null;
+      hideAgentInput();
+      sendAgentAlert(name, phone);
+      var avail = isAgentAvailable();
+      var confirm = avail
+        ? '<div class="ai-agent-confirm online">🟢 Un agent va vous appeler au <strong>' + phone.replace(/</g,'&lt;') + '</strong> dans quelques minutes.</div>'
+        : '<div class="ai-agent-confirm offline">🕐 Nous vous rappellerons au <strong>' + phone.replace(/</g,'&lt;') + '</strong> dès l\'ouverture (Lun–Ven 8h–18h).</div>';
+      setTimeout(function() {
+        appendBotMsgAgent('✅ <strong>Demande enregistrée !</strong>' + confirm);
+      }, 100);
+    }
+  }
+  // ───────────── FIN AGENT EN DIRECT ─────────────────────
 
   // Afficher la bulle d'invitation après 4 secondes
   setTimeout(() => {
