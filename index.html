@@ -9,7 +9,7 @@
 
   <!-- ──────────────────────── SEO PRIMARY ──────────────────────── -->
   <title>Cohesif BTP — Construction & Rénovation Paris Île-de-France | Devis 48h</title>
-  <meta name="description" content="Cohesif BTP : entreprise tous corps d'état à Paris et Île-de-France. Construction, rénovation, désamiantage, bureau d'études. Certifiée Qualibat, RGE, FFB. Devis gratuit sous 48h. ☎ 07 60 90 37 74" />
+  <meta name="description" content="Cohesif BTP : entreprise tous corps d'état à Paris et Île-de-France. Construction, rénovation, désamiantage, bureau d'études. Certifiée Qualibat, RGE, FFB. Devis gratuit sous 48h." />
   <meta name="keywords" content="entreprise BTP Paris, rénovation Paris, construction Île-de-France, désamiantage SS4, bureau études bâtiment, gros œuvre, second œuvre, Qualibat RGE, entreprise tous corps d'état, Cohesif BTP, Groupe Cohesif" />
   <meta name="author" content="Groupe Cohesif" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -1536,6 +1536,54 @@
     .form-success.show { display: block; }
     .form-success.show + form { display: none; }
 
+    /* ──────────────────────────────────── RAPPEL */
+    .rappel-section { background: var(--grey-50); border-top: 1px solid var(--grey-200); }
+    .rappel-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .rappel-info h2 {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800; letter-spacing: -1.5px; line-height: 1.05;
+      margin-bottom: 24px;
+    }
+    .rappel-info h2 .accent { color: var(--accent); }
+    .rappel-info > p {
+      font-size: 17px; color: var(--grey-700);
+      line-height: 1.65; margin-bottom: 40px;
+    }
+    .rappel-list { list-style: none; padding: 0; margin: 0; }
+    .rappel-list li {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--grey-200);
+      font-size: 16px; color: var(--grey-800); font-weight: 500;
+    }
+    .rappel-list li:first-child { border-top: 1px solid var(--grey-200); }
+    .rappel-check {
+      width: 24px; height: 24px;
+      background: var(--accent-soft); color: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0;
+    }
+    .rappel-card {
+      background: var(--white);
+      border: 1px solid var(--grey-200);
+      border-radius: 24px; padding: 40px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    }
+    .rappel-card-title {
+      font-size: 20px; font-weight: 700; color: var(--black);
+      margin-bottom: 28px; letter-spacing: -0.5px;
+    }
+    .rappel-success {
+      display: none;
+      background: #f0fdf4; border: 1px solid #86efac; color: #166534;
+      padding: 20px; border-radius: 12px;
+      text-align: center; font-weight: 600; font-size: 16px;
+    }
+
     /* ──────────────────────────────────── FOOTER */
     footer {
       background: var(--white);
@@ -1733,6 +1781,7 @@
       .footer-top { grid-template-columns: 1fr 1fr; }
       .stats-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
       .devis-grid { grid-template-columns: 1fr; gap: 48px; }
+      .rappel-grid { grid-template-columns: 1fr; gap: 48px; }
       .certifications-grid { grid-template-columns: repeat(3, 1fr); }
       .cert-badge:nth-child(4), .cert-badge:nth-child(5) { grid-column: auto; }
       .partners-network { grid-template-columns: repeat(3, 1fr); }
@@ -1760,6 +1809,7 @@
       .why-item p { padding-left: 0; }
       .form-row { grid-template-columns: 1fr; }
       .devis-form { padding: 28px; }
+      .rappel-card { padding: 24px; }
       .service-toggle { top: 24px; right: 24px; width: 32px; height: 32px; }
       .service-card { padding: 28px 24px; }
       .service-card h3 { padding-right: 40px; }
@@ -2325,9 +2375,78 @@
 
     <div class="cta-actions">
       <a href="#devis" class="btn btn-dark btn-large">Demander mon devis gratuit →</a>
-      <a href="tel:+33760903774" class="btn btn-outline btn-large">📞 Me faire rappeler</a>
+      <a href="#rappel" class="btn btn-outline btn-large">Me faire rappeler</a>
     </div>
     <p class="cta-note">Réponse garantie sous 48h · Sans engagement · Devis 100% gratuit</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ RAPPEL -->
+<section class="rappel-section" id="rappel">
+  <div class="section-inner">
+    <div class="rappel-grid">
+
+      <div class="rappel-info">
+        <span class="section-tag">Rappel gratuit</span>
+        <h2>Vous préférez qu'on <span class="accent">vous appelle ?</span></h2>
+        <p>Laissez-nous vos coordonnées et le créneau qui vous convient. Un conseiller dédié vous rappelle dans les plus brefs délais, sans engagement.</p>
+        <ul class="rappel-list">
+          <li><span class="rappel-check">✓</span> Appel gratuit, sans engagement</li>
+          <li><span class="rappel-check">✓</span> Réponse sous 24h en jours ouvrés</li>
+          <li><span class="rappel-check">✓</span> Conseiller dédié à votre projet</li>
+          <li><span class="rappel-check">✓</span> Échange strictement confidentiel</li>
+        </ul>
+      </div>
+
+      <div class="rappel-card">
+        <p class="rappel-card-title">Demande de rappel</p>
+        <div class="rappel-success" id="rappel-success">
+          ✓ Demande enregistrée. Nous vous rappelons sous 24h ouvrées.
+        </div>
+        <form onsubmit="handleRappel(event)" id="rappel-form">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="rappel-prenom">Prénom *</label>
+              <input type="text" id="rappel-prenom" name="prenom" autocomplete="given-name" required />
+            </div>
+            <div class="form-field">
+              <label for="rappel-nom">Nom *</label>
+              <input type="text" id="rappel-nom" name="nom" autocomplete="family-name" required />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="rappel-tel">Numéro de téléphone *</label>
+            <input type="tel" id="rappel-tel" name="telephone" placeholder="06 xx xx xx xx" autocomplete="tel" required />
+          </div>
+          <div class="form-field">
+            <label for="rappel-creneau">Créneau préféré</label>
+            <select id="rappel-creneau" name="creneau">
+              <option value="flexible">Flexible — Dès que possible</option>
+              <option value="matin">Matin (8h – 12h)</option>
+              <option value="apres-midi">Après-midi (14h – 18h)</option>
+              <option value="fin-journee">Fin de journée (17h – 19h)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="rappel-sujet">Objet de l'appel <span style="color:var(--grey-500);font-weight:400">(facultatif)</span></label>
+            <select id="rappel-sujet" name="sujet">
+              <option value="">— Sélectionnez —</option>
+              <option value="devis">Demande de devis</option>
+              <option value="renseignement">Renseignement général</option>
+              <option value="partenariat">Partenariat</option>
+              <option value="suivi">Suivi de dossier</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <input type="hidden" name="_subject" value="Demande de rappel – Cohesif BTP" />
+          <button type="submit" class="btn btn-dark form-submit btn-large">
+            Demander à être rappelé →
+          </button>
+          <p class="form-note">Vos données sont traitées conformément à notre <a href="politique-confidentialite.html" style="color:var(--grey-700);text-decoration:underline">politique de confidentialité</a>.</p>
+        </form>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -2341,11 +2460,11 @@
         <h2>Décrivez-nous votre projet en <span class="accent">2 minutes.</span></h2>
         <p>Notre équipe vous répond sous 48h avec un premier chiffrage et un interlocuteur dédié à votre dossier.</p>
 
-        <a href="tel:+33760903774" class="contact-block">
+        <a href="#rappel" class="contact-block">
           <div class="contact-icon">📞</div>
           <div>
-            <div class="contact-label">Appelez-nous</div>
-            <div class="contact-value">07 60 90 37 74</div>
+            <div class="contact-label">Rappel gratuit</div>
+            <div class="contact-value">Être rappelé →</div>
           </div>
         </a>
 
@@ -2466,7 +2585,7 @@
         <a href="#packs">Nos offres</a>
         <a href="#partenaires">Devenir partenaire</a>
         <a href="#devis">Demander un devis</a>
-        <a href="tel:+33760903774">Nous appeler</a>
+        <a href="#rappel">Être rappelé</a>
       </div>
 
       <div class="footer-col">
@@ -2812,6 +2931,27 @@
 
     return false;
   }
+
+  async function handleRappel(event) {
+    event.preventDefault();
+    const form = event.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Envoi en cours…'; }
+    const data = new FormData(form);
+    try {
+      const res = await fetch('https://formspree.io/f/mbdeypzl', {
+        method: 'POST', body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('rappel-success').style.display = 'block';
+        form.style.display = 'none';
+      }
+    } catch (_) {}
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Demander à être rappelé →'; }
+    return false;
+  }
+
   // ──────────────────────────────── ASSISTANT IA "COACH COHESIF"
 
   const aiResponses = {
@@ -2845,7 +2985,7 @@
       label: "Comment demander un devis ?",
       reply: `Très simple ! Vous avez 3 options :<br/><br/>
         📋 <a href="#devis" onclick="toggleAiChat()">Remplir le formulaire en ligne</a> (2 minutes)<br/>
-        📞 <a href="tel:+33760903774">Nous appeler directement</a><br/>
+        📞 <a href="#rappel" onclick="toggleAiChat()">Demander à être rappelé</a><br/>
         ✉️ <a href="mailto:cohesifbtp@gmail.com">Nous écrire par email</a><br/><br/>
         Quelle que soit l'option, <strong>réponse garantie sous 48h</strong> avec un interlocuteur dédié à votre dossier.`
     },
@@ -2877,7 +3017,7 @@
     contact: {
       label: "Comment vous contacter ?",
       reply: `Plusieurs moyens pour nous joindre :<br/><br/>
-        📞 <a href="tel:+33760903774">07 60 90 37 74</a><br/>
+        📞 <a href="#rappel" onclick="toggleAiChat()">Demander à être rappelé</a><br/>
         ✉️ <a href="mailto:cohesifbtp@gmail.com">cohesifbtp@gmail.com</a><br/>
         📍 Île-de-France & national<br/><br/>
         Notre équipe vous répond <strong>sous 48h</strong> avec un interlocuteur dédié à votre dossier.`
