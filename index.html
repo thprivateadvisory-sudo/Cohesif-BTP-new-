@@ -2591,7 +2591,7 @@
         <div class="rappel-success" id="rappel-success">
           ✓ Demande enregistrée. Nous vous rappelons sous 24h ouvrées.
         </div>
-        <form onsubmit="handleRappel(event)" id="rappel-form">
+        <form action="https://formspree.io/f/mzdnndna" method="POST" onsubmit="handleRappel(event)" id="rappel-form">
           <div class="form-row">
             <div class="form-field">
               <label for="rappel-prenom">Prénom *</label>
@@ -2678,7 +2678,7 @@
           ✓ Demande envoyée ! Nous vous recontactons sous 48h.
         </div>
 
-        <form onsubmit="handleSubmit(event)">
+        <form action="https://formspree.io/f/mzdnndna" method="POST" onsubmit="handleSubmit(event)">
           <div class="form-row">
             <div class="form-field">
               <label for="prenom">Prénom *</label>
@@ -3100,7 +3100,7 @@
     const data = new FormData(form);
 
     try {
-      const res = await fetch('https://formspree.io/f/mbdeypzl', {
+      const res = await fetch('https://formspree.io/f/mzdnndna', {
         method: 'POST',
         body: data,
         headers: { 'Accept': 'application/json' }
@@ -3127,7 +3127,7 @@
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Envoi en cours…'; }
     const data = new FormData(form);
     try {
-      const res = await fetch('https://formspree.io/f/mbdeypzl', {
+      const res = await fetch('https://formspree.io/f/mzdnndna', {
         method: 'POST', body: data,
         headers: { 'Accept': 'application/json' }
       });
@@ -3317,7 +3317,7 @@
       'Heure : '     + new Date().toLocaleString('fr-FR') + '\n' +
       'Agent disponible : ' + (isAgentAvailable() ? 'OUI (heures ouvrables)' : 'NON — hors horaires')
     );
-    fetch('https://formspree.io/f/mbdeypzl', {
+    fetch('https://formspree.io/f/mzdnndna', {
       method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
     });
   }
