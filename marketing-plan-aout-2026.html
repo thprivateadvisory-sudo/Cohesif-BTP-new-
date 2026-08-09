@@ -1,0 +1,947 @@
+<title>Plan Marketing — Cohesif BTP | 10–14 Août 2026</title>
+
+<style>
+:root {
+  --bg: #F5F3EE;
+  --bg-card: #FFFFFF;
+  --bg-tip: #EDEAE3;
+  --bg-header: #0D1B2A;
+  --text: #0D1B2A;
+  --text-muted: #6B7A8D;
+  --accent: #F28C0F;
+  --border: #E2DDD5;
+  --shadow: rgba(13,27,42,0.07);
+  --c-linkedin: #0A66C2;
+  --c-social: #C13584;
+  --c-whatsapp: #0E9E6E;
+  --c-email: #7C3AED;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1B2A; --bg-card: #112233; --bg-tip: #0A1929;
+    --bg-header: #060E17; --text: #E8E4DC; --text-muted: #8B9AAB;
+    --accent: #F28C0F; --border: #1A3050; --shadow: rgba(0,0,0,0.3);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1B2A; --bg-card: #112233; --bg-tip: #0A1929;
+  --bg-header: #060E17; --text: #E8E4DC; --text-muted: #8B9AAB;
+  --accent: #F28C0F; --border: #1A3050; --shadow: rgba(0,0,0,0.3);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65}
+
+.site-header{background:var(--bg-header);padding:2.5rem 2rem 2rem}
+.header-inner{max-width:1120px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.group-eyebrow{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.4rem}
+.site-title{font-family:'Arial Black','Impact',Arial,sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-.03em;line-height:1;color:#fff}
+.site-title span{color:var(--accent)}
+.week-label{display:block;font-size:.82rem;color:rgba(255,255,255,.45);margin-top:.5rem;letter-spacing:.04em}
+.header-stats{display:flex;gap:2rem}
+.stat{display:flex;flex-direction:column;align-items:flex-end}
+.stat-num{font-family:'Arial Black',Arial,sans-serif;font-size:1.8rem;font-weight:900;color:var(--accent);line-height:1}
+.stat-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:.15rem}
+
+.day-nav{position:sticky;top:0;z-index:100;background:var(--bg-header);border-bottom:2px solid var(--accent)}
+.day-nav-inner{max-width:1120px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.day-nav-inner::-webkit-scrollbar{display:none}
+.day-nav a{display:block;padding:.8rem 1.4rem;color:rgba(255,255,255,.45);text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s}
+.day-nav a:hover,.day-nav a.active{color:#fff;border-bottom-color:var(--accent)}
+
+main{max-width:1120px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+.strategy-section{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:2rem 2.5rem;margin-bottom:3rem;box-shadow:0 2px 10px var(--shadow)}
+.s-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.strategy-section h2{font-family:'Arial Black',Arial,sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:-.02em;margin-bottom:1.75rem}
+.strategy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.5rem}
+.strategy-item{padding-top:1rem;border-top:2px solid var(--border)}
+.strategy-item h3{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.7rem}
+.strategy-item ul{list-style:none;display:flex;flex-direction:column;gap:.35rem}
+.strategy-item li{font-size:.88rem}
+.arc-item{display:flex;align-items:baseline;gap:.75rem;margin-bottom:.45rem}
+.arc-day{font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);min-width:52px;flex-shrink:0}
+.arc-theme{font-size:.88rem}
+.legend{display:flex;gap:1.25rem;flex-wrap:wrap;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.legend-item{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--text-muted)}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+.day-section{margin-bottom:4rem}
+.day-section+.day-section{padding-top:2rem;border-top:1px solid var(--border)}
+.day-header{display:flex;align-items:flex-start;gap:2rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.day-marker{flex-shrink:0;background:var(--bg-header);border-radius:8px;padding:1rem 1.25rem;text-align:center;min-width:90px}
+.day-name{font-family:'Arial Black',Arial,sans-serif;font-size:.62rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:block}
+.day-date{font-family:'Arial Black',Arial,sans-serif;font-size:2.2rem;font-weight:900;line-height:1;display:block;color:#fff}
+.day-month{font-size:.7rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em}
+.day-info{flex:1;min-width:0}
+.day-theme-label{font-size:.63rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.day-theme{font-family:'Arial Black',Arial,sans-serif;font-size:clamp(1.1rem,2.2vw,1.45rem);font-weight:900;letter-spacing:-.02em;line-height:1.15;text-wrap:balance;margin-bottom:.6rem}
+.day-objective{font-size:.87rem;color:var(--text-muted);max-width:520px}
+.day-targets{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.75rem}
+.target-chip{font-size:.68rem;font-weight:600;padding:.22rem .55rem;border-radius:4px;background:var(--bg-tip);color:var(--text-muted);letter-spacing:.04em}
+
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem}
+.posts-grid.cols-2{grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
+
+.post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px var(--shadow)}
+.post-card-header{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;border-bottom:1px solid var(--border)}
+.platform-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .65rem;border-radius:4px;color:#fff;flex-shrink:0}
+.platform-badge.linkedin{background:var(--c-linkedin)}
+.platform-badge.social{background:var(--c-social)}
+.platform-badge.whatsapp{background:var(--c-whatsapp)}
+.platform-badge.email{background:var(--c-email)}
+.post-card-meta{flex:1;font-size:.73rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-btn{flex-shrink:0;font-size:.72rem;font-weight:700;letter-spacing:.06em;padding:.32rem .8rem;border-radius:5px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:background .15s,color .15s}
+.copy-btn:hover{background:var(--accent);color:#0D1B2A}
+.copy-btn.copied{background:#16A34A;border-color:#16A34A;color:#fff}
+.post-body{padding:1.1rem 1.2rem;flex:1;overflow-y:auto;max-height:390px}
+.post-text{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:.86rem;line-height:1.72;white-space:pre-wrap;word-break:break-word;color:var(--text);margin:0}
+.post-tip{padding:.6rem 1.2rem;border-top:1px solid var(--border);background:var(--bg-tip);font-size:.73rem;color:var(--text-muted)}
+.post-tip strong{color:var(--accent)}
+
+.site-footer{text-align:center;padding:2rem;font-size:.78rem;color:var(--text-muted);border-top:1px solid var(--border)}
+
+@media(max-width:640px){
+  .header-inner{flex-direction:column;align-items:flex-start}
+  .header-stats{flex-direction:row}
+  .stat{align-items:flex-start}
+  .day-header{flex-direction:column}
+  .posts-grid,.posts-grid.cols-2{grid-template-columns:1fr}
+  .strategy-grid{grid-template-columns:1fr}
+  main{padding:1.5rem 1rem 3rem}
+  .strategy-section{padding:1.5rem}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <p class="group-eyebrow">Groupe Cohesif — Pôle BTP</p>
+      <h1 class="site-title">COHESIF<span> BTP</span></h1>
+      <span class="week-label">Plan Marketing · 10 au 14 Août 2026 · Objectif : Vendre</span>
+    </div>
+    <div class="header-stats">
+      <div class="stat"><span class="stat-num">5</span><span class="stat-label">Jours</span></div>
+      <div class="stat"><span class="stat-num">19</span><span class="stat-label">Posts</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Canaux</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="day-nav">
+  <div class="day-nav-inner">
+    <a href="#strategie">Stratégie</a>
+    <a href="#lundi">Lun 10</a>
+    <a href="#mardi">Mar 11</a>
+    <a href="#mercredi">Mer 12</a>
+    <a href="#jeudi">Jeu 13</a>
+    <a href="#vendredi">Ven 14</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ── STRATÉGIE ── -->
+<section class="strategy-section" id="strategie">
+  <p class="s-eyebrow">Vue d'ensemble de la semaine</p>
+  <h2>Stratégie : Capter → Convaincre → Créer l'urgence → Vendre</h2>
+  <div class="strategy-grid">
+    <div class="strategy-item">
+      <h3>Arc narratif</h3>
+      <div class="arc-item"><span class="arc-day">Lun 10</span><span class="arc-theme">Le problème du marché BTP</span></div>
+      <div class="arc-item"><span class="arc-day">Mar 11</span><span class="arc-theme">La preuve technique unique</span></div>
+      <div class="arc-item"><span class="arc-day">Mer 12</span><span class="arc-theme">Service haute valeur : amiante</span></div>
+      <div class="arc-item"><span class="arc-day">Jeu 13</span><span class="arc-theme">Urgence rentrée : agissez maintenant</span></div>
+      <div class="arc-item"><span class="arc-day">Ven 14</span><span class="arc-theme">Close : l'offre directe</span></div>
+    </div>
+    <div class="strategy-item">
+      <h3>Cibles prioritaires</h3>
+      <ul>
+        <li>🏢 Syndics de copropriété</li>
+        <li>🏠 Bailleurs &amp; propriétaires</li>
+        <li>🏗️ Promoteurs &amp; marchands de biens</li>
+        <li>💼 Entreprises &amp; commerces</li>
+        <li>👤 Particuliers exigeants</li>
+      </ul>
+    </div>
+    <div class="strategy-item">
+      <h3>Canaux &amp; horaires</h3>
+      <ul>
+        <li><strong>LinkedIn</strong> — 8h30 (mar–ven)</li>
+        <li><strong>Facebook/Insta</strong> — 12h ou 19h</li>
+        <li><strong>WhatsApp/SMS</strong> — 9h–10h</li>
+        <li><strong>Email froid</strong> — 8h–9h</li>
+      </ul>
+    </div>
+    <div class="strategy-item">
+      <h3>Règles d'or</h3>
+      <ul>
+        <li>Chaque post = 1 CTA direct</li>
+        <li>Toujours le 📞 07 60 90 37 74</li>
+        <li>Répondre aux DM en &lt; 2h</li>
+        <li>WhatsApp : 10–15 contacts/jour max</li>
+        <li>Relancer jeudi tous les sans-réponse</li>
+      </ul>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-linkedin)"></span>LinkedIn</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-social)"></span>Facebook / Instagram</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-whatsapp)"></span>WhatsApp / SMS</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-email)"></span>Email froid</div>
+  </div>
+</section>
+
+<!-- ── LUNDI 10 ── -->
+<section class="day-section" id="lundi">
+  <div class="day-header">
+    <div class="day-marker">
+      <span class="day-name">Lundi</span>
+      <span class="day-date">10</span>
+      <span class="day-month">Août</span>
+    </div>
+    <div class="day-info">
+      <p class="day-theme-label">Thème du jour</p>
+      <h2 class="day-theme">Le problème que tout le monde connaît — et que personne ne résout vraiment</h2>
+      <p class="day-objective">Ouvrez fort. Nommer le problème crée une reconnaissance immédiate chez votre cible et les positionne mentalement comme acheteurs potentiels.</p>
+      <div class="day-targets">
+        <span class="target-chip">Bailleurs</span>
+        <span class="target-chip">Syndics</span>
+        <span class="target-chip">Promoteurs</span>
+        <span class="target-chip">Entreprises</span>
+      </div>
+    </div>
+  </div>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge linkedin">LinkedIn</span>
+        <span class="post-card-meta">Syndics · Bailleurs · Promoteurs · Gestionnaires</span>
+        <button class="copy-btn" data-target="li-lun">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="li-lun">🔴 Ce que personne ne veut vous dire sur les chantiers BTP à Paris.
+
+En Île-de-France, 1 projet sur 3 finit en litige, en retard, ou en dépassement de budget.
+
+Pas parce que les maîtres d'ouvrage sont naïfs.
+Parce que le marché est fragmenté : sous-traitants en cascade, aucun pilote dans l'avion, devis volontairement flous.
+
+Chez Cohesif BTP, on a construit notre modèle à l'opposé :
+
+→ 1 chef de projet dédié, de la première réunion à la remise des clés
+→ Bureau d'études intégré : on optimise votre budget AVANT de commencer
+→ Devis détaillé et engageant rendu sous 48h
+→ Certifiés RGE | Assurance décennale | Groupe Cohesif
+
+Vous savez exactement ce que vous allez obtenir, quand, et pour combien.
+
+Vous êtes bailleur, syndic, promoteur ou chef d'entreprise avec un projet en attente ?
+
+On intervient sur tout Paris et l'Île-de-France (75 – 92 – 93 – 94).
+
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr
+
+Demandez votre devis gratuit. Réponse sous 48h. ↓
+
+#BTP #RénovationParis #Construction #Syndic #Bailleur #IleDeFrance #CohesifBTP</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 8h30 · <strong>Format :</strong> Texte seul ou photo de chantier en cours</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge social">Facebook / Instagram</span>
+        <span class="post-card-meta">Large audience locale · Particuliers · B2B local</span>
+        <button class="copy-btn" data-target="fb-lun">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="fb-lun">💥 Fini les artisans qui disparaissent en cours de route.
+
+Votre chantier mérite une entreprise qui répond présente du premier appel jusqu'à la livraison.
+
+Cohesif BTP, c'est :
+✅ 1 chef de projet dédié de A à Z — un numéro, une responsabilité
+✅ Devis GRATUIT sous 48h, détaillé et engageant
+✅ Prix tenu. Délai tenu. Pas de mauvaise surprise.
+✅ Certifiés RGE | Assurance décennale
+
+Construction • Rénovation • Désamiantage • Finitions
+
+📍 Paris et toute l'Île-de-France
+
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr
+
+Un projet à prévoir ? Appelez-nous aujourd'hui — on vous répond.</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 12h ou 19h · <strong>Format :</strong> Photo avant/après ou photo équipe chantier</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge whatsapp">WhatsApp / SMS</span>
+        <span class="post-card-meta">Prospection directe syndics &amp; gestionnaires</span>
+        <button class="copy-btn" data-target="wa-lun">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="wa-lun">Bonjour [Prénom],
+
+Je me permets de vous contacter au nom de Cohesif BTP, pôle bâtiment du Groupe Cohesif, basé à Paris 15e.
+
+Nous intervenons auprès des syndics et gestionnaires d'Île-de-France pour tous travaux de rénovation, mise aux normes, désamiantage certifié et construction.
+
+Ce qui nous distingue :
+✓ Un chef de projet dédié à votre dossier
+✓ Bureau d'études intégré (optimisation budgétaire avant chantier)
+✓ Devis gratuit sous 48h
+✓ Certifiés RGE, assurance décennale
+
+Avez-vous des travaux à planifier pour la rentrée ou la fin d'année ? Je serais ravi d'en discuter.
+
+Bien cordialement,
+Cohesif BTP
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 9h–11h · <strong>Volume :</strong> 10–15 contacts qualifiés max / jour</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge email">Email froid</span>
+        <span class="post-card-meta">Bailleurs · Gestionnaires · Décideurs B2B</span>
+        <button class="copy-btn" data-target="em-lun">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="em-lun">OBJET : Travaux en Île-de-France — 1 interlocuteur, devis sous 48h
+
+Bonjour [Prénom],
+
+En tant que [gestionnaire / bailleur / syndic] en Île-de-France, vous savez combien il est difficile de trouver un prestataire BTP à la fois fiable, transparent sur les prix et disponible.
+
+C'est précisément le problème que Cohesif BTP résout :
+
+• 1 chef de projet dédié du premier contact à la remise des clés
+• Bureau d'études intégré pour optimiser les coûts avant travaux
+• Devis gratuit et détaillé sous 48h
+• Intervention sur tout Paris et IDF (75/92/93/94)
+• Certifiés RGE, assurance décennale complète
+
+Nos domaines : rénovation complète, remise aux normes, désamiantage certifié, construction neuve, second œuvre et finitions.
+
+Avez-vous des projets à planifier pour la rentrée ?
+Je serais heureux de vous préparer une proposition adaptée.
+
+Bien cordialement,
+[Votre Prénom] — Cohesif BTP
+📞 07 60 90 37 74 | cohesifbtp.fr
+200 rue de la Croix Nivert, Paris 75015</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 8h–9h · <strong>Astuce :</strong> Objet court et factuel — pas de majuscules excessives</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── MARDI 11 ── -->
+<section class="day-section" id="mardi">
+  <div class="day-header">
+    <div class="day-marker">
+      <span class="day-name">Mardi</span>
+      <span class="day-date">11</span>
+      <span class="day-month">Août</span>
+    </div>
+    <div class="day-info">
+      <p class="day-theme-label">Thème du jour</p>
+      <h2 class="day-theme">La preuve technique : ce que les autres entreprises BTP n'ont pas</h2>
+      <p class="day-objective">Le bureau d'études intégré est votre avantage concurrentiel rare. C'est ce qui justifie de vous choisir plutôt qu'un concurrent et qui rassure sur le budget.</p>
+      <div class="day-targets">
+        <span class="target-chip">Promoteurs</span>
+        <span class="target-chip">Marchands de biens</span>
+        <span class="target-chip">Syndics</span>
+        <span class="target-chip">Entreprises</span>
+      </div>
+    </div>
+  </div>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge linkedin">LinkedIn</span>
+        <span class="post-card-meta">Promoteurs · Marchands de biens · Maîtres d'ouvrage</span>
+        <button class="copy-btn" data-target="li-mar">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="li-mar">Pourquoi nos clients évitent les mauvaises surprises en cours de chantier ?
+
+Non, pas grâce à des matériaux bas de gamme.
+Grâce à notre bureau d'études intégré.
+
+La majorité des entreprises BTP calculent APRÈS la conception.
+Résultat : des avenants qui font exploser l'enveloppe initiale.
+
+Chez Cohesif BTP, on optimise PENDANT la conception.
+
+Avant qu'un seul outil soit sorti, nos études techniques identifient :
+▸ Les postes de coûts évitables (substitutions techniques équivalentes)
+▸ Les phases de chantier qui réduisent les délais
+▸ Les erreurs de conception qui finissent en avenants coûteux
+
+Pour vous, bailleur, syndic ou promoteur :
+→ Un projet mieux conçu techniquement
+→ Un budget tenu sans dérive
+→ Un calendrier respecté
+
+C'est l'atout que peu d'entreprises BTP possèdent en interne en Île-de-France.
+
+Cohesif BTP — Pôle BTP du Groupe Cohesif
+📞 07 60 90 37 74 | 🌐 cohesifbtp.fr
+
+Un projet en cours d'étude ? Parlez-nous en avant de signer ailleurs.
+
+#BTP #ÉtudesTechniques #Rénovation #Paris #Construction #Promoteur #Bailleur</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 8h30 · <strong>Format :</strong> Texte ou photo de plans / bureau d'études</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge social">Facebook / Instagram</span>
+        <span class="post-card-meta">Propriétaires · Particuliers exigeants · B2B local</span>
+        <button class="copy-btn" data-target="fb-mar">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="fb-mar">💡 Le secret pour ne pas exploser son budget chantier ?
+
+Un bureau d'études intégré AVANT de commencer.
+
+Cohesif BTP est l'une des rares entreprises BTP en Île-de-France à intégrer ses études techniques en interne.
+
+On optimise votre projet techniquement et financièrement avant le premier coup de pioche.
+
+Le résultat ?
+→ Pas d'avenant surprise
+→ Pas de dépassement de budget
+→ Un devis = un engagement
+
+Construction • Rénovation • Désamiantage • Finitions
+Paris et toute l'Île-de-France
+
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr
+
+Demandez votre devis gratuit sous 48h.</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 19h · <strong>Format :</strong> Carrousel ou image avec chiffres clés</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge whatsapp">WhatsApp / SMS</span>
+        <span class="post-card-meta">Prospection promoteurs &amp; marchands de biens</span>
+        <button class="copy-btn" data-target="wa-mar">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="wa-mar">Bonjour [Prénom],
+
+Cohesif BTP — Groupe Cohesif, Paris.
+
+On accompagne les promoteurs et marchands de biens sur leurs opérations de réhabilitation et construction neuve en IDF.
+
+Notre différence : un bureau d'études intégré qui optimise les coûts AVANT le chantier. Moins d'avenants, plus de maîtrise budgétaire.
+
+Avez-vous des opérations à venir en 2026-2027 ? Je serais disponible pour un échange de 15 min.
+
+07 60 90 37 74 | cohesifbtp.fr</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 9h–10h · <strong>Cibles :</strong> Promoteurs, marchands de biens, lotisseurs</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── MERCREDI 12 ── -->
+<section class="day-section" id="mercredi">
+  <div class="day-header">
+    <div class="day-marker">
+      <span class="day-name">Mercredi</span>
+      <span class="day-date">12</span>
+      <span class="day-month">Août</span>
+    </div>
+    <div class="day-info">
+      <p class="day-theme-label">Thème du jour</p>
+      <h2 class="day-theme">Service à obligation légale : le désamiantage — risque pénal, risque immédiat</h2>
+      <p class="day-objective">Le désamiantage est à forte valeur ajoutée et à forte urgence légale. La peur du risque pénal est l'un des leviers les plus puissants en B2B immobilier.</p>
+      <div class="day-targets">
+        <span class="target-chip">Bailleurs</span>
+        <span class="target-chip">Syndics</span>
+        <span class="target-chip">Propriétaires avant 1997</span>
+        <span class="target-chip">Gestionnaires</span>
+      </div>
+    </div>
+  </div>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge linkedin">LinkedIn</span>
+        <span class="post-card-meta">Bailleurs · Syndics · Gestionnaires immobiliers</span>
+        <button class="copy-btn" data-target="li-mer">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="li-mer">⚠️ Amiante dans votre bâtiment : ce que vous risquez si vous ignorez l'obligation légale.
+
+En France, tout bâtiment construit avant juillet 1997 est soumis à la réglementation amiante.
+
+Pour les bailleurs, syndics et propriétaires, cette obligation engage votre responsabilité civile ET pénale.
+
+En cas de manquement constaté :
+→ Jusqu'à 75 000 € d'amende
+→ Jusqu'à 5 ans d'emprisonnement (mise en danger de la vie d'autrui)
+→ Responsabilité pleine sur les dommages causés aux occupants
+
+Ce n'est pas une formalité administrative. C'est une obligation qui s'applique AVANT tous travaux.
+
+Cohesif BTP est certifié pour :
+✅ Diagnostic amiante avant travaux (obligatoire par la loi)
+✅ Retrait et confinement certifiés SS3 / SS4
+✅ Traçabilité complète et légale des déchets amiante
+✅ Mise en conformité réglementaire totale
+
+On intervient rapidement en Île-de-France avec toutes les certifications requises.
+
+Un diagnostic ou une opération de désamiantage à planifier ?
+
+📞 07 60 90 37 74 — Réponse sous 48h
+🌐 cohesifbtp.fr
+
+Cohesif BTP — Pôle BTP du Groupe Cohesif | Paris &amp; Île-de-France
+
+#Désamiantage #Amiante #BTP #Paris #Conformité #Syndic #Bailleur #IleDeFrance</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 8h30 · <strong>Ton :</strong> Factuel, informatif — pas alarmiste</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge social">Facebook / Instagram</span>
+        <span class="post-card-meta">Propriétaires · Particuliers · B2B local</span>
+        <button class="copy-btn" data-target="fb-mer">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="fb-mer">⚠️ AMIANTE : votre responsabilité légale en tant que propriétaire.
+
+Bâtiment construit avant 1997 ?
+Un diagnostic amiante est OBLIGATOIRE avant tous travaux.
+
+Sans diagnostic = risque pénal pour le propriétaire.
+Ce n'est pas une option.
+
+Cohesif BTP réalise :
+→ Diagnostic certifié avant travaux
+→ Retrait sécurisé certifié SS3/SS4
+→ Traçabilité complète des déchets
+→ Mise en conformité totale
+
+On intervient sur tout Paris et l'Île-de-France.
+Devis gratuit sous 48h.
+
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr
+
+Pas sûr de votre situation ? Appelez-nous — c'est gratuit et sans engagement.</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 12h · <strong>Format :</strong> Visuel informatif ou infographie loi amiante</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge whatsapp">WhatsApp / SMS</span>
+        <span class="post-card-meta">Prospection bailleurs &amp; gestionnaires de patrimoine</span>
+        <button class="copy-btn" data-target="wa-mer">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="wa-mer">Bonjour [Prénom],
+
+Une question directe : votre patrimoine immobilier a-t-il fait l'objet d'un diagnostic amiante avant travaux ?
+
+Si vos biens datent d'avant 1997, c'est une obligation légale. Sans diagnostic, vous exposez votre responsabilité civile et pénale.
+
+Cohesif BTP est certifié pour le diagnostic, le retrait et la mise en conformité amiante en Île-de-France. Devis gratuit sous 48h.
+
+07 60 90 37 74 | cohesifbtp.fr</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 9h · <strong>Cibles :</strong> Bailleurs multi-biens, syndics, gestionnaires pré-1997</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge email">Email froid</span>
+        <span class="post-card-meta">Syndics · Bailleurs · Gestionnaires de patrimoine</span>
+        <button class="copy-btn" data-target="em-mer">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="em-mer">OBJET : Amiante avant travaux — êtes-vous en conformité ?
+
+Bonjour [Prénom],
+
+Avant tous travaux sur un bâtiment construit avant juillet 1997, un diagnostic amiante est légalement obligatoire.
+
+En l'absence de diagnostic :
+→ Responsabilité civile et pénale du propriétaire ou du syndic
+→ Risque de litige avec les occupants ou entreprises intervenantes
+→ Impossibilité d'obtenir certaines assurances chantier
+
+Cohesif BTP est certifié SS3/SS4 pour :
+• Le diagnostic amiante avant travaux
+• Le retrait et confinement certifiés
+• La traçabilité complète des déchets amiante
+• La mise en conformité réglementaire totale
+
+Intervention rapide sur tout Paris et l'Île-de-France.
+Devis gratuit, réponse sous 48h.
+
+Avez-vous des biens ou des projets concernés par cette réglementation ?
+
+Bien cordialement,
+[Votre Prénom] — Cohesif BTP
+📞 07 60 90 37 74 | cohesifbtp.fr
+200 rue de la Croix Nivert, Paris 75015</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 8h · <strong>Segmentation :</strong> Propriétaires de biens anciens, syndics copropriétés pré-1997</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── JEUDI 13 ── -->
+<section class="day-section" id="jeudi">
+  <div class="day-header">
+    <div class="day-marker">
+      <span class="day-name">Jeudi</span>
+      <span class="day-date">13</span>
+      <span class="day-month">Août</span>
+    </div>
+    <div class="day-info">
+      <p class="day-theme-label">Thème du jour</p>
+      <h2 class="day-theme">Urgence réelle : la rentrée arrive, les plannings se ferment</h2>
+      <p class="day-objective">Créez l'urgence sur un fait concret : septembre est dans 3 semaines. Les entreprises sérieuses ont des plannings chargés. Relancez aussi tous vos contacts sans réponse de la semaine.</p>
+      <div class="day-targets">
+        <span class="target-chip">Tous segments</span>
+        <span class="target-chip">Syndics (AG votées)</span>
+        <span class="target-chip">Bailleurs</span>
+        <span class="target-chip">Entreprises</span>
+      </div>
+    </div>
+  </div>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge linkedin">LinkedIn</span>
+        <span class="post-card-meta">Tous segments B2B · Syndics · Bailleurs · Promoteurs</span>
+        <button class="copy-btn" data-target="li-jeu">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="li-jeu">📅 Avis aux bailleurs, syndics et promoteurs : la rentrée, c'est dans 3 semaines.
+
+Et les plannings des entreprises BTP sérieuses en Île-de-France se remplissent vite.
+
+Chaque année, le même scénario se répète :
+→ Septembre : "on aurait dû s'y prendre plus tôt"
+→ Octobre : démarrage repoussé à janvier
+→ Janvier : les tarifs ont augmenté
+
+Si vous avez des travaux à réaliser avant la fin d'année, ou à lancer en début 2027, c'est maintenant qu'il faut poser les bases.
+
+Ce que Cohesif BTP peut faire pour vous dès cette semaine :
+✅ Visite de site et évaluation technique gratuite
+✅ Devis détaillé et engageant sous 48h
+✅ Planification de chantier adaptée à votre calendrier
+✅ Créneaux de démarrage disponibles en septembre
+
+Que vous soyez :
+→ Bailleur avec des logements à remettre en état
+→ Syndic avec des travaux votés en AG
+→ Promoteur avec une opération à lancer
+→ Entreprise avec des locaux à rénover
+
+Appelez-nous maintenant. On n'attend pas que vous soyez 100% prêts pour bloquer votre créneau.
+
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr
+
+Cohesif BTP — Pôle BTP du Groupe Cohesif | Paris &amp; Île-de-France
+
+#BTP #Rénovation #Rentrée #Paris #IleDeFrance #Construction #Planning</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 8h30 · <strong>Format :</strong> Texte avec photo planning ou calendrier chantier</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge social">Facebook / Instagram</span>
+        <span class="post-card-meta">Large audience · Particuliers · B2B local</span>
+        <button class="copy-btn" data-target="fb-jeu">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="fb-jeu">⏰ Rentrée dans 3 semaines.
+
+Les plannings BTP sérieux se remplissent dès maintenant.
+
+Si vous avez des travaux à prévoir pour septembre–octobre, c'est le moment de nous appeler.
+
+Cohesif BTP — Paris &amp; Île-de-France
+
+✅ Rénovation complète
+✅ Construction neuve
+✅ Désamiantage certifié
+✅ Finitions &amp; second œuvre
+
+📞 07 60 90 37 74 — appelez maintenant
+🌐 cohesifbtp.fr
+
+Devis GRATUIT sous 48h.
+Les créneaux de septembre sont limités.</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 12h · <strong>Format :</strong> Visuel avec date / décompte rentrée</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge whatsapp">WhatsApp / SMS</span>
+        <span class="post-card-meta">Relance TOUS les contacts de lundi + nouveaux prospects</span>
+        <button class="copy-btn" data-target="wa-jeu">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="wa-jeu">Bonjour [Prénom],
+
+La rentrée approche et nos créneaux de septembre se remplissent.
+
+Si vous avez des travaux à planifier pour la fin d'année, maintenant est le bon moment pour caler votre devis et réserver votre créneau.
+
+Cohesif BTP intervient sur tout Paris et l'IDF :
+rénovation, construction, désamiantage, finitions.
+
+Devis gratuit sous 48h. On se rappelle rapidement ?
+
+07 60 90 37 74 | cohesifbtp.fr</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 10h · <strong>Action prioritaire :</strong> Relancer aussi TOUS les sans-réponse de lundi et mardi</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── VENDREDI 14 ── -->
+<section class="day-section" id="vendredi">
+  <div class="day-header">
+    <div class="day-marker">
+      <span class="day-name">Vendredi</span>
+      <span class="day-date">14</span>
+      <span class="day-month">Août</span>
+    </div>
+    <div class="day-info">
+      <p class="day-theme-label">Thème du jour</p>
+      <h2 class="day-theme">Close : l'offre directe et sans ambiguïté</h2>
+      <p class="day-objective">Fin de semaine = proposition directe. Récapitulez tout, levez les dernières hésitations, simplifiez le passage à l'action au maximum.</p>
+      <div class="day-targets">
+        <span class="target-chip">Tous segments</span>
+        <span class="target-chip">Relance de toute la semaine</span>
+      </div>
+    </div>
+  </div>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge linkedin">LinkedIn</span>
+        <span class="post-card-meta">Tous segments · Close de semaine</span>
+        <button class="copy-btn" data-target="li-ven">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="li-ven">Cette semaine, on vous a parlé de fiabilité, d'études techniques, de désamiantage, de planning.
+
+Permettez-moi d'être direct.
+
+Si vous avez un projet BTP en Île-de-France — quelle qu'en soit la taille — appelez-nous aujourd'hui.
+
+Voici ce que vous obtenez concrètement :
+
+☎️ Un premier échange de 15 minutes pour comprendre votre projet
+📋 Un devis gratuit, détaillé, engageant sous 48h
+👷 Un chef de projet dédié dès la signature
+🔧 Des travaux livrés dans les délais et dans le budget
+
+On ne vend pas de la sous-traitance en cascade.
+On vend de la maîtrise et de la responsabilité.
+
+Cohesif BTP couvre :
+▸ Construction &amp; maçonnerie — gros œuvre, fondations, béton armé
+▸ Réhabilitation complète — logements, bureaux, locaux commerciaux
+▸ Études techniques intégrées — optimisation avant chantier
+▸ Diagnostic &amp; retrait amiante certifié SS3/SS4
+▸ Finitions &amp; second œuvre — cloisons, carrelage, peinture
+▸ Location &amp; vente de matériel professionnel
+
+Pôle BTP du Groupe Cohesif
+200 rue de la Croix Nivert, Paris 75015
+Zone : Paris (75) — Hauts-de-Seine (92) — Seine-Saint-Denis (93) — Val-de-Marne (94)
+
+📞 07 60 90 37 74
+✉️ cohesifbtp@gmail.com
+🌐 cohesifbtp.fr
+
+Votre projet attend. Nous, on est prêts.
+
+#BTP #Construction #Rénovation #Paris #IleDeFrance #CohesifBTP #GroupeCohesif</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 8h · <strong>Format :</strong> Texte avec photo d'équipe ou chantier terminé</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge social">Facebook / Instagram</span>
+        <span class="post-card-meta">Large audience · Récapitulatif · Appel à l'action fort</span>
+        <button class="copy-btn" data-target="fb-ven">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="fb-ven">🏗️ COHESIF BTP — Ce qu'on fait, pour qui, et où.
+
+CE QU'ON FAIT :
+✅ Construction &amp; Maçonnerie
+✅ Réhabilitation complète
+✅ Désamiantage certifié SS3/SS4
+✅ Second œuvre &amp; finitions
+✅ Location matériel professionnel
+
+POUR QUI :
+→ Bailleurs &amp; propriétaires
+→ Syndics de copropriété
+→ Promoteurs &amp; marchands de biens
+→ Entreprises &amp; commerces
+→ Particuliers exigeants
+
+OÙ :
+📍 Paris et toute l'Île-de-France
+75 • 92 • 93 • 94
+
+LA DIFFÉRENCE :
+🎯 1 chef de projet dédié de A à Z
+🎯 Bureau d'études intégré (budget maîtrisé avant chantier)
+🎯 Devis GRATUIT sous 48h
+🎯 Certifiés RGE | Assurance décennale
+
+📞 07 60 90 37 74
+🌐 cohesifbtp.fr | cohesifbtp@gmail.com
+
+Votre projet mérite une vraie réponse.
+Appelez-nous — on est disponibles.</pre>
+      </div>
+      <div class="post-tip"><strong>Heure :</strong> 12h ou 17h · <strong>Format :</strong> Carrousel récap (très partageable) ou visuel structuré</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge whatsapp">WhatsApp / SMS</span>
+        <span class="post-card-meta">Relance finale — tous les contacts sans réponse de la semaine</span>
+        <button class="copy-btn" data-target="wa-ven">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="wa-ven">Bonjour [Prénom],
+
+Pour clore la semaine : si vous avez un projet BTP à venir, Cohesif BTP peut vous proposer un devis gratuit sous 48h avec un chef de projet dédié et un bureau d'études intégré.
+
+Construction • Rénovation • Désamiantage • Finitions
+Tout Paris et l'Île-de-France.
+
+Disponible pour un appel de 15 minutes la semaine prochaine ?
+
+07 60 90 37 74 | cohesifbtp.fr</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 10h · <strong>Action :</strong> Relancer ABSOLUMENT tous les sans-réponse de la semaine</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-card-header">
+        <span class="platform-badge email">Email de relance</span>
+        <span class="post-card-meta">Relance des prospects contactés lundi et mercredi</span>
+        <button class="copy-btn" data-target="em-ven">Copier</button>
+      </div>
+      <div class="post-body">
+        <pre class="post-text" id="em-ven">OBJET : Suite — votre projet BTP en Île-de-France
+
+Bonjour [Prénom],
+
+Je reviens vers vous suite à mon message de début de semaine.
+
+Si vous avez des travaux à planifier — rénovation, construction, désamiantage ou second œuvre — je serais heureux de vous proposer un devis gratuit adapté à votre projet.
+
+Pour rappel, Cohesif BTP :
+• Devis gratuit et détaillé sous 48h
+• 1 chef de projet dédié à votre dossier
+• Bureau d'études intégré (optimisation budgétaire avant chantier)
+• Intervention sur tout Paris et IDF (75/92/93/94)
+• Certifiés RGE, assurance décennale
+
+Nos créneaux de septembre se remplissent — si votre projet est pour la rentrée, c'est le bon moment pour en discuter.
+
+Avez-vous 15 minutes pour un appel la semaine prochaine ?
+
+Bien cordialement,
+[Votre Prénom] — Cohesif BTP
+📞 07 60 90 37 74 | cohesifbtp.fr
+200 rue de la Croix Nivert, Paris 75015</pre>
+      </div>
+      <div class="post-tip"><strong>Envoi :</strong> 8h30 · <strong>Ton :</strong> Direct et court — pas de justification excessive</div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  Plan Marketing Cohesif BTP · Semaine du 10 au 14 Août 2026 · Groupe Cohesif · 📞 07 60 90 37 74 · cohesifbtp.fr
+</footer>
+
+<script>
+document.querySelectorAll('.copy-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var id = btn.dataset.target;
+    var el = document.getElementById(id);
+    if (!el) return;
+    navigator.clipboard.writeText(el.innerText).then(function() {
+      btn.textContent = '✓ Copié !';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copier';
+        btn.classList.remove('copied');
+      }, 2000);
+    }).catch(function() {
+      var r = document.createRange();
+      r.selectNodeContents(el);
+      var s = window.getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+    });
+  });
+});
+
+var sections = document.querySelectorAll('section[id]');
+var links = document.querySelectorAll('.day-nav a');
+window.addEventListener('scroll', function() {
+  var cur = '';
+  sections.forEach(function(s) {
+    if (s.getBoundingClientRect().top <= 100) cur = s.id;
+  });
+  links.forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+  });
+}, { passive: true });
+</script>
