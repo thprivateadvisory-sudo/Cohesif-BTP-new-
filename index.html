@@ -1918,8 +1918,8 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 6px 24px rgba(26,39,68,0.40);
-      transform: translateX(-160px);
-      transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+      transform: translateX(calc(-100% - 30px));
+      transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, opacity 0.3s;
     }
     .leasing-trigger.show { transform: translateX(0); }
     .leasing-trigger:hover {
@@ -1943,6 +1943,28 @@
       letter-spacing: 0.4px;
       text-transform: uppercase;
     }
+    .leasing-trigger-dismiss {
+      position: absolute;
+      top: -9px;
+      right: -9px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1.5px solid rgba(26,39,68,0.18);
+      color: #1a2744;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+      z-index: 1;
+      transition: background 0.2s;
+    }
+    .leasing-trigger-dismiss:hover { background: #f0f0f0; }
 
     .leasing-modal-overlay {
       position: fixed; inset: 0; z-index: 9500;
@@ -3634,6 +3656,7 @@
 
 <!-- ════════════════════════════════════════════ LEASING — BOUTON FLOTTANT -->
 <button class="leasing-trigger" id="leasing-trigger" onclick="openLeasingModal()" aria-label="Financer vos travaux avec Cohesif Leasing">
+  <span class="leasing-trigger-dismiss" onclick="dismissLeasingTrigger(event)" role="button" tabindex="0" aria-label="Masquer">×</span>
   <div class="leasing-trigger-icon">€</div>
   <div class="leasing-trigger-text">
     Financer vos travaux
@@ -3780,6 +3803,14 @@
     document.getElementById('leasing-modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
     calcLeasing();
+  }
+
+  function dismissLeasingTrigger(e) {
+    e.stopPropagation();
+    var trigger = document.getElementById('leasing-trigger');
+    trigger.style.opacity = '0';
+    trigger.style.transform = 'translateX(calc(-100% - 30px))';
+    setTimeout(function() { trigger.style.display = 'none'; }, 350);
   }
 
   function closeLeasingModal() {
