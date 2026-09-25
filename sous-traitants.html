@@ -86,6 +86,20 @@
     .engage { display: grid; gap: 12px; }
     .engage .chk { font-size: 14px; }
     .hp { position: absolute; left: -9999px; }
+    .files { display: grid; gap: 10px; }
+    .file { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; border: 1px dashed #cbd5e1; border-radius: 12px; }
+    .file.has-file { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+    .file.bad { border-color: var(--error); background: #fef2f2; }
+    .file-info { min-width: 0; }
+    .file-info strong { display: block; font-size: 14px; font-weight: 600; }
+    .file-info em { font-style: normal; font-weight: 500; color: var(--muted); }
+    .file-name { display: block; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+    .file.has-file .file-name { color: var(--accent-dark); font-weight: 600; }
+    .file.bad .file-name { color: var(--error); font-weight: 600; }
+    .file-btn { position: relative; flex-shrink: 0; font-size: 13.5px; font-weight: 700; padding: 9px 14px; border-radius: 10px; background: var(--accent-dark); color: #fff; cursor: pointer; white-space: nowrap; }
+    .file-btn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+    .success ul { text-align: left; display: inline-block; margin: 6px auto 4px; color: var(--ink-soft); }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 24px; border-radius: 12px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; text-decoration: none; border: 2px solid transparent; }
     .btn-primary { background: var(--accent); color: var(--on-accent); }
@@ -111,6 +125,8 @@
 
     @media (max-width: 720px) {
       .steps, .grid2, .grid3, .chks, .docs ul { grid-template-columns: 1fr; }
+      .file { flex-direction: column; align-items: stretch; }
+      .file-btn { text-align: center; }
       .grid2 .field + .field, .grid3 .field + .field { margin-top: 0; }
       fieldset { padding: 22px 16px; }
       .docs { padding: 20px 16px; }
@@ -135,7 +151,7 @@
     <p>Artisans, entreprises et indépendants : constituez votre dossier de référencement directement en ligne, en 10 minutes environ. Fini les dossiers papier à remplir et à renvoyer.</p>
     <div class="steps">
       <div class="step"><b>1</b><strong>Remplissez le formulaire</strong><span>Entreprise, métiers, assurances, qualifications.</span></div>
-      <div class="step"><b>2</b><strong>Envoyez vos pièces</strong><span>Par email ou WhatsApp, juste après l'envoi.</span></div>
+      <div class="step"><b>2</b><strong>Joignez vos pièces</strong><span>En PDF ou en photo, directement depuis votre téléphone.</span></div>
       <div class="step"><b>3</b><strong>Référencement</strong><span>Nous étudions votre dossier et revenons vers vous.</span></div>
     </div>
   </div>
@@ -144,7 +160,7 @@
 <main class="wrap">
   <div class="docs">
     <h2>Pièces à préparer</h2>
-    <p>Obligation de vigilance du donneur d'ordre (art. L8222-1 et D8222-5 du Code du travail). Vous pourrez les envoyer en un clic après validation du formulaire.</p>
+    <p>Obligation de vigilance du donneur d'ordre (art. L8222-1 et D8222-5 du Code du travail). Vous pourrez les joindre directement dans le formulaire (PDF ou photo).</p>
     <ul>
           <li>Extrait Kbis (ou avis INSEE / carte artisan) de moins de 3 mois</li>
           <li>Attestation de vigilance URSSAF de moins de 6 mois</li>
@@ -153,7 +169,7 @@
           <li>Attestation de régularité fiscale</li>
           <li>RIB au nom de l&#x27;entreprise</li>
           <li>Liste nominative des salariés étrangers soumis à autorisation de travail (le cas échéant)</li>
-          <li>Certificats de qualification (si vous en avez)</li>
+          <li>Certificats de qualification (si vous en avez, plusieurs fichiers possibles)</li>
     </ul>
   </div>
 
@@ -316,25 +332,30 @@
           <label class="radio"><input type="radio" name="Recours sous-traitance" value="Non"> Non</label>
         </div>
       </div>
-      <h3 class="sub">Pièces que vous pouvez nous transmettre dès maintenant</h3>
-      <div class="chks">
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Extrait Kbis (ou avis INSEE / carte artisan) de moins de 3 mois"> <span>Extrait Kbis (ou avis INSEE / carte artisan) de moins de 3 mois</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Attestation de vigilance URSSAF de moins de 6 mois"> <span>Attestation de vigilance URSSAF de moins de 6 mois</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Attestation d&#x27;assurance Responsabilité Civile Professionnelle"> <span>Attestation d&#x27;assurance Responsabilité Civile Professionnelle</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Attestation d&#x27;assurance décennale de l&#x27;année en cours"> <span>Attestation d&#x27;assurance décennale de l&#x27;année en cours</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Attestation de régularité fiscale"> <span>Attestation de régularité fiscale</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="RIB au nom de l&#x27;entreprise"> <span>RIB au nom de l&#x27;entreprise</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Liste nominative des salariés étrangers soumis à autorisation de travail (le cas échéant)"> <span>Liste nominative des salariés étrangers soumis à autorisation de travail (le cas échéant)</span></label>
-            <label class="chk"><input type="checkbox" name="Pieces disponibles" value="Certificats de qualification (si vous en avez)"> <span>Certificats de qualification (si vous en avez)</span></label>
-      </div>
     </fieldset>
 
     <fieldset>
-      <legend><span class="n">7</span> Engagements &amp; signature</legend>
+      <legend><span class="n">7</span> Pièces justificatives</legend>
+      <p class="hint">Joignez vos documents en PDF ou en photo (prise directement avec votre téléphone si besoin). 10 Mo maximum par fichier, 25 Mo au total. S'il vous manque une pièce, vous pourrez nous l'envoyer après.</p>
+      <div class="files">
+        <div class="file" data-short="Kbis" data-required><div class="file-info"><strong>Extrait Kbis (ou avis INSEE / carte artisan) de moins de 3 mois</strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - Kbis" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="Attestation URSSAF" data-required><div class="file-info"><strong>Attestation de vigilance URSSAF de moins de 6 mois</strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - URSSAF" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="Attestation RC Pro" data-required><div class="file-info"><strong>Attestation d&#x27;assurance Responsabilité Civile Professionnelle</strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - RC Pro" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="Attestation décennale" data-required><div class="file-info"><strong>Attestation d&#x27;assurance décennale de l&#x27;année en cours</strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - Decennale" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="Attestation fiscale" data-required><div class="file-info"><strong>Attestation de régularité fiscale</strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - Fiscale" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="RIB" data-required><div class="file-info"><strong>RIB au nom de l&#x27;entreprise</strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - RIB" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="Liste des salariés étrangers"><div class="file-info"><strong>Liste nominative des salariés étrangers soumis à autorisation de travail (le cas échéant) <em>(facultatif)</em></strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - Salaries etrangers" accept="application/pdf,image/*"></label></div>
+        <div class="file" data-short="Certificats"><div class="file-info"><strong>Certificats de qualification (si vous en avez, plusieurs fichiers possibles) <em>(facultatif)</em></strong><span class="file-name">Aucun fichier choisi</span></div><label class="file-btn">Choisir un fichier<input type="file" name="Piece - Certificats" accept="application/pdf,image/*" multiple></label></div>
+      </div>
+      <div class="group-error" id="files-error"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="n">8</span> Engagements &amp; signature</legend>
       <div class="engage">
         <label class="chk"><input type="checkbox" name="Declaration sur l'honneur" value="Oui" required> <span>Je certifie sur l'honneur l'exactitude des informations transmises et que mon entreprise est à jour de ses obligations sociales et fiscales. *</span></label>
         <label class="chk"><input type="checkbox" name="Engagement travail dissimule" value="Oui" required> <span>Je m'engage à n'employer que des salariés déclarés et à respecter la réglementation sur le travail dissimulé et le détachement. *</span></label>
-        <label class="chk"><input type="checkbox" name="Engagement pieces" value="Oui" required> <span>Je m'engage à transmettre les pièces justificatives et à les renouveler tous les 6 mois pendant la durée de notre collaboration. *</span></label>
+        <label class="chk"><input type="checkbox" name="Engagement pieces" value="Oui" required> <span>Je m'engage à fournir les pièces justificatives et à les renouveler tous les 6 mois pendant la durée de notre collaboration. *</span></label>
         <label class="chk"><input type="checkbox" name="Consentement RGPD" value="Oui" required> <span>J'accepte que Cohesif BTP traite ces données pour étudier mon dossier et me recontacter, conformément à notre <a href="politique-confidentialite.html">politique de confidentialité</a>. *</span></label>
       </div>
       <div class="grid2" style="margin-top:18px">
@@ -354,12 +375,17 @@
   <div class="success" id="st-success" role="status">
     <div class="ok">✓</div>
     <h2>Dossier bien reçu !</h2>
-    <p>Merci. Il ne reste plus qu'à nous envoyer vos pièces justificatives (Kbis, attestation URSSAF, attestations d'assurance…). Des photos nettes ou des PDF suffisent.</p>
-    <p>Nous étudions votre dossier et revenons vers vous rapidement.</p>
-    <div class="actions">
+    <p id="st-complete">Merci, votre dossier et vos pièces justificatives nous sont bien parvenus.</p>
+    <div id="st-missing" style="display:none">
+      <p id="st-missing-intro">Merci. Il nous manque encore les pièces suivantes :</p>
+      <ul id="st-missing-list"></ul>
+      <p>Des photos nettes ou des PDF suffisent.</p>
+      <div class="actions">
         <a class="btn btn-primary" id="mail-docs" href="mailto:cohesifbtp@gmail.com">Envoyer mes pièces par email</a>
         <a class="btn btn-outline" id="wa-docs" href="https://wa.me/33756855727?text=Bonjour, je vous envoie les pièces de mon dossier sous-traitant Cohesif BTP." target="_blank" rel="noopener noreferrer">Envoyer par WhatsApp</a>
+      </div>
     </div>
+    <p style="margin-top:18px">Nous étudions votre dossier et revenons vers vous rapidement.</p>
   </div>
 </main>
 
@@ -381,7 +407,7 @@
     try {
       var data = {};
       Array.prototype.forEach.call(form.elements, function (el) {
-        if (!el.name || el.type === 'hidden' || el.name === '_gotcha') return;
+        if (!el.name || el.type === 'hidden' || el.type === 'file' || el.name === '_gotcha') return;
         if (el.type === 'checkbox' || el.type === 'radio') {
           if (el.checked) (data[el.name] = data[el.name] || []).push(el.value);
         } else if (el.value) {
@@ -396,7 +422,7 @@
       var data = JSON.parse(localStorage.getItem(KEY) || 'null');
       if (!data) return;
       Array.prototype.forEach.call(form.elements, function (el) {
-        if (!el.name || !(el.name in data) || el.type === 'hidden') return;
+        if (!el.name || !(el.name in data) || el.type === 'hidden' || el.type === 'file') return;
         if (el.type === 'checkbox' || el.type === 'radio') {
           el.checked = data[el.name].indexOf(el.value) !== -1;
         } else {
@@ -419,6 +445,36 @@
     m.addEventListener('change', function () { if (metiersOk()) metiersErr.classList.remove('visible'); });
   });
 
+  // Pièces jointes : nom du fichier affiché, taille contrôlée
+  var MAX_FILE = 10 * 1024 * 1024, MAX_TOTAL = 25 * 1024 * 1024;
+  var fileRows = Array.prototype.slice.call(document.querySelectorAll('.file'));
+  var filesErr = document.getElementById('files-error');
+  fileRows.forEach(function (row) {
+    var input = row.querySelector('input[type=file]');
+    var nameEl = row.querySelector('.file-name');
+    input.addEventListener('change', function () {
+      var files = Array.prototype.slice.call(input.files);
+      row.classList.remove('has-file', 'bad');
+      filesErr.classList.remove('visible');
+      if (!files.length) { nameEl.textContent = 'Aucun fichier choisi'; return; }
+      var tooBig = files.filter(function (f) { return f.size > MAX_FILE; });
+      if (tooBig.length) {
+        input.value = '';
+        row.classList.add('bad');
+        nameEl.textContent = tooBig[0].name + ' dépasse 10 Mo — réduisez-le ou prenez une photo.';
+        return;
+      }
+      row.classList.add('has-file');
+      nameEl.textContent = '✓ ' + files.map(function (f) { return f.name; }).join(', ');
+    });
+  });
+  function attached(row) { return row.querySelector('input[type=file]').files.length > 0; }
+  function missingDocs(allFailed) {
+    return fileRows.filter(function (row) {
+      return row.hasAttribute('data-required') && (allFailed || !attached(row));
+    }).map(function (row) { return row.getAttribute('data-short'); });
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var ok = form.checkValidity();
@@ -428,6 +484,17 @@
       ok = false;
     }
     if (!ok) { form.reportValidity(); return; }
+
+    var total = 0, hasFiles = false;
+    fileRows.forEach(function (row) {
+      Array.prototype.forEach.call(row.querySelector('input[type=file]').files, function (f) { total += f.size; hasFiles = true; });
+    });
+    if (total > MAX_TOTAL) {
+      filesErr.textContent = 'Vos pièces dépassent 25 Mo au total. Retirez-en une ou deux : vous pourrez nous les envoyer après.';
+      filesErr.classList.add('visible');
+      filesErr.scrollIntoView({ block: 'center' });
+      return;
+    }
 
     var raison = document.getElementById('raison').value.trim();
     var siret = document.getElementById('siret').value.replace(/\s/g, '');
@@ -442,13 +509,48 @@
     btn.textContent = 'Envoi en cours…';
     errBox.classList.remove('visible');
 
-    fetch('https://formspree.io/f/mzdnndna', {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { 'Accept': 'application/json' }
+    function buildData(withFiles) {
+      var fd = new FormData(form);
+      var joined = [];
+      fileRows.forEach(function (row) {
+        var input = row.querySelector('input[type=file]');
+        if (!withFiles) fd.delete(input.name);
+        else if (input.files.length) joined.push(row.getAttribute('data-short'));
+      });
+      fd.append('Pieces jointes', withFiles && joined.length ? joined.join(', ') : 'Aucune (à envoyer par email / WhatsApp)');
+      var missing = missingDocs(!withFiles);
+      fd.append('Pieces manquantes', missing.length ? missing.join(', ') : 'Aucune — dossier complet');
+      return fd;
+    }
+    function send(fd) {
+      return fetch('https://formspree.io/f/mzdnndna', {
+        method: 'POST',
+        body: fd,
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    var filesFailed = false;
+
+    send(buildData(true)).then(function (res) {
+      // Si l'envoi avec pièces jointes est refusé, on envoie le dossier sans les fichiers
+      if (!res.ok && hasFiles) {
+        filesFailed = true;
+        return send(buildData(false));
+      }
+      return res;
     }).then(function (res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       try { localStorage.removeItem(KEY); } catch (e) {}
+      var missing = missingDocs(filesFailed);
+      if (missing.length) {
+        document.getElementById('st-complete').style.display = 'none';
+        document.getElementById('st-missing').style.display = 'block';
+        if (filesFailed) document.getElementById('st-missing-intro').textContent =
+          'Votre dossier est bien enregistré, mais vos fichiers n’ont pas pu être transmis en ligne. Merci de nous envoyer ces pièces :';
+        document.getElementById('st-missing-list').innerHTML = missing.map(function (m) {
+          return '<li>' + m.replace(/[&<>"]/g, function (ch) { return '&#' + ch.charCodeAt(0) + ';'; }) + '</li>';
+        }).join('');
+      }
       var ref = raison + ' (SIRET ' + siret + ')';
       var mail = document.getElementById('mail-docs');
       if (mail) {
