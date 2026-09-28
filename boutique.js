@@ -62,9 +62,19 @@
       out.textContent = poids.toLocaleString('fr-FR') + ' kg';
       // marge de sécurité de 10 %
       var besoin = poids * 1.1;
-      var m = modeles.filter(function (x) { return x.cap >= besoin; })[0] || modeles[modeles.length - 1];
+      var m = modeles.filter(function (x) { return x.cap >= besoin; })[0];
+      var surCommande = !m;
+      if (surCommande) m = modeles[modeles.length - 1];
       q('[data-r-img]').src = m.img;
       q('[data-r-img]').alt = m.nom;
+      q('[data-r-link]').hidden = surCommande;
+      if (surCommande) {
+        q('[data-r-cat]').textContent = 'Sur commande';
+        q('[data-r-nom]').textContent = 'Chariot élévateur de 7 ou 10 tonnes';
+        q('[data-r-info]').textContent = 'Pour vos charges les plus lourdes, nous proposons des modèles électriques de 7 et 10 t sur commande. Demandez votre devis.';
+        q('[data-r-devis]').removeAttribute('data-modele');
+        return;
+      }
       q('[data-r-cat]').textContent = 'Recommandé · Réf. ' + m.ref;
       q('[data-r-nom]').textContent = m.nom;
       q('[data-r-info]').textContent = 'Capacité ' + fmtKg(m.cap) + ' · ' + m.tension + ' · largeur ' +

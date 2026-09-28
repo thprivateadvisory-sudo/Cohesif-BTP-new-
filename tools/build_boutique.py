@@ -29,10 +29,14 @@ WA = DATA["whatsapp"]
 TEL = DATA["telephone"]
 MAIL = DATA["email"]
 ENG = DATA["engagements"]
-PRODUITS = DATA["produits"]
+TOUS = DATA["produits"]
+PRODUITS = [p for p in TOUS if p.get("actif", True)]
 RAYONS = DATA["rayons"]
 LEG = DATA["legendes"]
 E = html.escape
+
+N = len(PRODUITS)
+
 
 GAMMES = {k: v for r in RAYONS for k, v in r["gammes"].items()}
 
@@ -403,7 +407,7 @@ FAQ = [
     ("Pourquoi les prix ne sont-ils pas affichés ?",
      "Le prix dépend de la batterie choisie (plomb-acide ou lithium-ion), de la hauteur de levée, des options, de la couleur et du lieu de livraison. Nous vous envoyons sous 48 h un devis complet et détaillé, sans engagement."),
     ("Faut-il un CACES pour conduire ces chariots ?",
-     "Oui. En France, la conduite d'un chariot élévateur nécessite une autorisation de conduite délivrée par l'employeur, généralement après un CACES R489. Nos modèles de 1 à 5 t relèvent de la catégorie 3, ceux de 7 et 10 t de la catégorie 4."),
+     "Oui. En France, la conduite d'un chariot élévateur nécessite une autorisation de conduite délivrée par l'employeur, généralement après un CACES R489. Tous nos modèles (jusqu'à 5 t) relèvent de la catégorie 3 ; les chariots de plus de 6 t, disponibles sur commande, relèvent de la catégorie 4."),
     ("Batterie plomb ou lithium : que choisir ?",
      "Le plomb-acide est le choix le plus économique à l'achat, parfait pour un usage d'une équipe par jour avec une recharge la nuit. Le lithium-ion coûte plus cher mais se recharge vite, à tout moment, sans entretien : idéal pour un usage intensif ou en plusieurs équipes. Nous vous conseillons selon votre activité."),
     ("Quelle hauteur de levée ?",
@@ -458,10 +462,21 @@ def data_script():
 
 # ─────────────────────────── page catalogue
 
+def _t(n):
+    t = n / 1000
+    return f"{t:.1f}".replace(".", ",").replace(",0", "")
+
+
+CAP_MIN = _t(min(p["capacite"] for p in PRODUITS))
+CAP_MAX = _t(max(p["capacite"] for p in PRODUITS)) + " tonnes"
+CAP_MIN_C = CAP_MIN
+CAP_MAX_C = _t(max(p["capacite"] for p in PRODUITS)) + " t"
+
+
 def build_catalogue():
     url = f"{SITE}/boutique.html"
-    title = "Chariots élévateurs électriques de 1 à 10 tonnes | Boutique Cohesif BTP"
-    desc = ("Achetez votre chariot élévateur électrique neuf de 1 à 10 tonnes : conforme CE, batterie plomb ou lithium, "
+    title = f"Chariots élévateurs électriques de {CAP_MIN} à {CAP_MAX} | Boutique Cohesif BTP"
+    desc = (f"Achetez votre chariot élévateur électrique neuf de {CAP_MIN} à {CAP_MAX} : conforme CE, batterie plomb ou lithium, "
             "livré et mis en service partout en France, avec garantie et SAV. Devis sous 48 h, achat ou leasing.")
     ld_obj = {"@context": "https://schema.org", "@graph": [
         {"@type": "CollectionPage", "name": "Boutique Cohesif BTP : chariots élévateurs électriques", "url": url, "description": desc},
@@ -480,6 +495,9 @@ def build_catalogue():
         for k, (nom, plage) in r["gammes"].items():
             n = sum(1 for p in prods if p["gamme"] == k)
             filtres += f'<button class="bq-filter" data-f="{k}">{E(nom)} · {E(plage)} <span>{n}</span></button>'
+        # des filtres n'ont d'intérêt qu'au-delà de 6 produits
+        filtres_html = (f'<div class="bq-filters" role="group" aria-label="Filtrer par capacité">{filtres}</div>'
+                        if len(prods) > 6 else "")
         rayons_html += f"""<section class="bq-sec" id="catalogue">
   <div class="bq-in">
     <div class="bq-sec-head">
@@ -487,13 +505,13 @@ def build_catalogue():
       <h2>{E(r["titre"])}</h2>
       <p>{E(r["intro"])}</p>
     </div>
-    <div class="bq-filters" role="group" aria-label="Filtrer par capacité">{filtres}</div>
+    {filtres_html}
     <div class="bq-grid" id="bqGrid">
       {"".join(card(p) for p in prods)}
       <aside class="bq-card-more">
         <p class="bq-kicker">Sur mesure</p>
-        <h3>Un besoin particulier ?</h3>
-        <p>Mât de grande hauteur, flotte de plusieurs chariots, accessoires spécifiques, couleurs de votre entreprise… Nous étudions votre projet et vous proposons la bonne configuration.</p>
+        <h3>Une autre capacité ?</h3>
+        <p>Chariots de 1 t à 10 t, mât de grande hauteur, flotte de plusieurs chariots, accessoires spécifiques, couleurs de votre entreprise… Nous étudions votre projet et vous proposons la bonne configuration.</p>
         <a href="#devis" class="bq-btn bq-btn-lg">Parler à un conseiller</a>
       </aside>
     </div>
@@ -521,20 +539,20 @@ def build_catalogue():
   <div class="bq-in bq-hero-grid">
     <div class="bq-hero-txt">
       <p class="bq-pill"><span></span>Nouveau · Boutique Cohesif BTP</p>
-      <h1>Chariots élévateurs électriques, <span class="accent">de 1 à 10 tonnes.</span></h1>
-      <p class="bq-hero-p">Des chariots neufs, robustes et silencieux, livrés et mis en service sur votre site partout en France. Garantie, pièces détachées et SAV inclus dans notre accompagnement.</p>
+      <h1>Chariots élévateurs électriques, <span class="accent">sélectionnés pour durer.</span></h1>
+      <p class="bq-hero-p">{N} modèles neufs de {CAP_MIN} à {CAP_MAX}, choisis pour leur robustesse et leur fiabilité, livrés et mis en service sur votre site partout en France. Garantie, pièces détachées et SAV inclus dans notre accompagnement.</p>
       <div class="bq-hero-btns">
-        <a href="#catalogue" class="bq-btn bq-btn-lg">Voir les 10 modèles</a>
+        <a href="#catalogue" class="bq-btn bq-btn-lg">Voir les {N} modèles</a>
         <a href="#choisir" class="bq-btn bq-btn-lg bq-btn-line">Trouver mon chariot</a>
       </div>
       <ul class="bq-hero-kpis">
-        <li><b>10</b><span>modèles</span></li>
-        <li><b>1 → 10 t</b><span>de capacité</span></li>
+        <li><b>{N}</b><span>modèles sélectionnés</span></li>
+        <li><b>{CAP_MIN_C} → {CAP_MAX_C}</b><span>de capacité</span></li>
         <li><b>{E(ENG["delaiReponse"])}</b><span>pour votre devis</span></li>
       </ul>
     </div>
     <div class="bq-hero-vis" aria-hidden="true">
-      <img src="img/boutique/chariots/cpd-20.webp" alt="" class="hv hv-l"/>
+      <img src="img/boutique/chariots/cpd-15.webp" alt="" class="hv hv-l"/>
       <img src="img/boutique/chariots/cpd-25.webp" alt="" class="hv hv-r"/>
       <img src="img/boutique/chariots/cpd-50.webp" alt="" class="hv hv-c"/>
       <div class="hv-tag"><b>100 %</b><span>électrique</span></div>
@@ -562,7 +580,7 @@ def build_catalogue():
       <p class="bq-kicker">Bien choisir</p>
       <h2>Quel chariot pour vos charges ?</h2>
       <p>Indiquez le poids de votre charge la plus lourde. Nous vous proposons le modèle adapté, avec une marge de sécurité.</p>
-      <p class="bq-note">Conseil : pour des charges encombrantes ou levées très haut, prévoyez une capacité supérieure. Un conseiller valide toujours le choix avec vous avant la commande.</p>
+      <p class="bq-note">Au-delà de 4,5 t, nous proposons aussi des modèles de 7 et 10 t sur commande. Conseil : pour des charges encombrantes ou levées très haut, prévoyez une capacité supérieure. Un conseiller valide toujours le choix avec vous avant la commande.</p>
     </div>
     <div class="bq-choose-box" data-choose>
       <label for="bqPoids">Charge la plus lourde <output data-choose-out>1 500 kg</output></label>
@@ -588,7 +606,7 @@ def build_catalogue():
   <div class="bq-in">
     <div class="bq-sec-head">
       <p class="bq-kicker">Comparer</p>
-      <h2>Les 10 modèles côte à côte</h2>
+      <h2>Les {N} modèles côte à côte</h2>
       <p>Toutes les caractéristiques clés en un coup d'œil. Faites défiler le tableau horizontalement sur mobile.</p>
     </div>
     {compare_table()}
@@ -883,7 +901,23 @@ def build_fiche(p):
     (ROOT / f"{p['slug']}.html").write_text(body, encoding="utf-8")
 
 
+def retirer_inactifs():
+    """Supprime les fiches des produits masqués (actif: false) et les retire des sitemaps."""
+    inactifs = [f"{p['slug']}.html" for p in TOUS if not p.get("actif", True)]
+    for u in inactifs:
+        (ROOT / u).unlink(missing_ok=True)
+    path = ROOT / "sitemap.xml"
+    xml = path.read_text(encoding="utf-8")
+    for u in inactifs:
+        xml = re.sub(rf"  <url>\s*<loc>{re.escape(SITE + '/' + u)}</loc>.*?</url>\n", "", xml, flags=re.S)
+    path.write_text(xml, encoding="utf-8")
+    txt = ROOT / "sitemap.txt"
+    lignes = [l for l in txt.read_text(encoding="utf-8").split() if l.rsplit("/", 1)[-1] not in inactifs]
+    txt.write_text("\n".join(lignes) + "\n", encoding="utf-8")
+
+
 def update_sitemaps():
+    retirer_inactifs()
     urls = ["boutique.html"] + [f"{p['slug']}.html" for p in PRODUITS]
     path = ROOT / "sitemap.xml"
     xml = path.read_text(encoding="utf-8")

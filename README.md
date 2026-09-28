@@ -25,6 +25,7 @@ Les pages boutique sont générées : ne pas les modifier à la main.
 2. Lancer `python3 tools/build_boutique.py`
 
 Tant que `prix` vaut `null`, la fiche affiche « Prix sur demande ».
+`"actif": false` masque un modèle de la boutique (sa page est supprimée, ses données sont conservées).
 Pour ajouter un nouveau rayon (nacelles, mini-pelles…), ajouter une entrée dans `rayons` et les produits correspondants.
 
 ## Contact
