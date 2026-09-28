@@ -10,9 +10,22 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD
 - `cgv.html` — Conditions générales de vente
+- `boutique.html` + `boutique-*.html` — Boutique chariots élévateurs (pages générées)
+- `data/boutique.json` — Données de la boutique (produits, prix, engagements SAV)
+- `tools/build_boutique.py` — Générateur de la boutique
 - `sitemap.xml` — Plan du site pour les moteurs de recherche
 - `robots.txt` — Directives d'exploration
 - `CNAME` — Domaine personnalisé GitHub Pages
+
+## Boutique
+
+Les pages boutique sont générées : ne pas les modifier à la main.
+
+1. Modifier `data/boutique.json` (ex. renseigner `"prix": 12900` en € HT, ou `"leasingMois"`)
+2. Lancer `python3 tools/build_boutique.py`
+
+Tant que `prix` vaut `null`, la fiche affiche « Prix sur demande ».
+Pour ajouter un nouveau rayon (nacelles, mini-pelles…), ajouter une entrée dans `rayons` et les produits correspondants.
 
 ## Contact
 

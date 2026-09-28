@@ -1344,6 +1344,45 @@
       line-height: 1.6;
     }
 
+    /* ──────────────────────────────────── BOUTIQUE CHARIOTS */
+    .nav-shop { color: var(--accent) !important; font-weight: 700 !important; }
+    .nav-shop::after { content: 'Nouveau'; margin-left: 6px; font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); padding: 2px 6px; border-radius: 999px; vertical-align: 2px; }
+    .header-shop-mobile { display: none; }
+    .shop-spotlight { padding: 0 32px 120px; }
+    .shop-card {
+      max-width: 1280px; margin: 0 auto; position: relative; overflow: hidden;
+      background: var(--black); color: var(--white); border-radius: 28px;
+      padding: 64px; display: grid; grid-template-columns: 1fr 1.05fr; gap: 40px; align-items: center;
+    }
+    .shop-card::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(520px 320px at 78% 60%, rgba(234,91,31,0.3), transparent 70%),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: auto, 56px 56px, 56px 56px;
+    }
+    .shop-card > * { position: relative; }
+    .shop-card h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 18px; }
+    .shop-card h2 .accent { color: var(--accent); }
+    .shop-card p { font-size: 17px; color: rgba(255,255,255,0.72); line-height: 1.65; margin-bottom: 24px; max-width: 520px; }
+    .shop-points { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .shop-points li { font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; padding: 6px 12px; }
+    .shop-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .shop-actions .btn-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.3); }
+    .shop-actions .btn-outline:hover { border-color: var(--white); }
+    .shop-visual { position: relative; height: 380px; }
+    .shop-visual img { position: absolute; bottom: 20px; filter: drop-shadow(0 24px 28px rgba(0,0,0,0.5)); }
+    .shop-visual .sv-c { left: 50%; transform: translateX(-50%); width: 82%; z-index: 3; }
+    .shop-visual .sv-l { left: -2%; width: 48%; bottom: 120px; opacity: 0.85; }
+    .shop-visual .sv-r { right: -2%; width: 48%; bottom: 130px; opacity: 0.85; transform: scaleX(-1); }
+    @media (max-width: 900px) {
+      .shop-card { grid-template-columns: 1fr; padding: 40px 28px; }
+      .shop-visual { height: 260px; order: -1; }
+    }
+    @media (max-width: 768px) {
+      .shop-spotlight { padding: 0 20px 80px; }
+      .header-shop-mobile { display: inline-flex; align-items: center; font-size: 14px; font-weight: 700; color: var(--white); background: var(--accent); padding: 9px 16px; border-radius: 999px; }
+    }
+
     /* ──────────────────────────────────── FILIALE COHESIF NÉGOCE */
     .negoce-spotlight { padding: 0 32px 120px; }
     .negoce-card {
@@ -2137,9 +2176,11 @@
       <a href="#pourquoi">Pourquoi nous</a>
       <a href="#packs">Offres</a>
       <a href="#partenaires">Partenaires</a>
+      <a href="boutique.html" class="nav-shop">Boutique</a>
       <a href="#contact">Contact</a>
       <a href="#devis" class="btn btn-dark header-cta">Demander un devis →</a>
     </nav>
+    <a href="boutique.html" class="header-shop-mobile">Boutique</a>
   </div>
 </header>
 
@@ -2360,12 +2401,39 @@
               <li>Tarifs dégressifs pour les professionnels</li>
               <li>Livraison sur chantier en Île-de-France</li>
             </ul>
+            <a href="boutique.html" class="service-cta" onclick="event.stopPropagation();">Voir la boutique chariots élévateurs →</a>
             <a href="#devis" class="service-cta" onclick="event.stopPropagation(); selectService('materiel')">Demander un devis →</a>
           </div>
         </div>
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ BOUTIQUE CHARIOTS ÉLÉVATEURS -->
+<section class="shop-spotlight" id="boutique">
+  <div class="shop-card">
+    <div>
+      <span class="section-tag">Nouveau · Boutique Cohesif BTP</span>
+      <h2>Chariots élévateurs électriques, <span class="accent">de 1 à 10 tonnes.</span></h2>
+      <p>Des chariots neufs, robustes et silencieux, livrés et mis en service sur votre site. Garantie, pièces détachées et SAV assurés par Cohesif BTP. Achat comptant ou leasing.</p>
+      <ul class="shop-points">
+        <li>10 modèles</li>
+        <li>Batterie plomb ou lithium</li>
+        <li>Conformes CE</li>
+        <li>Devis sous 48 h</li>
+      </ul>
+      <div class="shop-actions">
+        <a href="boutique.html" class="btn btn-accent btn-large">Découvrir la boutique →</a>
+        <a href="boutique.html#choisir" class="btn btn-outline btn-large">Trouver mon chariot</a>
+      </div>
+    </div>
+    <a href="boutique.html" class="shop-visual" aria-label="Voir les chariots élévateurs">
+      <img loading="lazy" src="img/boutique/chariots/cpd-20.webp" alt="" class="sv-l" />
+      <img loading="lazy" src="img/boutique/chariots/cpd-25.webp" alt="" class="sv-r" />
+      <img loading="lazy" src="img/boutique/chariots/cpd-50.webp" alt="Chariot élévateur électrique 5 tonnes" class="sv-c" />
+    </a>
   </div>
 </section>
 
@@ -2998,6 +3066,7 @@
         <a href="#services">Bureau d'études</a>
         <a href="#services">Désamiantage</a>
         <a href="#services">Location matériel</a>
+        <a href="boutique.html">Boutique chariots élévateurs</a>
       </div>
 
       <div class="footer-col">

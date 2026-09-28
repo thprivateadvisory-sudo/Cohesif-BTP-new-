@@ -1,0 +1,255 @@
+{
+  "marque": "Cohesif BTP",
+  "site": "https://cohesifbtp.fr",
+  "formspree": "https://formspree.io/f/mzdnndna",
+  "whatsapp": "33756855727",
+  "telephone": "07 60 90 37 74",
+  "email": "cohesifbtp@gmail.com",
+  "misAJour": "2026-09-28",
+  "note": "prix : null = « Prix sur demande ». Renseigner un nombre (€ HT) puis relancer python3 tools/build_boutique.py. leasingMois : mensualité indicative facultative (€ HT/mois). Les engagements SAV se modifient dans « engagements ».",
+
+  "engagements": {
+    "garantie": "12 mois",
+    "delaiReponse": "48 h",
+    "livraison": "Livraison partout en France"
+  },
+
+  "rayons": [
+    {
+      "id": "chariots",
+      "titre": "Chariots élévateurs électriques",
+      "intro": "Dix modèles de 1 à 10 tonnes, du chariot compact pour la réserve au géant de l'industrie. Même conception robuste, même SAV, un seul interlocuteur.",
+      "gammes": {
+        "compact": ["Compacts", "1 à 2 t"],
+        "polyvalent": ["Polyvalents", "2,5 à 3,5 t"],
+        "lourd": ["Grande capacité", "4 à 10 t"]
+      }
+    }
+  ],
+
+  "usagesGamme": {
+    "compact": ["Entrepôts et réserves", "Commerces et magasins", "Ateliers", "Allées étroites", "Chargement de camionnettes"],
+    "polyvalent": ["Négoce de matériaux", "Plateformes logistiques", "Dépôts BTP", "Quais de chargement", "Industrie légère"],
+    "lourd": ["Industrie et métallurgie", "Préfabrication béton", "Pierre et marbre", "Ports et plateformes", "Charges hors gabarit"]
+  },
+
+  "legendes": {
+    "siege": ["Siège ergonomique", "Assise enveloppante avec ceinture de sécurité, pour des journées entières sans fatigue."],
+    "mat-renforce": ["Mât renforcé", "Profilés épaissis : le mât reste rigide et stable, même charge levée en hauteur."],
+    "mat-renforce-2": ["Mât renforcé", "Profilés épaissis pour une levée précise et sans vibration."],
+    "mat-renforce-3": ["Mât renforcé", "Structure épaissie, conçue pour un usage quotidien intensif."],
+    "mat-vue-arriere": ["Mât et tablier", "Tablier porte-fourches robuste, visibilité dégagée à travers le mât."],
+    "mat-galets": ["Mât sur galets", "Galets de guidage de grand diamètre pour une levée fluide."],
+    "chaines-levage": ["Chaînes de levage renforcées", "Chaînes épaisses et poulies surdimensionnées : sécurité et longévité."],
+    "chaines-levage-2": ["Chaînes de levage renforcées", "Double chaîne épaisse pour lever la charge en toute sécurité."],
+    "toit-protection": ["Toit de protection", "Protège-conducteur en acier contre les chutes d'objets."],
+    "toit-protection-2": ["Toit de protection", "Structure acier qui protège le conducteur sans gêner la visibilité."],
+    "pneu-plein": ["Pneus pleins anti-crevaison", "Aucune crevaison possible : zéro immobilisation, entretien minimal."],
+    "pneu-plein-2": ["Pneus renforcés", "Gommes épaisses pour une meilleure adhérence et une longue durée de vie."],
+    "pneus-pleins-jumeles": ["Roues avant jumelées", "Pneus pleins jumelés : stabilité maximale sous charge lourde."],
+    "poste-conduite": ["Poste de conduite", "Commandes regroupées et tableau de bord lisible : prise en main immédiate."],
+    "poste-conduite-2": ["Poste de conduite", "Volant réglable et leviers hydrauliques à portée de main."],
+    "poste-conduite-3": ["Poste de conduite", "Commandes simples et intuitives, écran d'information du chariot."],
+    "verin-levage": ["Vérin hydraulique", "Vérin de levage étanche et puissant, levée souple et précise."],
+    "verin-levage-2": ["Vérin hydraulique", "Hydraulique fiable pour des levées répétées sans à-coups."],
+    "verin-inclinaison": ["Vérins d'inclinaison", "Inclinaison du mât pour sécuriser la charge pendant le déplacement."],
+    "fourches": ["Fourches", "Fourches de 1 220 mm, compatibles avec toutes les palettes standard."],
+    "fourches-forgees": ["Fourches forgées", "Fourches forgées et épaissies, plus résistantes à l'usure."],
+    "feux-arriere": ["Feux de sécurité arrière", "Signalisation arrière bien visible pour circuler en sécurité."],
+    "vue-ensemble": ["Couleur au choix", "Carrosserie disponible dans la couleur de votre entreprise."],
+    "batterie": ["Batterie de traction", "Plomb-acide ou lithium-ion au choix, selon votre rythme de travail."],
+    "carrosserie": ["Carrosserie robuste", "Châssis et contrepoids massifs pour une stabilité exemplaire."],
+    "pont-moteur": ["Pont renforcé", "Pont avant en acier moulé, dimensionné pour les charges lourdes."],
+    "eclairage-led": ["Éclairage LED", "Phares de travail et gyrophare pour travailler tôt, tard ou en intérieur sombre."]
+  },
+
+  "accessoires": [
+    "Tablier à déplacement latéral", "Positionneur de fourches", "Rotateur", "Pousseur (push-pull)",
+    "Pince à cartons", "Pince à balles", "Pince à bobines de papier", "Pince à fûts",
+    "Pince à pneus", "Pince multi-usages", "Stabilisateur de charge", "Porte-verre",
+    "Manipulateur de palettes simple / double", "Pince à fourches", "Pince à grumes", "Fourches de voirie"
+  ],
+
+  "produits": [
+    {
+      "slug": "boutique-chariot-elevateur-electrique-1-tonne",
+      "rayon": "chariots", "gamme": "compact",
+      "ref": "CPD-10", "nom": "Chariot élévateur électrique 1 tonne", "court": "Électrique 1 t",
+      "capacite": 1000, "badge": "Le plus maniable",
+      "accroche": "Le plus compact de la gamme : il se faufile dans les allées étroites, les réserves et les ateliers.",
+      "atouts": [
+        ["Passe partout", "1,20 m de large et un rayon de braquage réduit : il travaille là où un chariot classique ne rentre pas."],
+        ["Léger", "1,8 t seulement : adapté aux sols de magasins, mezzanines renforcées et locaux commerciaux."],
+        ["Idéal pour débuter", "Le format le plus simple pour mécaniser la manutention d'une petite structure."]
+      ],
+      "image": "img/boutique/chariots/cpd-10.webp",
+      "details": ["siege", "mat-renforce", "chaines-levage", "toit-protection", "pneu-plein", "poste-conduite"],
+      "longueur": 3170, "longueurSans": 1950, "fourches": 1220, "largeur": 1200, "hauteur": 2150,
+      "poids": 1800, "levee": 3000, "traction": "4 kW", "levage": "4 kW", "tension": "60 V",
+      "pneus": "Avant 500-8 / arrière 400-8, pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-1-5-tonne",
+      "rayon": "chariots", "gamme": "compact",
+      "ref": "CPD-15", "nom": "Chariot élévateur électrique 1,5 tonne", "court": "Électrique 1,5 t",
+      "capacite": 1500, "badge": "Commerce & atelier",
+      "accroche": "Compact et nerveux, il charge vos camionnettes et range vos palettes au quotidien, sans bruit ni fumée.",
+      "atouts": [
+        ["Silencieux", "Il travaille en intérieur, à proximité du public ou tôt le matin sans gêner personne."],
+        ["Fourches forgées", "Fourches épaissies et feux de sécurité arrière de série."],
+        ["Économique", "Une recharge sur 220 V coûte quelques euros, loin du plein de gaz ou de gasoil."]
+      ],
+      "image": "img/boutique/chariots/cpd-15.webp",
+      "details": ["verin-levage", "fourches-forgees", "mat-renforce-2", "feux-arriere", "siege", "poste-conduite-2"],
+      "longueur": 3520, "longueurSans": 2300, "fourches": 1220, "largeur": 1200, "hauteur": 2150,
+      "poids": 2300, "levee": 3000, "traction": "5 kW", "levage": "5 kW", "tension": "60 V",
+      "pneus": "Avant 650-10 / arrière 500-8, pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-2-tonnes",
+      "rayon": "chariots", "gamme": "compact",
+      "ref": "CPD-20", "nom": "Chariot élévateur électrique 2 tonnes", "court": "Électrique 2 t",
+      "capacite": 2000, "badge": "Le bon compromis",
+      "accroche": "2 tonnes de capacité dans un gabarit qui passe partout : le chariot polyvalent des PME.",
+      "atouts": [
+        ["Moteurs 7,5 kW", "De la réserve de puissance pour enchaîner les palettes pleines toute la journée."],
+        ["Gabarit compact", "Même largeur de 1,20 m que les petits modèles, pour deux fois plus de capacité."],
+        ["Pneus renforcés", "Gommes épaisses pour rouler sur sol intérieur comme sur cour bétonnée."]
+      ],
+      "image": "img/boutique/chariots/cpd-20.webp",
+      "details": ["pneu-plein-2", "poste-conduite-3", "mat-renforce-3", "verin-levage-2", "chaines-levage-2", "toit-protection-2"],
+      "longueur": 3720, "longueurSans": 2500, "fourches": 1220, "largeur": 1200, "hauteur": 2150,
+      "poids": 2800, "levee": 3000, "traction": "7,5 kW", "levage": "7,5 kW", "tension": "60 V",
+      "pneus": "Avant 650-10 / arrière 500-8, pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-2-5-tonnes",
+      "rayon": "chariots", "gamme": "polyvalent",
+      "ref": "CPD-25", "nom": "Chariot élévateur électrique 2,5 tonnes", "court": "Électrique 2,5 t",
+      "capacite": 2500, "badge": "Format standard",
+      "accroche": "Le format de référence en entrepôt : du quai de chargement au rayonnage, il manutentionne toutes vos palettes.",
+      "atouts": [
+        ["La capacité standard", "2,5 t : la capacité la plus courante en logistique, adaptée à la grande majorité des palettes."],
+        ["Endurance", "Système de récupération d'énergie au freinage et en décélération pour allonger l'autonomie."],
+        ["À vos couleurs", "Carrosserie et logo personnalisables pour une flotte à l'image de votre entreprise."]
+      ],
+      "image": "img/boutique/chariots/cpd-25.webp",
+      "details": ["vue-ensemble", "siege", "poste-conduite", "mat-renforce", "toit-protection", "chaines-levage"],
+      "longueur": 3820, "longueurSans": 2600, "fourches": 1220, "largeur": 1200, "hauteur": 2150,
+      "poids": 3200, "levee": 3000, "traction": "7,5 kW", "levage": "7,5 kW", "tension": "60 V",
+      "pneus": "Avant 650-10 / arrière 500-8, pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-3-tonnes",
+      "rayon": "chariots", "gamme": "polyvalent",
+      "ref": "CPD-30", "nom": "Chariot élévateur électrique 3 tonnes", "court": "Électrique 3 t",
+      "capacite": 3000, "badge": "Spécial matériaux",
+      "accroche": "Taillé pour le BTP et le négoce : palettes de parpaings, sacs de ciment, big bags et tourets.",
+      "atouts": [
+        ["Moteurs 10 kW", "Puissance de traction et de levage pour les palettes les plus lourdes du négoce."],
+        ["Pneus pleins", "Increvables sur les cours de dépôt, les gravillons et les chutes de matériaux."],
+        ["Zéro émission", "Travaille aussi bien sous hangar fermé qu'en extérieur, sans gaz d'échappement."]
+      ],
+      "image": "img/boutique/chariots/cpd-30.webp",
+      "details": ["pneu-plein", "poste-conduite", "mat-renforce", "toit-protection", "chaines-levage", "siege"],
+      "longueur": 3920, "longueurSans": 2700, "fourches": 1220, "largeur": 1200, "hauteur": 2150,
+      "poids": 3700, "levee": 3000, "traction": "10 kW", "levage": "10 kW", "tension": "60 V",
+      "pneus": "Avant 650-10 / arrière 500-8, pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-3-5-tonnes",
+      "rayon": "chariots", "gamme": "polyvalent",
+      "ref": "CPD-35", "nom": "Chariot élévateur électrique 3,5 tonnes", "court": "Électrique 3,5 t",
+      "capacite": 3500, "badge": "Usage intensif",
+      "accroche": "Plus de réserve de puissance pour les manutentions intensives, en 2 ou 3 équipes.",
+      "atouts": [
+        ["Moteurs 13 kW", "Accélérations franches et levée rapide, même en charge maximale."],
+        ["Construit pour durer", "Mât, chaînes et vérins surdimensionnés pour les cadences soutenues."],
+        ["Option lithium", "Recharges d'opportunité pendant les pauses : le chariot ne s'arrête jamais."]
+      ],
+      "image": "img/boutique/chariots/cpd-35.webp",
+      "details": ["chaines-levage", "verin-inclinaison", "mat-vue-arriere", "siege", "fourches", "pneu-plein"],
+      "longueur": 3970, "longueurSans": 2750, "fourches": 1220, "largeur": 1200, "hauteur": 2150,
+      "poids": 4200, "levee": 3000, "traction": "13 kW", "levage": "13 kW", "tension": "60 V",
+      "pneus": "Pneus pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-4-tonnes",
+      "rayon": "chariots", "gamme": "lourd",
+      "ref": "CPD-40", "nom": "Chariot élévateur électrique 4 tonnes", "court": "Électrique 4 t",
+      "capacite": 4000, "badge": "Passage en 80 V",
+      "accroche": "La puissance d'un chariot thermique, sans le bruit, sans les fumées et sans les vidanges.",
+      "atouts": [
+        ["Architecture 80 V", "Moteurs de 16 kW alimentés en 80 V : couple élevé et rendement optimal."],
+        ["Pont renforcé", "Pont avant en acier moulé et mât épaissi pour les charges lourdes."],
+        ["Remplace le thermique", "Mêmes performances qu'un diesel de 4 t, avec un coût d'usage bien plus bas."]
+      ],
+      "image": "img/boutique/chariots/cpd-40.webp",
+      "details": ["batterie", "verin-inclinaison", "carrosserie", "fourches", "mat-galets", "pont-moteur"],
+      "longueur": 4020, "longueurSans": 2800, "fourches": 1220, "largeur": 1200, "hauteur": 2130,
+      "poids": 4800, "levee": 3000, "traction": "16 kW", "levage": "16 kW", "tension": "80 V",
+      "pneus": "Pneus pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-5-tonnes",
+      "rayon": "chariots", "gamme": "lourd",
+      "ref": "CPD-50", "nom": "Chariot élévateur électrique 5 tonnes", "court": "Électrique 5 t",
+      "capacite": 5000, "badge": "Industrie",
+      "accroche": "5 tonnes pour l'industrie et les matériaux lourds, avec éclairage LED et pont renforcé.",
+      "atouts": [
+        ["Levage 21,5 kW", "Un moteur hydraulique puissant pour lever vite les charges les plus denses."],
+        ["Éclairage LED", "Phares de travail et signalisation LED pour les équipes du matin et du soir."],
+        ["Stabilité", "Châssis élargi à 1,32 m et contrepoids massif pour manutentionner en confiance."]
+      ],
+      "image": "img/boutique/chariots/cpd-50.webp",
+      "details": ["batterie", "poste-conduite", "mat-galets", "pont-moteur", "carrosserie", "eclairage-led"],
+      "longueur": 4170, "longueurSans": 2950, "fourches": 1220, "largeur": 1320, "hauteur": 2250,
+      "poids": 5600, "levee": 3000, "traction": "16 kW", "levage": "21,5 kW", "tension": "80 V",
+      "pneus": "Pneus pleins",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-7-tonnes",
+      "rayon": "chariots", "gamme": "lourd",
+      "ref": "CPD-70", "nom": "Chariot élévateur électrique 7 tonnes", "court": "Électrique 7 t",
+      "capacite": 7000, "badge": "Charges lourdes",
+      "accroche": "Un géant électrique pour les charges exceptionnelles : acier, pierre, béton préfabriqué, bobines.",
+      "atouts": [
+        ["Roues jumelées", "Pneus pleins jumelés à l'avant pour répartir la charge et rester stable."],
+        ["Moteurs 21,5 / 25,5 kW", "La puissance d'un gros thermique, en silence et sans émission."],
+        ["Coût maîtrisé", "Pas de carburant, pas de vidange, pas de filtre à particules : l'entretien est réduit."]
+      ],
+      "image": "img/boutique/chariots/cpd-70.webp",
+      "details": ["batterie", "pont-moteur", "poste-conduite", "pneus-pleins-jumeles", "mat-galets", "eclairage-led"],
+      "longueur": 4820, "longueurSans": 3600, "fourches": 1220, "largeur": 1860, "hauteur": 2260,
+      "poids": 8700, "levee": 3000, "traction": "21,5 kW", "levage": "25,5 kW", "tension": "80 V",
+      "pneus": "Pneus pleins, jumelés à l'avant",
+      "prix": null, "leasingMois": null
+    },
+    {
+      "slug": "boutique-chariot-elevateur-electrique-10-tonnes",
+      "rayon": "chariots", "gamme": "lourd",
+      "ref": "CPD-100", "nom": "Chariot élévateur électrique 10 tonnes", "court": "Électrique 10 t",
+      "capacite": 10000, "badge": "Hors norme",
+      "accroche": "10 tonnes, zéro émission : le chariot des ports, des aciéries et des grands chantiers.",
+      "atouts": [
+        ["10 tonnes", "La capacité des plus gros chariots thermiques, en version 100 % électrique."],
+        ["Traction 35 kW", "Un moteur de traction très puissant pour déplacer les charges lourdes sans effort."],
+        ["Conçu pour l'intensif", "Pont renforcé, roues jumelées et chaîne stabilisée pour un usage industriel."]
+      ],
+      "image": "img/boutique/chariots/cpd-100.webp",
+      "details": ["batterie", "pont-moteur", "poste-conduite", "pneus-pleins-jumeles", "mat-galets", "eclairage-led"],
+      "longueur": 5125, "longueurSans": 3905, "fourches": 1220, "largeur": 2000, "hauteur": 2450,
+      "poids": 13200, "levee": 3000, "traction": "35 kW", "levage": "25,4 kW", "tension": "80 V",
+      "pneus": "Pneus pleins, jumelés à l'avant",
+      "prix": null, "leasingMois": null
+    }
+  ]
+}
