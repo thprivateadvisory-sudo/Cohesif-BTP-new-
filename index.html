@@ -335,16 +335,6 @@
       padding: 80px 32px 100px;
       position: relative;
     }
-    .hero-bg-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-      background-size: 80px 80px;
-      mask-image: radial-gradient(ellipse at top right, rgba(0,0,0,0.6), transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse at top right, rgba(0,0,0,0.6), transparent 70%);
-      pointer-events: none;
-    }
 
     .hero-badge {
       display: inline-flex; align-items: center; gap: 10px;
@@ -1356,9 +1346,7 @@
     }
     .shop-card::before {
       content: ''; position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(520px 320px at 78% 60%, rgba(234,91,31,0.3), transparent 70%),
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: auto, 56px 56px, 56px 56px;
+      background: linear-gradient(180deg, #0a0a0a 0%, #161616 100%);
     }
     .shop-card > * { position: relative; }
     .shop-card h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 18px; }
@@ -2186,7 +2174,6 @@
 
 <!-- ════════════════════════════════════════════ HERO -->
 <section class="hero">
-  <div class="hero-bg-grid"></div>
 
   <div class="hero-badge">
     Groupe Cohesif · Pôle BTP · Devis sous 48h
@@ -2415,7 +2402,7 @@
 <section class="shop-spotlight" id="boutique">
   <div class="shop-card">
     <div>
-      <span class="section-tag">Nouveau · Boutique Cohesif BTP</span>
+      <span class="section-tag">Boutique Cohesif BTP · Vente, livraison et SAV</span>
       <h2>Chariots élévateurs électriques, <span class="accent">sélectionnés pour durer.</span></h2>
       <p>4 modèles neufs de 1,5 à 5 tonnes, robustes et silencieux, livrés et mis en service sur votre site. Garantie, pièces détachées et SAV assurés par Cohesif BTP. Achat comptant ou leasing.</p>
       <ul class="shop-points">
