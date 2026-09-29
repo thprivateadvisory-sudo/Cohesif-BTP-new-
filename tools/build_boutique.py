@@ -135,7 +135,7 @@ def acompte_ttc(p):
 
 
 def zones_livraison(p):
-    """Zones de livraison du produit (mini-pelles : départ Île-de-France, chariots : départ Anvers), supplément compris."""
+    """Zones de livraison du produit (mini-pelles : départ Île-de-France, chariots : départ Benelux), supplément compris."""
     zones = RESA["zonesChariots"] if p["rayon"] == "chariots" else RESA["zones"]
     sup = p.get("livraisonSupplement", 0)
     return [{"nom": z["nom"], "prix": z["prix"] + sup, "deps": z["departements"]} for z in zones]
