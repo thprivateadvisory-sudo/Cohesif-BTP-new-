@@ -12,8 +12,8 @@ Pour afficher un prix : renseigner "prix" (€ HT) et, si besoin, "leasingMois"
 dans data/boutique.json, puis relancer le script. Tant que "prix" vaut null,
 la fiche affiche « Prix sur demande » et le bouton ouvre la demande de devis.
 
-Pour ajouter un nouveau rayon plus tard (nacelles, mini-pelles…) : ajouter une
-entrée dans "rayons" et des produits avec le même "rayon".
+Les mini-pelles (rayon "minipelles") ont leur propre gabarit : tools/build_minipelles.py,
+appelé automatiquement par ce script.
 """
 import html
 import json
@@ -30,7 +30,10 @@ TEL = DATA["telephone"]
 MAIL = DATA["email"]
 ENG = DATA["engagements"]
 TOUS = DATA["produits"]
-PRODUITS = [p for p in TOUS if p.get("actif", True)]
+ACTIFS = [p for p in TOUS if p.get("actif", True)]
+# les pages de ce script ne concernent que les chariots ; les mini-pelles sont générées par build_minipelles.py
+PRODUITS = [p for p in ACTIFS if p["rayon"] == "chariots"]
+MINIPELLES = [p for p in ACTIFS if p["rayon"] == "minipelles"]
 RAYONS = DATA["rayons"]
 LEG = DATA["legendes"]
 E = html.escape
@@ -158,6 +161,7 @@ NAV = f"""<div class="bq-topbar">
   <a href="index.html" class="bq-logo"><img src="img/028d2fd4f4.png" alt="Cohesif BTP" width="600" height="104"/></a>
   <ul class="bq-links">
     <li><a href="boutique.html#catalogue">Chariots élévateurs</a></li>
+    <li><a href="boutique-mini-pelles.html">Mini-pelles</a></li>
     <li><a href="boutique.html#choisir">Bien choisir</a></li>
     <li><a href="boutique.html#comparer">Comparer</a></li>
     <li><a href="boutique.html#sav">SAV &amp; garanties</a></li>
@@ -171,6 +175,7 @@ NAV = f"""<div class="bq-topbar">
 </nav>
 <div class="bq-mmenu" id="bqMenu">
   <a href="boutique.html#catalogue">Chariots élévateurs</a>
+  <a href="boutique-mini-pelles.html">Mini-pelles</a>
   <a href="boutique.html#choisir">Bien choisir</a>
   <a href="boutique.html#comparer">Comparer les modèles</a>
   <a href="boutique.html#sav">SAV &amp; garanties</a>
@@ -272,15 +277,18 @@ def form_html(selected=None, titre="Recevez votre devis sous 48 h"):
 
 def footer():
     liens = "".join(f'<a href="{p["slug"]}.html">{E(p["ref"])} · {E(tonnes(p["capacite"]))}</a>' for p in PRODUITS)
+    liens_mp = "".join(f'<a href="{p["slug"]}.html">{E(p["ref"])} · Mini-pelle {E(tonnes(p["capacite"]))}</a>' for p in MINIPELLES)
     return f"""<footer class="bq-foot">
   <div class="bq-in bq-foot-grid">
     <div>
       <img src="img/028d2fd4f4.png" alt="Cohesif BTP" width="600" height="104" class="bq-foot-logo" loading="lazy"/>
-      <p>Vente de chariots élévateurs électriques neufs, livrés partout en France, avec garantie et service après-vente. Une société du Groupe Cohesif.</p>
+      <p>Vente de chariots élévateurs électriques et de mini-pelles neufs, livrés partout en France, avec garantie et service après-vente. Une société du Groupe Cohesif.</p>
     </div>
     <div>
       <h4>Chariots élévateurs</h4>
       <div class="bq-foot-2col">{liens}</div>
+      <h4 class="bq-foot-h4b">Mini-pelles</h4>
+      <div class="bq-foot-2col">{liens_mp}</div>
     </div>
     <div>
       <h4>Boutique</h4>
@@ -324,7 +332,6 @@ def card(p):
     return f"""<article class="bq-card" data-gamme="{p["gamme"]}">
   <a href="{p["slug"]}.html" class="bq-card-img" aria-label="{E(p["nom"])}">
     <span class="bq-badge">{E(p["badge"])}</span>
-    <span class="bq-card-t" aria-hidden="true">{E(tonnes(p["capacite"]))}</span>
     <img src="{p["image"]}" alt="{E(p["nom"])} {E(p["ref"])}" loading="lazy"/>
   </a>
   <div class="bq-card-body">
@@ -489,7 +496,7 @@ def build_catalogue():
         faq_ld(FAQ)]}
 
     rayons_html = ""
-    for r in RAYONS:
+    for r in [r for r in RAYONS if r["id"] == "chariots"]:
         prods = [p for p in PRODUITS if p["rayon"] == r["id"]]
         filtres = f'<button class="bq-filter is-on" data-f="tout">Tous <span>{len(prods)}</span></button>'
         for k, (nom, plage) in r["gammes"].items():
@@ -538,7 +545,7 @@ def build_catalogue():
   <div class="bq-hero-bg" aria-hidden="true"></div>
   <div class="bq-in bq-hero-grid">
     <div class="bq-hero-txt">
-      <p class="bq-pill"><span></span>Nouveau · Boutique Cohesif BTP</p>
+      <p class="bq-pill">Boutique Cohesif BTP · Vente, livraison et SAV</p>
       <h1>Chariots élévateurs électriques, <span class="accent">sélectionnés pour durer.</span></h1>
       <p class="bq-hero-p">{N} modèles neufs de {CAP_MIN} à {CAP_MAX}, choisis pour leur robustesse et leur fiabilité, livrés et mis en service sur votre site partout en France. Garantie, pièces détachées et SAV inclus dans notre accompagnement.</p>
       <div class="bq-hero-btns">
@@ -546,7 +553,7 @@ def build_catalogue():
         <a href="#choisir" class="bq-btn bq-btn-lg bq-btn-line">Trouver mon chariot</a>
       </div>
       <ul class="bq-hero-kpis">
-        <li><b>{N}</b><span>modèles sélectionnés</span></li>
+        <li><b>{E(ENG["garantie"])}</b><span>de garantie</span></li>
         <li><b>{CAP_MIN_C} → {CAP_MAX_C}</b><span>de capacité</span></li>
         <li><b>{E(ENG["delaiReponse"])}</b><span>pour votre devis</span></li>
       </ul>
@@ -555,7 +562,6 @@ def build_catalogue():
       <img src="img/boutique/chariots/cpd-15.webp" alt="" class="hv hv-l"/>
       <img src="img/boutique/chariots/cpd-25.webp" alt="" class="hv hv-r"/>
       <img src="img/boutique/chariots/cpd-50.webp" alt="" class="hv hv-c"/>
-      <div class="hv-tag"><b>100 %</b><span>électrique</span></div>
     </div>
   </div>
   {trust_bar()}
@@ -797,7 +803,6 @@ def build_fiche(p):
     <div class="bq-gal">
       <div class="bq-gal-main">
         <span class="bq-badge">{E(p["badge"])}</span>
-        <span class="bq-card-t" aria-hidden="true">{E(tonnes(p["capacite"]))}</span>
         <img src="{p["image"]}" alt="{E(p["nom"])} {E(p["ref"])}" width="800" height="500"/>
       </div>
       <ul class="bq-gal-reass">
@@ -916,9 +921,8 @@ def retirer_inactifs():
     txt.write_text("\n".join(lignes) + "\n", encoding="utf-8")
 
 
-def update_sitemaps():
+def update_sitemaps(urls):
     retirer_inactifs()
-    urls = ["boutique.html"] + [f"{p['slug']}.html" for p in PRODUITS]
     path = ROOT / "sitemap.xml"
     xml = path.read_text(encoding="utf-8")
     ajout = ""
@@ -940,8 +944,14 @@ def update_sitemaps():
 
 
 if __name__ == "__main__":
+    import sys
+    sys.dont_write_bytecode = True  # pas de __pycache__ dans le dépôt
+    import build_minipelles
     build_catalogue()
     for p in PRODUITS:
         build_fiche(p)
-    update_sitemaps()
-    print(f"Boutique générée : boutique.html + {len(PRODUITS)} fiches")
+    build_minipelles.build()
+    update_sitemaps(["boutique.html"] + [f"{p['slug']}.html" for p in PRODUITS]
+                    + ["boutique-mini-pelles.html"] + [f"{p['slug']}.html" for p in MINIPELLES])
+    print(f"Boutique générée : boutique.html + {len(PRODUITS)} fiches chariots, "
+          f"boutique-mini-pelles.html + {len(MINIPELLES)} fiches mini-pelles")

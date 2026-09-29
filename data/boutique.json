@@ -5,7 +5,7 @@
   "whatsapp": "33756855727",
   "telephone": "07 60 90 37 74",
   "email": "cohesifbtp@gmail.com",
-  "misAJour": "2026-09-28",
+  "misAJour": "2026-09-29",
   "note": "prix : null = « Prix sur demande ». Renseigner un nombre (€ HT) puis relancer python3 tools/build_boutique.py. leasingMois : mensualité indicative facultative (€ HT/mois). Les engagements SAV se modifient dans « engagements ». actif : false = modèle masqué de la boutique (données conservées, disponible sur commande).",
   "engagements": {
     "garantie": "12 mois",
@@ -31,6 +31,17 @@
           "4 à 10 t"
         ]
       }
+    },
+    {
+      "id": "minipelles",
+      "titre": "Mini-pelles moteur Kubota",
+      "intro": "Trois mini-pelles de 2 à 3 tonnes, toutes équipées d'un moteur diesel Kubota. Le poids réel de chaque machine est vérifié à la bascule : ce que vous lisez est ce que vous recevez.",
+      "gammes": {
+        "mp": [
+          "Mini-pelles",
+          "2 à 3 t"
+        ]
+      }
     }
   ],
   "usagesGamme": {
@@ -54,6 +65,14 @@
       "Pierre et marbre",
       "Ports et plateformes",
       "Charges hors gabarit"
+    ],
+    "mp": [
+      "Terrassement et fondations",
+      "Tranchées VRD et réseaux",
+      "Aménagement paysager",
+      "Piscines et assainissement",
+      "Démolition légère",
+      "Location courte durée"
     ]
   },
   "legendes": {
@@ -664,6 +683,152 @@
       "prix": null,
       "leasingMois": null,
       "actif": false
+    },
+    {
+      "slug": "boutique-mini-pelle-2-tonnes-kubota",
+      "ref": "MP-20",
+      "nom": "Mini-pelle 2 tonnes moteur Kubota",
+      "court": "Mini-pelle 2 t",
+      "capacite": 2000,
+      "poidsReel": 1760,
+      "badge": "Passe partout",
+      "accroche": "Châssis télescopique de 1 m et déport arrière nul : elle entre par un portail de jardin et travaille contre un mur sans rien heurter.",
+      "atouts": [
+        [
+          "Largeur 1 m",
+          "Châssis télescopique de 1 000 à 1 300 mm : elle passe les portillons, puis s'élargit pour gagner en stabilité."
+        ],
+        [
+          "Zéro déport arrière",
+          "La tourelle ne dépasse pas des chenilles : idéale en bord de mur, en cour ou en voirie."
+        ],
+        [
+          "Transportable",
+          "1 760 kg réels : elle se déplace sur une remorque porte-engin avec un véhicule utilitaire."
+        ]
+      ],
+      "image": "img/boutique/minipelles/mp-20.webp",
+      "moteur": "Kubota D902",
+      "puissance": "11,8 kW (16 ch)",
+      "largeur": "1 000 à 1 300 mm (télescopique)",
+      "largeurMin": 1000,
+      "profondeur": 2200,
+      "vitesse": null,
+      "poste": "Canopée 4 montants",
+      "chenilles": "Acier ou caoutchouc, au choix",
+      "equipements": [
+        "Moteur diesel Kubota D902",
+        "Conception zéro déport arrière",
+        "Châssis télescopique 1 000 à 1 300 mm",
+        "Déport latéral de flèche",
+        "Translation 2 vitesses, moteurs à pistons intégrés",
+        "Pompe à pistons et distributeur load-sensing",
+        "Moteur de rotation Danfoss",
+        "Lame de nivellement",
+        "Canopée de protection 4 montants"
+      ],
+      "prix": 18190,
+      "rayon": "minipelles",
+      "gamme": "mp",
+      "leasingMois": null,
+      "actif": true
+    },
+    {
+      "slug": "boutique-mini-pelle-2-5-tonnes-kubota",
+      "ref": "MP-25",
+      "nom": "Mini-pelle 2,5 tonnes moteur Kubota avec cabine",
+      "court": "Mini-pelle 2,5 t",
+      "capacite": 2500,
+      "poidsReel": 2250,
+      "badge": "Le meilleur équilibre",
+      "accroche": "Plus de profondeur, une cabine fermée et des commandes pilotées : la mini-pelle du quotidien pour les artisans du terrassement.",
+      "atouts": [
+        [
+          "Cabine fermée",
+          "Vitre coulissante, travail au sec et à l'abri du bruit toute l'année."
+        ],
+        [
+          "Commandes pilotées",
+          "Commande hydraulique pilotée intégrale : des gestes précis et moins de fatigue."
+        ],
+        [
+          "2,62 m de profondeur",
+          "Assez pour les tranchées de réseaux, les fosses et les fondations courantes."
+        ]
+      ],
+      "image": "img/boutique/minipelles/mp-25.webp",
+      "moteur": "Kubota D1105",
+      "puissance": "14,2 kW (19 ch)",
+      "largeur": "1 311 à 1 500 mm (télescopique)",
+      "largeurMin": 1311,
+      "profondeur": 2624,
+      "vitesse": "2 à 4 km/h",
+      "poste": "Cabine fermée, vitre coulissante",
+      "chenilles": null,
+      "equipements": [
+        "Moteur diesel Kubota D1105",
+        "Cabine fermée avec vitre coulissante",
+        "Commande hydraulique pilotée intégrale",
+        "Système hydraulique load-sensing",
+        "Pompe à pistons et distributeur load-sensing",
+        "Châssis télescopique 1 311 à 1 500 mm",
+        "Déport latéral de flèche",
+        "Translation 2 vitesses, moteurs à pistons intégrés",
+        "Vérin de flèche monté en partie haute (protégé des chocs)",
+        "Lame de nivellement"
+      ],
+      "prix": 21990,
+      "rayon": "minipelles",
+      "gamme": "mp",
+      "leasingMois": null,
+      "actif": true
+    },
+    {
+      "slug": "boutique-mini-pelle-3-tonnes-kubota",
+      "ref": "MP-30",
+      "nom": "Mini-pelle 3 tonnes moteur Kubota avec cabine climatisée",
+      "court": "Mini-pelle 3 t",
+      "capacite": 3000,
+      "poidsReel": 2700,
+      "badge": "La plus puissante",
+      "accroche": "La plus robuste de la gamme, avec cabine climatisée et chauffée : pour enchaîner les chantiers de terrassement en toute saison.",
+      "atouts": [
+        [
+          "Cabine climatisée",
+          "Climatisation et chauffage : le confort d'un engin de grande marque, été comme hiver."
+        ],
+        [
+          "2,83 m de profondeur",
+          "La plus grande profondeur de fouille de la gamme, pour les chantiers exigeants."
+        ],
+        [
+          "Stable et puissante",
+          "2,7 t réelles sur un châssis de 1,55 m : elle creuse fort sans se soulever."
+        ]
+      ],
+      "image": "img/boutique/minipelles/mp-30.webp",
+      "moteur": "Kubota D1105",
+      "puissance": "15,7 kW",
+      "largeur": "1 550 mm",
+      "largeurMin": 1550,
+      "profondeur": 2830,
+      "vitesse": "2,2 à 4 km/h",
+      "poste": "Cabine fermée, climatisation et chauffage",
+      "chenilles": "Caoutchouc ou acier, au choix",
+      "equipements": [
+        "Moteur diesel Kubota D1105",
+        "Cabine fermée avec climatisation et chauffage",
+        "Déport latéral de flèche",
+        "Translation 2 vitesses",
+        "Distributeur principal Beifang Hydraulics",
+        "Godet standard de 53 cm",
+        "Lame de nivellement"
+      ],
+      "prix": 26490,
+      "rayon": "minipelles",
+      "gamme": "mp",
+      "leasingMois": null,
+      "actif": true
     }
   ]
 }

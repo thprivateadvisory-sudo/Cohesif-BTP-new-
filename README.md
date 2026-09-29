@@ -10,9 +10,10 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD
 - `cgv.html` — Conditions générales de vente
-- `boutique.html` + `boutique-*.html` — Boutique chariots élévateurs (pages générées)
+- `boutique.html` + `boutique-chariot-*.html` — Boutique chariots élévateurs (pages générées)
+- `boutique-mini-pelles.html` + `boutique-mini-pelle-*.html` — Boutique mini-pelles (pages générées)
 - `data/boutique.json` — Données de la boutique (produits, prix, engagements SAV)
-- `tools/build_boutique.py` — Générateur de la boutique
+- `tools/build_boutique.py` — Générateur de la boutique (appelle `tools/build_minipelles.py`)
 - `sitemap.xml` — Plan du site pour les moteurs de recherche
 - `robots.txt` — Directives d'exploration
 - `CNAME` — Domaine personnalisé GitHub Pages
@@ -26,7 +27,9 @@ Les pages boutique sont générées : ne pas les modifier à la main.
 
 Tant que `prix` vaut `null`, la fiche affiche « Prix sur demande ».
 `"actif": false` masque un modèle de la boutique (sa page est supprimée, ses données sont conservées).
-Pour ajouter un nouveau rayon (nacelles, mini-pelles…), ajouter une entrée dans `rayons` et les produits correspondants.
+Les mini-pelles (`"rayon": "minipelles"`) affichent la classe (`capacite`) et le poids réel pesé (`poidsReel`).
+
+⚠️ `data/boutique.json` est publié avec le site : n'y mettre que des prix de vente, jamais de prix d'achat ni de nom de fournisseur.
 
 ## Contact
 
