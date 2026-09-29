@@ -16,7 +16,7 @@
     {
       "id": "chariots",
       "titre": "Chariots élévateurs électriques",
-      "intro": "Parmi toute la gamme, nous avons retenu 4 modèles qui couvrent l'essentiel des besoins, du commerce au dépôt de matériaux. Même conception robuste, même SAV, un seul interlocuteur.",
+      "intro": "Six modèles de 1 à 5 tonnes, à batterie plomb-acide, qui couvrent l'essentiel des besoins, du commerce au dépôt de matériaux. Prix affichés, réservation en ligne, un seul interlocuteur pour le SAV.",
       "gammes": {
         "compact": [
           "Compacts",
@@ -170,7 +170,7 @@
     ],
     "batterie": [
       "Batterie de traction",
-      "Plomb-acide ou lithium-ion au choix, selon votre rythme de travail."
+      "Batterie plomb-acide de série ; lithium-ion en option, selon votre rythme de travail."
     ],
     "carrosserie": [
       "Carrosserie robuste",
@@ -221,7 +221,7 @@
         ],
         [
           "Léger",
-          "1,8 t seulement : adapté aux sols de magasins, mezzanines renforcées et locaux commerciaux."
+          "1,7 t seulement : adapté aux sols de magasins, mezzanines renforcées et locaux commerciaux."
         ],
         [
           "Idéal pour débuter",
@@ -237,20 +237,21 @@
         "pneu-plein",
         "poste-conduite"
       ],
-      "longueur": 3170,
+      "longueur": 3020,
       "longueurSans": 1950,
-      "fourches": 1220,
+      "fourches": 1070,
       "largeur": 1200,
       "hauteur": 2150,
-      "poids": 1800,
+      "poids": 1700,
       "levee": 3000,
-      "traction": "4 kW",
-      "levage": "4 kW",
+      "traction": "3 kW",
+      "levage": "3 kW",
       "tension": "60 V",
       "pneus": "Avant 500-8 / arrière 400-8, pleins",
-      "prix": null,
+      "prix": 9990,
       "leasingMois": null,
-      "actif": false
+      "actif": true,
+      "stripeAcompte": "https://buy.stripe.com/4gM00lgHofgw6QUfrjaVa0z"
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-1-5-tonne",
@@ -292,13 +293,14 @@
       "hauteur": 2150,
       "poids": 2300,
       "levee": 3000,
-      "traction": "5 kW",
-      "levage": "5 kW",
+      "traction": "7 kW",
+      "levage": "7 kW",
       "tension": "60 V",
       "pneus": "Avant 650-10 / arrière 500-8, pleins",
-      "prix": null,
+      "prix": 11900,
       "leasingMois": null,
-      "actif": true
+      "actif": true,
+      "stripeAcompte": "https://buy.stripe.com/6oU28t62K2tKdfi92VaVa0A"
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-2-tonnes",
@@ -308,16 +310,16 @@
       "nom": "Chariot élévateur électrique 2 tonnes",
       "court": "Électrique 2 t",
       "capacite": 2000,
-      "badge": "Le bon compromis",
-      "accroche": "2 tonnes de capacité dans un gabarit qui passe partout : le chariot polyvalent des PME.",
+      "badge": "Levée 5 m",
+      "accroche": "2 tonnes et un mât de 5 m de série, dans un gabarit qui passe partout : le chariot des PME qui stockent en hauteur.",
       "atouts": [
         [
           "Moteurs 7,5 kW",
           "De la réserve de puissance pour enchaîner les palettes pleines toute la journée."
         ],
         [
-          "Gabarit compact",
-          "Même largeur de 1,20 m que les petits modèles, pour deux fois plus de capacité."
+          "Mât de 5 m",
+          "Levée jusqu'à 5 m de série : il dessert les rayonnages hauts sans surcoût d'option."
         ],
         [
           "Pneus renforcés",
@@ -338,15 +340,16 @@
       "fourches": 1220,
       "largeur": 1200,
       "hauteur": 2150,
-      "poids": 2800,
-      "levee": 3000,
+      "poids": 2700,
+      "levee": 5000,
       "traction": "7,5 kW",
       "levage": "7,5 kW",
       "tension": "60 V",
       "pneus": "Avant 650-10 / arrière 500-8, pleins",
-      "prix": null,
+      "prix": 14290,
       "leasingMois": null,
-      "actif": false
+      "actif": true,
+      "stripeAcompte": "https://buy.stripe.com/eVq3cx3UCgkAdfi3IBaVa0B"
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-2-5-tonnes",
@@ -394,7 +397,7 @@
       "pneus": "Avant 650-10 / arrière 500-8, pleins",
       "prix": null,
       "leasingMois": null,
-      "actif": true
+      "actif": false
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-3-tonnes",
@@ -440,9 +443,10 @@
       "levage": "10 kW",
       "tension": "60 V",
       "pneus": "Avant 650-10 / arrière 500-8, pleins",
-      "prix": null,
+      "prix": 19900,
       "leasingMois": null,
-      "actif": true
+      "actif": true,
+      "stripeAcompte": "https://buy.stripe.com/9B6bJ3aj0fgw7UY7YRaVa0C"
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-3-5-tonnes",
@@ -530,15 +534,17 @@
       "fourches": 1220,
       "largeur": 1200,
       "hauteur": 2130,
-      "poids": 4800,
+      "poids": 4700,
       "levee": 3000,
       "traction": "16 kW",
       "levage": "16 kW",
       "tension": "80 V",
       "pneus": "Pneus pleins",
-      "prix": null,
+      "prix": 25900,
       "leasingMois": null,
-      "actif": false
+      "actif": true,
+      "stripeAcompte": "https://buy.stripe.com/3cI3cx9eW4BSa36enfaVa0D",
+      "livraisonSupplement": 300
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-5-tonnes",
@@ -552,8 +558,8 @@
       "accroche": "5 tonnes pour l'industrie et les matériaux lourds, avec éclairage LED et pont renforcé.",
       "atouts": [
         [
-          "Levage 21,5 kW",
-          "Un moteur hydraulique puissant pour lever vite les charges les plus denses."
+          "Moteurs 18 kW",
+          "Traction et levage de 18 kW chacun pour déplacer et lever vite les charges les plus denses."
         ],
         [
           "Éclairage LED",
@@ -578,15 +584,17 @@
       "fourches": 1220,
       "largeur": 1320,
       "hauteur": 2250,
-      "poids": 5600,
+      "poids": 5700,
       "levee": 3000,
-      "traction": "16 kW",
-      "levage": "21,5 kW",
+      "traction": "18 kW",
+      "levage": "18 kW",
       "tension": "80 V",
       "pneus": "Pneus pleins",
-      "prix": null,
+      "prix": 36090,
       "leasingMois": null,
-      "actif": true
+      "actif": true,
+      "stripeAcompte": "https://buy.stripe.com/aFaaEZ76O3xOejm3IBaVa0E",
+      "livraisonSupplement": 300
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-7-tonnes",
@@ -837,7 +845,7 @@
     }
   ],
   "reservation": {
-    "note": "Mini-pelles : réservation en ligne. acomptePct = % du prix HT de la machine, payé TTC. Livraison forfaitaire HT par zone (départements). Départements absents des zones = sur devis. stripeAcompte (sur chaque produit) = lien de paiement Stripe du montant de l'acompte TTC ; tant qu'il vaut null, le bouton ouvre la demande de réservation.",
+    "note": "Réservation en ligne (mini-pelles et chariots). acomptePct = % du prix HT de la machine, payé TTC. Livraison forfaitaire HT par zone de départements : « zones » pour les mini-pelles (départ Île-de-France), « zonesChariots » pour les chariots (départ Benelux) ; livraisonSupplement (sur un produit) s'ajoute à la zone. Départements absents des zones = sur devis. stripeAcompte (sur chaque produit) = lien de paiement Stripe du montant de l'acompte TTC ; tant qu'il vaut null, le bouton ouvre la demande de réservation.",
     "acomptePct": 30,
     "tva": 20,
     "zones": [
@@ -951,6 +959,120 @@
           "85",
           "87",
           "90"
+        ]
+      }
+    ],
+    "zonesChariots": [
+      {
+        "nom": "Nord, Île-de-France et Champagne-Lorraine",
+        "prix": 490,
+        "departements": [
+          "02",
+          "08",
+          "10",
+          "27",
+          "28",
+          "51",
+          "54",
+          "55",
+          "57",
+          "59",
+          "60",
+          "62",
+          "75",
+          "76",
+          "77",
+          "78",
+          "80",
+          "91",
+          "92",
+          "93",
+          "94",
+          "95"
+        ]
+      },
+      {
+        "nom": "Centre, Est, Ouest et Rhône",
+        "prix": 690,
+        "departements": [
+          "01",
+          "03",
+          "14",
+          "18",
+          "21",
+          "23",
+          "25",
+          "35",
+          "36",
+          "37",
+          "39",
+          "41",
+          "44",
+          "45",
+          "49",
+          "50",
+          "52",
+          "53",
+          "58",
+          "61",
+          "63",
+          "67",
+          "68",
+          "69",
+          "70",
+          "71",
+          "72",
+          "79",
+          "86",
+          "87",
+          "88",
+          "89",
+          "90"
+        ]
+      },
+      {
+        "nom": "Reste de la France métropolitaine",
+        "prix": 890,
+        "departements": [
+          "04",
+          "05",
+          "06",
+          "07",
+          "09",
+          "11",
+          "12",
+          "13",
+          "15",
+          "16",
+          "17",
+          "19",
+          "22",
+          "24",
+          "26",
+          "29",
+          "30",
+          "31",
+          "32",
+          "33",
+          "34",
+          "38",
+          "40",
+          "42",
+          "43",
+          "46",
+          "47",
+          "48",
+          "56",
+          "64",
+          "65",
+          "66",
+          "73",
+          "74",
+          "81",
+          "82",
+          "83",
+          "84",
+          "85"
         ]
       }
     ]

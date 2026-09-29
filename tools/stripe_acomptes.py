@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Crée les liens de paiement Stripe des acomptes mini-pelles et les branche sur le site.
+"""Crée les liens de paiement Stripe des acomptes (mini-pelles et chariots) et les branche sur le site.
 
     STRIPE_API_KEY=rk_live_... python3 tools/stripe_acomptes.py
 
-Pour chaque mini-pelle active sans "stripeAcompte" : crée un produit, un prix
+Pour chaque machine active avec un prix et sans "stripeAcompte" : crée un produit, un prix
 (acompte TTC calculé comme sur le site) et un lien de paiement Stripe, puis
 enregistre le lien dans data/boutique.json et régénère la boutique.
-Relancer le script ne recrée pas les liens déjà enregistrés.
+Relancer le script ne recrée pas les liens déjà enregistrés. Si un prix change,
+remettre "stripeAcompte" à null puis relancer (et désactiver l'ancien lien dans Stripe).
 
 Clé conseillée : clé restreinte Stripe avec les droits en écriture sur
 Products, Prices et Payment Links (jamais la clé secrète sk_ complète dans le dépôt).
@@ -41,9 +42,10 @@ def stripe(path, params):
 
 def lien_acompte(p, montant_centimes):
     ref = p["ref"]
-    produit = stripe("products", {"name": f"Acompte mini-pelle {ref}",
-                                  "description": f"Acompte de réservation · {p['nom']}",
-                                  "metadata[cohesif_ref]": ref})
+    produit = stripe("products", {"name": f"Acompte 30 % — {p['nom']} {ref}",
+                                  "description": "Acompte de réservation. Solde et livraison réglés par virement avant expédition.",
+                                  "images[0]": f"https://cohesifbtp.fr/img/boutique/stripe/{ref.lower()}.jpg",
+                                  "metadata[marque]": "Cohesif BTP", "metadata[ref]": ref})
     prix = stripe("prices", {"product": produit["id"], "currency": "eur",
                              "unit_amount": montant_centimes, "metadata[cohesif_ref]": ref})
     base = {"line_items[0][price]": prix["id"], "line_items[0][quantity]": 1,
@@ -51,7 +53,7 @@ def lien_acompte(p, montant_centimes):
             "billing_address_collection": "required",
             "tax_id_collection[enabled]": "true",
             "metadata[cohesif_ref]": ref,
-            "custom_text[submit][message]": f"Acompte de réservation de votre {p['nom']}. "
+            "custom_text[submit][message]": f"Acompte de réservation : {p['nom']}. "
                                             f"Conditions : {CGV}"}
     try:
         # case « J'accepte les conditions » : exige l'URL des CGV dans les réglages publics Stripe
@@ -66,7 +68,7 @@ def main():
     resa = data["reservation"]
     crees = 0
     for p in data["produits"]:
-        if p.get("rayon") != "minipelles" or not p.get("actif", True) or not p.get("prix") or p.get("stripeAcompte"):
+        if not p.get("actif", True) or not p.get("prix") or p.get("stripeAcompte"):
             continue
         centimes = round(p["prix"] * resa["acomptePct"] / 100 * (1 + resa["tva"] / 100) * 100)
         print(f"{p['ref']} : acompte {centimes / 100:.2f} € TTC…")
@@ -77,7 +79,7 @@ def main():
         # enregistrement après chaque lien : pas de doublon si le script s'arrête en route
         DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     if not crees:
-        print("Aucun lien à créer : toutes les mini-pelles ont déjà leur lien d'acompte.")
+        print("Aucun lien à créer : toutes les machines en vente ont déjà leur lien d'acompte.")
         return
     subprocess.run([sys.executable, str(ROOT / "tools" / "build_boutique.py")], check=True)
 

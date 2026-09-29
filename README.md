@@ -29,10 +29,14 @@ Tant que `prix` vaut `null`, la fiche affiche « Prix sur demande ».
 `"actif": false` masque un modèle de la boutique (sa page est supprimée, ses données sont conservées).
 Les mini-pelles (`"rayon": "minipelles"`) affichent la classe (`capacite`) et le poids réel pesé (`poidsReel`).
 
-Réservation des mini-pelles : le client choisit son département, la page affiche livraison, total et acompte.
-Réglages dans `reservation` (acompte en %, TVA, tarifs de livraison par zone de départements).
-Pour activer le paiement en ligne, renseigner `"stripeAcompte": "https://buy.stripe.com/..."` sur chaque mini-pelle
-(lien de paiement Stripe du montant de l'acompte TTC). Tant qu'il vaut `null`, le bouton ouvre la demande de réservation.
+Réservation en ligne (mini-pelles et chariots avec un prix) : le client choisit son département, la page affiche livraison, total et acompte.
+Réglages dans `reservation` : acompte en %, TVA, tarifs de livraison par zone de départements
+(`zones` pour les mini-pelles, départ Île-de-France ; `zonesChariots` pour les chariots, départ Benelux).
+`"livraisonSupplement"` sur un produit s'ajoute au tarif de la zone (ex. chariots de 4 et 5 t).
+Pour activer le paiement en ligne, renseigner `"stripeAcompte": "https://buy.stripe.com/..."` sur chaque machine
+(lien de paiement Stripe du montant de l'acompte TTC), ou lancer `tools/stripe_acomptes.py`.
+Tant qu'il vaut `null`, le bouton ouvre la demande de réservation.
+⚠️ Si un prix change, l'acompte change : créer un nouveau lien Stripe et désactiver l'ancien.
 
 ⚠️ `data/boutique.json` est publié avec le site : n'y mettre que des prix de vente, jamais de prix d'achat ni de nom de fournisseur.
 
