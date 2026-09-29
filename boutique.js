@@ -7,20 +7,23 @@
   var menu = document.getElementById('bqMenu');
   if (burger && menu) {
     var nav = document.querySelector('.bq-nav');
-    burger.addEventListener('click', function () {
-      // le menu démarre sous la barre de navigation (sa position varie avec la barre noire au-dessus)
-      if (nav) menu.style.top = Math.round(nav.getBoundingClientRect().bottom) + 'px';
-      var open = menu.classList.toggle('open');
+    // le menu couvre tout l'écran derrière la barre de navigation ; ses liens commencent juste sous la barre,
+    // dont la position varie (barre noire visible ou non, défilement en cours sur iPhone)
+    var caler = function () {
+      if (nav && menu.classList.contains('open')) {
+        menu.style.paddingTop = Math.ceil(nav.getBoundingClientRect().bottom) + 8 + 'px';
+      }
+    };
+    var ouvrir = function (open) {
+      menu.classList.toggle('open', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.body.style.overflow = open ? 'hidden' : '';
-    });
-    menu.addEventListener('click', function (e) {
-      if (e.target.closest('a')) {
-        menu.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-    });
+      caler();
+    };
+    burger.addEventListener('click', function () { ouvrir(!menu.classList.contains('open')); });
+    menu.addEventListener('click', function (e) { if (e.target.closest('a')) ouvrir(false); });
+    window.addEventListener('scroll', caler, { passive: true });
+    window.addEventListener('resize', caler);
   }
 
   // Filtres du catalogue

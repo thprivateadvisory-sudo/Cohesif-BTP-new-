@@ -244,6 +244,7 @@
       background: #ffffff !important;
       color-scheme: light !important;
       forced-color-adjust: none;
+      overflow-x: clip;
     }
 
     body {
@@ -253,6 +254,7 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      overflow-x: clip;
     }
 
     /* Neutralise tout dark mode automatique iOS / Safari */
@@ -1825,7 +1827,7 @@
       .logo { height: 36px; }
       .hero { padding: 48px 20px 64px; }
       section { padding: 70px 20px; }
-      .services-grid, .packs-grid, .promises-grid { grid-template-columns: 1fr; }
+      .services-grid, .packs-grid, .promises-grid { grid-template-columns: minmax(0, 1fr); }
       .stats-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
       .stats { padding: 0 20px 60px; }
       .why-side { padding: 36px 28px; }
@@ -1922,7 +1924,7 @@
       .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 640px) {
-      .testimonials-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: minmax(0, 1fr); }
       .t-score-num { font-size: 56px; }
       .testimonials-header { margin-bottom: 40px; }
     }
@@ -2149,6 +2151,11 @@
       .leasing-form-row { grid-template-columns: 1fr; }
       .leasing-sim-result { flex-direction: column; align-items: flex-start; gap: 6px; }
       .leasing-modal-header h2 { font-size: 19px; }
+    }
+
+    /* Mobile : les blocs des grilles peuvent rétrécir (sinon un contenu large élargit toute la page) */
+    @media (max-width: 900px) {
+      [class*="-grid"] > *, .shop-card > *, .footer-top > *, .form-row > *, .partner-packs > * { min-width: 0; }
     }
   </style>
 </head>

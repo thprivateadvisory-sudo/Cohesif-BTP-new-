@@ -17,6 +17,7 @@ acompte) ; le lien de paiement Stripe se crée avec tools/stripe_acomptes.py.
 Les mini-pelles (rayon "minipelles") ont leur propre gabarit : tools/build_minipelles.py,
 appelé automatiquement par ce script.
 """
+import hashlib
 import html
 import json
 import re
@@ -44,6 +45,11 @@ N = len(PRODUITS)
 
 
 GAMMES = {k: v for r in RAYONS for k, v in r["gammes"].items()}
+
+
+def version(fichier):
+    """Empreinte du fichier, ajoutée à son URL : les navigateurs rechargent la feuille de style et le script dès qu'ils changent."""
+    return hashlib.sha1((ROOT / fichier).read_bytes()).hexdigest()[:8]
 
 
 # ─────────────────────────── utilitaires
@@ -232,7 +238,7 @@ def head(title, desc, url, image, extra_ld=""):
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="boutique.css"/>
+<link rel="stylesheet" href="boutique.css?v={version("boutique.css")}"/>
 {extra_ld}
 </head>
 <body>
@@ -409,7 +415,7 @@ def wa_float(texte):
     return f'<a href="{wa_link(texte)}" class="bq-wa" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp">{WA_SVG}</a>\n'
 
 
-TAIL = '<script src="boutique.js" defer></script>\n</body>\n</html>\n'
+TAIL = f'<script src="boutique.js?v={version("boutique.js")}" defer></script>\n</body>\n</html>\n'
 
 
 # ─────────────────────────── blocs réutilisables
