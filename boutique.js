@@ -119,6 +119,56 @@
     majWa();
   }
 
+  // Mini-pelles : livraison selon le département, total et acompte
+  var resa = document.querySelector('[data-resa]');
+  if (resa) {
+    var R = JSON.parse(resa.querySelector('[data-resa-data]').textContent);
+    var r = function (s) { return resa.querySelector(s); };
+    var eur = function (n) {
+      return n.toLocaleString('fr-FR', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €';
+    };
+    var btn = r('[data-resa-btn]');
+    var depSel = r('[data-resa-dep]');
+    var majResa = function () {
+      var dep = depSel.value;
+      var zone = null;
+      R.zones.forEach(function (z) { if (z.deps.indexOf(dep) !== -1) zone = z; });
+      var depTxt = dep ? depSel.options[depSel.selectedIndex].text : '';
+      r('[data-resa-calc]').hidden = !zone;
+      r('[data-resa-devis]').hidden = !dep || !!zone;
+      if (zone) {
+        var tot = R.prix + zone.prix;
+        r('[data-resa-zone]').textContent = '(' + zone.nom + ')';
+        r('[data-resa-liv]').textContent = eur(zone.prix) + ' HT';
+        r('[data-resa-tot]').textContent = eur(tot) + ' HT';
+        r('[data-resa-ttc]').textContent = 'soit ' + eur(Math.round(tot * (100 + R.tva)) / 100) + ' TTC';
+      }
+      // lien Stripe : on transmet le modèle et le département pour les retrouver dans le paiement
+      if (R.stripe) {
+        btn.href = R.stripe + (dep ? (R.stripe.indexOf('?') === -1 ? '?' : '&') +
+          'client_reference_id=' + encodeURIComponent(R.ref + '_dep' + dep) : '');
+        btn.target = '_blank';
+        btn.rel = 'noopener';
+      }
+      btn.setAttribute('data-dep', depTxt);
+      btn.setAttribute('data-livraison', zone ? eur(zone.prix) + ' HT (' + zone.nom + ')' : (dep ? 'sur devis' : ''));
+    };
+    depSel.addEventListener('change', majResa);
+    majResa();
+    // sans lien Stripe : la demande de réservation passe par le formulaire, préremplie
+    btn.addEventListener('click', function (e) {
+      if (R.stripe) {
+        if (!depSel.value) { e.preventDefault(); depSel.focus(); }
+        return;
+      }
+      var msg = champ('message');
+      if (msg) {
+        msg.value = 'Je souhaite réserver la ' + R.nom + ' (' + R.ref + ') avec un acompte de ' + R.pct + ' %.' +
+          (depSel.value ? ' Livraison : ' + btn.getAttribute('data-dep') + ', ' + btn.getAttribute('data-livraison') + '.' : '');
+      }
+    });
+  }
+
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-modele]');
     if (a) choisirModele(a.getAttribute('data-modele'));
