@@ -159,7 +159,7 @@ FAQ = [
     ("Les machines sont-elles conformes pour la France ?",
      "Oui : chaque mini-pelle est livrée avec son marquage CE et sa déclaration de conformité, indispensables pour l'utiliser sur un chantier et la faire contrôler."),
     ("Proposez-vous des godets et accessoires ?",
-     "Oui : godets de différentes largeurs, godet de curage, attache rapide, marteau hydraulique, tarière… Indiquez vos besoins dans votre demande, nous les chiffrons avec la machine."),
+     "Chaque mini-pelle est livrée avec un godet standard. En option : godets de différentes largeurs, godet de curage, attache rapide, marteau hydraulique, tarière… Indiquez vos besoins dans votre demande, nous les chiffrons avec la machine."),
     ("Peut-on payer en plusieurs fois ?",
      "Oui. Avec Cohesif Leasing, vous réglez une mensualité fixe sur 24 à 60 mois. Indiquez « Leasing » dans votre demande pour recevoir les deux options."),
 ]
@@ -487,6 +487,7 @@ def build_fiche(p):
         specs.append(("Chenilles", p["chenilles"]))
     specs += [
         ("Déport de flèche", "Oui"),
+        ("Godet", "Godet standard inclus"),
         ("Lame de nivellement", "Oui"),
         ("Conduite", "CACES R482 cat. A recommandé"),
         ("Conformité", "Marquage CE, déclaration de conformité fournie"),
