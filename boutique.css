@@ -376,6 +376,7 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   .bq-sticky div{display:flex;flex-direction:column;line-height:1.2}
   .bq-sticky b{font-size:.92rem}
   .bq-sticky span{font-size:.75rem;color:var(--g500)}
+  .bq-sticky b span,.bq-sticky span span{font-size:inherit;color:inherit}
   .bq-sticky.is-hidden{transform:translateY(110%)}
   .bq-wa{bottom:84px;right:16px;width:52px;height:52px}
   body{padding-bottom:64px}
@@ -463,5 +464,6 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .mp-resa-note{font-size:.76rem;color:var(--g500)}
 .mp-resa-note a{text-decoration:underline}
 @media (max-width:640px){.mp-resa-calc dt span{display:block}}
-@media (max-width:380px){.bq-buy .bq-btn-full{white-space:normal;text-align:center}.mp-resa-calc div{flex-wrap:wrap;gap:0 .6rem}}
+.bq-buy .bq-btn-full{white-space:normal;text-align:center}
+@media (max-width:380px){.mp-resa-calc div{flex-wrap:wrap;gap:0 .6rem}}
 .px-ttc{font-size:.8rem;font-weight:600;color:var(--g700)}
