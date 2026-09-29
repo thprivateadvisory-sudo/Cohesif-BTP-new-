@@ -40,9 +40,10 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .bq-topbar a{color:#fff;font-weight:700}
 .bq-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem var(--pad);
   background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--g200)}
+.bq-logo{flex-shrink:0}
 .bq-logo img{height:38px;width:auto}
 .bq-links{display:flex;gap:.2rem;list-style:none}
-.bq-links a{font-size:.86rem;font-weight:500;color:var(--g700);padding:.45rem .7rem;border-radius:8px;transition:color .15s,background .15s}
+.bq-links a{white-space:nowrap;font-size:.86rem;font-weight:500;color:var(--g700);padding:.45rem .7rem;border-radius:8px;transition:color .15s,background .15s}
 .bq-links a:hover{color:var(--black);background:var(--g100)}
 .bq-nav-r{display:flex;align-items:center;gap:.6rem}
 .bq-burger{display:none;flex-direction:column;gap:5px;background:none;border:0;padding:8px;cursor:pointer}
@@ -323,9 +324,13 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .bq-grid-3{grid-template-columns:repeat(3,1fr)}
 
 /* responsive */
-@media (max-width:1100px){
+/* tablette : le menu complet ne tient qu'à partir de ~1370 px, on retire les liens secondaires puis on passe au burger */
+@media (max-width:1366px){.bq-l-opt{display:none}}
+@media (max-width:1180px){
   .bq-links{display:none}
   .bq-burger{display:flex}
+}
+@media (max-width:1100px){
   .bq-grid{grid-template-columns:repeat(2,1fr)}
   .bq-why-grid{grid-template-columns:repeat(2,1fr)}
   .bq-steps{grid-template-columns:repeat(2,1fr)}
