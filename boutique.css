@@ -443,3 +443,22 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   .mp-verite-card{padding:1rem}
   .mp-poids-t th,.mp-poids-t td{padding:.6rem .5rem}
 }
+
+/* ─── Mini-pelles : réservation avec acompte ─── */
+.mp-resa{display:flex;flex-direction:column;gap:.7rem;background:#fff;border:1px solid var(--g200);border-radius:14px;padding:1rem}
+.mp-resa-dep{display:flex;flex-direction:column;gap:.35rem;font-size:.82rem;font-weight:700}
+.mp-resa-dep select{font:inherit;font-weight:500;font-size:.95rem;padding:.7rem .8rem;border:1px solid var(--g300);border-radius:10px;background:#fff;color:var(--black);width:100%}
+.mp-resa-calc{display:flex;flex-direction:column;gap:.35rem;margin:0}
+.mp-resa-calc div{display:flex;justify-content:space-between;gap:1rem;font-size:.86rem;color:var(--g700)}
+.mp-resa-calc dt span{color:var(--g500);font-size:.78rem}
+.mp-resa-calc dd{margin:0;font-weight:700;color:var(--black);text-align:right;white-space:nowrap}
+.mp-resa-calc dd small{display:block;font-size:.74rem;font-weight:500;color:var(--g500)}
+.mp-resa-tot{border-top:1px solid var(--g200);padding-top:.45rem}
+.mp-resa-tot dt{font-weight:700;color:var(--black)}
+.mp-resa-ac{background:var(--accent-s);border-radius:10px;padding:.55rem .7rem;margin-top:.2rem}
+.mp-resa-ac dt{font-weight:700;color:var(--black)}
+.mp-resa-ac dd{color:var(--accent-d)}
+.mp-resa-dev{font-size:.84rem;color:var(--g700)}
+.mp-resa-note{font-size:.76rem;color:var(--g500)}
+.mp-resa-note a{text-decoration:underline}
+@media (max-width:640px){.mp-resa-calc dt span{display:block}}

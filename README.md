@@ -29,6 +29,11 @@ Tant que `prix` vaut `null`, la fiche affiche « Prix sur demande ».
 `"actif": false` masque un modèle de la boutique (sa page est supprimée, ses données sont conservées).
 Les mini-pelles (`"rayon": "minipelles"`) affichent la classe (`capacite`) et le poids réel pesé (`poidsReel`).
 
+Réservation des mini-pelles : le client choisit son département, la page affiche livraison, total et acompte.
+Réglages dans `reservation` (acompte en %, TVA, tarifs de livraison par zone de départements).
+Pour activer le paiement en ligne, renseigner `"stripeAcompte": "https://buy.stripe.com/..."` sur chaque mini-pelle
+(lien de paiement Stripe du montant de l'acompte TTC). Tant qu'il vaut `null`, le bouton ouvre la demande de réservation.
+
 ⚠️ `data/boutique.json` est publié avec le site : n'y mettre que des prix de vente, jamais de prix d'achat ni de nom de fournisseur.
 
 ## Contact
