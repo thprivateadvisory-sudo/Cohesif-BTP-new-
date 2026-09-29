@@ -59,6 +59,10 @@ def euros2(n):
     return f"{n:,.2f}".replace(",", " ").replace(".", ",") + " €"
 
 
+def ttc(ht):
+    return round(ht * (1 + RESA["tva"] / 100), 2)
+
+
 def acompte_ttc(p):
     return round(p["prix"] * RESA["acomptePct"] / 100 * (1 + RESA["tva"] / 100), 2)
 
@@ -73,7 +77,7 @@ def resa_html(p):
             "zones": [{"nom": z["nom"], "prix": z["prix"], "deps": z["departements"]} for z in RESA["zones"]]}
     label = (f"Payer l'acompte de {euros2(acompte_ttc(p))} TTC" if p.get("stripeAcompte")
              else "Réserver avec un acompte")
-    return f"""<div class="mp-resa" data-resa>
+    return f"""<div class="mp-resa" id="reserver" data-resa>
           <script type="application/json" data-resa-data>{B.json.dumps(data, ensure_ascii=False)}</script>
           <label class="mp-resa-dep">Livraison dans votre département
             <select data-resa-dep><option value="">Choisir mon département…</option>{opts}</select>
@@ -100,11 +104,12 @@ def prof(p):
 
 def prix_html(p):
     if p.get("prix"):
-        out = f'<span class="px-val">{euros(p["prix"])} <small>HT</small></span>'
+        out = (f'<span class="px-val">{euros(p["prix"])} <small>HT</small></span>'
+               f'<span class="px-ttc">soit {euros2(ttc(p["prix"]))} TTC</span>')
         if p.get("leasingMois"):
             out += f'<span class="px-sub">ou {euros(p["leasingMois"])} HT/mois avec Cohesif Leasing</span>'
         else:
-            out += '<span class="px-sub">Machine neuve · livraison calculée selon votre département</span>'
+            out += '<span class="px-sub">Réservation en ligne avec un acompte de 30 %</span>'
         return out
     return ('<span class="px-val px-dem">Prix sur demande</span>'
             f'<span class="px-sub">Devis détaillé sous {ENG["delaiReponse"]}</span>')
@@ -141,7 +146,7 @@ def card(p):
       <div class="bq-px">{prix_html(p)}</div>
       <div class="bq-card-btns">
         <a href="{p["slug"]}.html" class="bq-btn bq-btn-ghost">Voir la fiche</a>
-        <a href="#devis" class="bq-btn" data-modele="{p["slug"]}">Devis</a>
+        <a href="{p["slug"]}.html#reserver" class="bq-btn">Réserver</a>
       </div>
     </div>
   </div>
@@ -212,25 +217,27 @@ FAQ = [
     ("Pourquoi parlez-vous autant du poids réel ?",
      "Parce que c'est le piège n° 1 du marché des mini-pelles importées : certaines machines vendues comme des « 2 tonnes » ne pèsent en réalité que 1,2 à 1,4 t. Une machine trop légère creuse moins fort, se soulève et s'use plus vite. Chez nous, chaque modèle affiche son poids réel mesuré à la bascule, et vous pouvez demander la vidéo de la pesée de votre machine avant son expédition."),
     ("Les prix affichés comprennent quoi ?",
-     "Le prix HT affiché correspond à la mini-pelle neuve, équipée comme décrit sur sa fiche, dédouanée et disponible en France. La livraison jusqu'à votre dépôt ou votre chantier est calculée selon votre département et affichée avant la réservation (Corse et outre-mer sur devis). Vous pouvez réserver en ligne avec un acompte de 30 %."),
+     "Le prix affiché correspond à la mini-pelle neuve, équipée comme décrit sur sa fiche, dédouanée et disponible en France. Il est indiqué hors taxes (HT) et toutes taxes comprises (TTC, TVA 20 %). La livraison jusqu'à votre dépôt ou votre chantier est calculée selon votre département et affichée avant la réservation (Corse et outre-mer sur devis). Vous réservez en ligne avec un acompte de 30 % ; le solde et la livraison sont réglés avant l'expédition."),
     ("Quel est le délai de livraison ?",
-     "Les machines sont préparées à la commande. Comptez en général 10 à 14 semaines entre la commande et la livraison ; la date prévue est indiquée clairement sur votre devis."),
+     "Les machines sont préparées à la commande. Comptez en général 10 à 14 semaines entre la commande et la livraison ; la date prévue vous est confirmée par écrit sous 48 h après votre réservation."),
     ("Faut-il un CACES pour conduire une mini-pelle ?",
      "En France, l'employeur doit délivrer une autorisation de conduite, en général après un CACES R482 catégorie A (engins compacts, jusqu'à 6 t). Un particulier qui utilise sa propre machine n'est pas soumis au CACES, mais une formation reste vivement conseillée."),
     ("Peut-on la transporter sur une remorque ?",
-     "Oui. La MP-20 (1 760 kg réels) se transporte sur une remorque porte-engin de 2,5 à 3,5 t de PTAC tractée par un utilitaire ; la MP-25 et la MP-30 demandent une remorque de 3,5 t. Selon le poids total de l'ensemble, le permis BE peut être nécessaire : nous vous conseillons au moment du devis."),
+     "Oui. La MP-20 (1 760 kg réels) se transporte sur une remorque porte-engin de 2,5 à 3,5 t de PTAC tractée par un utilitaire ; la MP-25 et la MP-30 demandent une remorque de 3,5 t. Selon le poids total de l'ensemble, le permis BE peut être nécessaire  : nous vous conseillons avant la livraison."),
     ("Qui assure l'entretien et les pièces ?",
      f"Cohesif BTP. La garantie de {ENG['garantie']} et les pièces détachées passent par nous. Le moteur est un Kubota, une marque japonaise dont les pièces d'entretien (filtres, courroies…) se trouvent facilement en France."),
     ("Les machines sont-elles conformes pour la France ?",
      "Oui : chaque mini-pelle est livrée avec son marquage CE et sa déclaration de conformité, indispensables pour l'utiliser sur un chantier et la faire contrôler."),
     ("Proposez-vous des godets et accessoires ?",
-     "Chaque mini-pelle est livrée avec un godet standard. En option : godets de différentes largeurs, godet de curage, attache rapide, marteau hydraulique, tarière… Indiquez vos besoins dans votre demande, nous les chiffrons avec la machine."),
+     "Chaque mini-pelle est livrée avec un godet standard. En option : godets de différentes largeurs, godet de curage, attache rapide, marteau hydraulique, tarière… Indiquez vos besoins au conseiller qui vous appelle après la réservation, ou dans le formulaire de contact : nous les chiffrons avec la machine."),
+    ("Je suis professionnel : comment récupérer la TVA ?",
+     "Après le paiement de l'acompte, vous recevez automatiquement une facture qui détaille le montant HT, la TVA à 20 % et le total TTC. Le solde fait l'objet d'une facture de solde, qui reprend le prix total HT, la TVA et l'acompte déjà versé. Pensez à indiquer le nom et le numéro de TVA de votre société au moment du paiement."),
     ("Peut-on payer en plusieurs fois ?",
      "Oui. Avec Cohesif Leasing, vous réglez une mensualité fixe sur 24 à 60 mois. Indiquez « Leasing » dans votre demande pour recevoir les deux options."),
 ]
 
 
-def form_html(selected=None, titre="Recevez votre devis sous 48 h"):
+def form_html(selected=None, titre="Une question avant de réserver ?"):
     opts = "".join(
         f'<option value="{E(p["ref"] + " · " + p["nom"])}" data-slug="{p["slug"]}"{" selected" if p["slug"] == selected else ""}>'
         f'{E(p["ref"])} · {E(p["nom"])}</option>'
@@ -238,9 +245,9 @@ def form_html(selected=None, titre="Recevez votre devis sous 48 h"):
     return f"""<section class="bq-devis" id="devis">
   <div class="bq-in bq-devis-grid">
     <div class="bq-devis-txt">
-      <p class="bq-kicker">Devis gratuit et sans engagement</p>
+      <p class="bq-kicker">Contact · réponse sous {ENG["delaiReponse"]}</p>
       <h2>{titre}</h2>
-      <p>Indiquez le modèle, vos accessoires et le lieu de livraison. Vous recevez un devis <strong>clair et complet</strong> : machine, options, livraison et délai.</p>
+      <p>Accessoires, plusieurs machines, leasing, livraison en Corse ou outre-mer : écrivez-nous, un conseiller vous répond avec une offre <strong>claire et complète</strong>.</p>
       <ul class="bq-checks">
         <li>Réponse d'un conseiller sous {ENG["delaiReponse"]}</li>
         <li>Vidéo de la pesée de votre machine sur demande</li>
@@ -249,11 +256,11 @@ def form_html(selected=None, titre="Recevez votre devis sous 48 h"):
       </ul>
       <div class="bq-devis-contacts">
         <a class="bq-contact" href="{tel_link()}">{ico("phone")}<span><small>Appelez-nous</small>{TEL}</span></a>
-        <a class="bq-contact bq-contact-wa" href="{wa_link("Bonjour, je souhaite un devis pour une mini-pelle.")}" target="_blank" rel="noopener">{WA_SVG}<span><small>WhatsApp</small>Réponse rapide</span></a>
+        <a class="bq-contact bq-contact-wa" href="{wa_link("Bonjour, j'ai une question sur vos mini-pelles.")}" target="_blank" rel="noopener">{WA_SVG}<span><small>WhatsApp</small>Réponse rapide</span></a>
       </div>
     </div>
     <form class="bq-form" action="{B.FORM}" method="POST" data-bq-form>
-      <input type="hidden" name="_subject" value="Cohesif BTP · Demande de devis mini-pelle"/>
+      <input type="hidden" name="_subject" value="Cohesif BTP · Demande mini-pelle"/>
       <input type="hidden" name="source" value="Boutique Cohesif BTP · Mini-pelles"/>
       <input type="text" name="_gotcha" class="bq-hp" tabindex="-1" autocomplete="off" aria-hidden="true"/>
       <div class="bq-frow">
@@ -304,11 +311,11 @@ def form_html(selected=None, titre="Recevez votre devis sous 48 h"):
         </label>
       </div>
       <label><span>Votre besoin <em>(facultatif)</em></span><textarea name="message" rows="3" placeholder="Type de travaux, accès au chantier (largeur de portail), profondeur à creuser, date souhaitée…"></textarea></label>
-      <button type="submit" class="bq-btn bq-btn-lg bq-btn-full">Recevoir mon devis</button>
+      <button type="submit" class="bq-btn bq-btn-lg bq-btn-full">Envoyer ma demande</button>
       <p class="bq-form-note">Gratuit et sans engagement. Vos données servent uniquement à vous répondre. <a href="politique-confidentialite.html">Confidentialité</a></p>
       <div class="bq-form-ok" role="status" hidden>
         <strong>Merci, votre demande est bien envoyée.</strong>
-        <span>Un conseiller Cohesif BTP vous recontacte sous {ENG["delaiReponse"]} avec votre devis.</span>
+        <span>Un conseiller Cohesif BTP vous recontacte sous {ENG["delaiReponse"]}.</span>
       </div>
     </form>
   </div>
@@ -326,8 +333,10 @@ def compare_table():
         ("Profondeur de fouille", lambda p: mm(p["profondeur"])),
         ("Largeur", lambda p: E(p["largeur"])),
         ("Poste de conduite", lambda p: E(p["poste"])),
-        ("Prix", lambda p: f'<b>{euros(p["prix"])} HT</b>' if p.get("prix") else "Sur demande"),
-        ("", lambda p: f'<a href="#devis" class="bq-btn bq-btn-sm" data-modele="{p["slug"]}">Devis</a>'),
+        ("Prix HT", lambda p: f'<b>{euros(p["prix"])}</b>' if p.get("prix") else "Sur demande"),
+        ("Prix TTC", lambda p: euros2(ttc(p["prix"])) if p.get("prix") else "Sur demande"),
+        ("Acompte à la réservation", lambda p: f'{euros2(acompte_ttc(p))} TTC' if p.get("prix") else "—"),
+        ("", lambda p: f'<a href="{p["slug"]}.html#reserver" class="bq-btn bq-btn-sm">Réserver</a>'),
     ]
     rows = "".join(f'<tr><th scope="row">{E(l)}</th>' + "".join(f"<td>{f(p)}</td>" for p in MP) + "</tr>" for l, f in lignes)
     return f'<div class="bq-cmp-wrap" tabindex="0" role="region" aria-label="Tableau comparatif des mini-pelles"><table class="bq-cmp"><thead><tr><th></th>{head_}</tr></thead><tbody>{rows}</tbody></table></div>'
@@ -337,13 +346,21 @@ def faq_html(items):
     return "".join(f'<details class="bq-faq-it"><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in items)
 
 
-def sticky(titre, sous, slug=None):
-    dm = f' data-modele="{slug}"' if slug else ""
+def sticky(titre, sous, lien="#reserver", bouton="Réserver"):
     return f"""<div class="bq-sticky">
   <div><b>{E(titre)}</b><span>{E(sous)}</span></div>
-  <a href="#devis" class="bq-btn"{dm}>Mon devis</a>
+  <a href="{lien}" class="bq-btn">{E(bouton)}</a>
 </div>
 """
+
+
+def nav(lien="#reserver"):
+    """Menu de la boutique, avec le bouton principal orienté réservation sur les pages mini-pelles."""
+    sm = '<a href="#devis" class="bq-btn bq-btn-sm">Demander un devis</a>'
+    lg = '<a href="#devis" class="bq-btn bq-btn-lg">Demander un devis</a>'
+    assert sm in B.NAV and lg in B.NAV, "menu de la boutique modifié : mettre à jour nav()"
+    return (B.NAV.replace(sm, f'<a href="{lien}" class="bq-btn bq-btn-sm">Réserver</a>')
+                 .replace(lg, f'<a href="{lien}" class="bq-btn bq-btn-lg">Réserver une mini-pelle</a>'))
 
 
 def breadcrumb(*items):
@@ -378,7 +395,7 @@ def build_catalogue():
         f'<div><p class="bq-card-cat">{E(t)}</p><h3>{E(p["ref"])} · {E(tonnes(p["capacite"]))}</h3><p>{E(d)}</p>'
         f'<span class="mp-choix-go">Voir la fiche →</span></div></a>' for p, t, d in choix)
 
-    body = B.head(title, desc, CAT_URL, MP[1]["image"], ld(ld_obj)) + B.NAV + f"""
+    body = B.head(title, desc, CAT_URL, MP[1]["image"], ld(ld_obj)) + nav("#catalogue") + f"""
 <header class="bq-hero mp-hero">
   <div class="bq-in bq-hero-grid">
     <div class="bq-hero-txt">
@@ -392,7 +409,7 @@ def build_catalogue():
       <ul class="bq-hero-kpis">
         <li><b>Kubota</b><span>moteur diesel japonais</span></li>
         <li><b>1,76 → 2,7 t</b><span>de poids réel pesé</span></li>
-        <li><b>{E(ENG["delaiReponse"])}</b><span>pour votre devis</span></li>
+        <li><b>En ligne</b><span>réservation avec acompte</span></li>
       </ul>
     </div>
     <div class="mp-hero-vis" aria-hidden="true">
@@ -444,7 +461,7 @@ def build_catalogue():
     <div class="bq-sec-head">
       <p class="bq-kicker">Bien choisir</p>
       <h2>Quelle mini-pelle pour vos chantiers ?</h2>
-      <p>Un doute ? Décrivez votre chantier dans la demande de devis : un conseiller valide le bon modèle avec vous avant toute commande.</p>
+      <p>Un doute ? Appelez-nous ou décrivez votre chantier dans le formulaire : un conseiller valide le bon modèle avec vous.</p>
     </div>
     <div class="mp-choix-grid">{choix_html}</div>
   </div>
@@ -485,9 +502,9 @@ def build_catalogue():
       <h2>De votre demande à votre premier coup de godet</h2>
     </div>
     <ol class="bq-steps">
-      <li><b>1</b><h3>Votre demande</h3><p>Vous choisissez un modèle ou décrivez votre chantier. Un conseiller vous rappelle.</p></li>
-      <li><b>2</b><h3>Devis sous {E(ENG["delaiReponse"])}</h3><p>Machine, accessoires, livraison et date prévue. En achat ou en leasing.</p></li>
-      <li><b>3</b><h3>Contrôle et pesée</h3><p>Votre machine est contrôlée et pesée avant son départ. Vidéo sur demande.</p></li>
+      <li><b>1</b><h3>Votre réservation</h3><p>Vous choisissez votre mini-pelle et votre département, puis réglez l'acompte de 30 % en ligne.</p></li>
+      <li><b>2</b><h3>Confirmation sous {E(ENG["delaiReponse"])}</h3><p>Un conseiller vous appelle pour confirmer la commande, les options et la date de livraison.</p></li>
+      <li><b>3</b><h3>Contrôle et pesée</h3><p>Votre machine est contrôlée et pesée avant son départ. Vidéo sur demande. Le solde est réglé avant l'expédition.</p></li>
       <li><b>4</b><h3>Livraison et suivi</h3><p>Livraison sur votre chantier, prise en main, puis garantie et SAV.</p></li>
     </ol>
   </div>
@@ -507,7 +524,7 @@ def build_catalogue():
 
 {form_html()}
 </main>
-{sticky("Mini-pelles Kubota", f"Dès {euros(pmin)} HT · devis sous {ENG['delaiReponse']}")}""" + B.footer() + B.wa_float("Bonjour, je souhaite des informations sur vos mini-pelles.") + B.TAIL
+{sticky("Mini-pelles Kubota", f"Dès {euros(pmin)} HT · réservation en ligne", "#catalogue", "Choisir")}""" + B.footer() + B.wa_float("Bonjour, je souhaite des informations sur vos mini-pelles.") + B.TAIL
     (B.ROOT / CAT).write_text(body, encoding="utf-8")
 
 
@@ -524,7 +541,9 @@ def build_fiche(p):
                   "brand": {"@type": "Brand", "name": "Cohesif BTP"},
                   "weight": {"@type": "QuantitativeValue", "value": p["poidsReel"], "unitCode": "KGM"}}
     if p.get("prix"):
-        produit_ld["offers"] = {"@type": "Offer", "price": p["prix"], "priceCurrency": "EUR", "url": url,
+        produit_ld["offers"] = {"@type": "Offer", "price": ttc(p["prix"]), "priceCurrency": "EUR", "url": url,
+                                "priceSpecification": {"@type": "UnitPriceSpecification", "price": ttc(p["prix"]),
+                                                       "priceCurrency": "EUR", "valueAddedTaxIncluded": True},
                                 "itemCondition": "https://schema.org/NewCondition",
                                 "availability": "https://schema.org/PreOrder",
                                 "seller": {"@type": "Organization", "name": "Cohesif BTP"}}
@@ -572,7 +591,7 @@ def build_fiche(p):
     wa_txt = f"Bonjour, je souhaite un devis pour la {p['nom']} ({p['ref']})."
     faq_fiche = [FAQ[0], FAQ[1], FAQ[2], FAQ[4], FAQ[3], FAQ[5]]
 
-    body = B.head(title, desc, url, p["image"], ld(ld_obj)) + B.NAV + f"""
+    body = B.head(title, desc, url, p["image"], ld(ld_obj)) + nav() + f"""
 <main class="bq-fiche">
   <div class="bq-in">
     <nav class="bq-crumb" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a> › <a href="boutique.html">Boutique</a> › <a href="{CAT}">Mini-pelles</a> › <span>{E(p["ref"])}</span></nav>
@@ -598,7 +617,7 @@ def build_fiche(p):
       <div class="bq-buy">
         <div class="bq-px bq-px-lg">{prix_html(p)}</div>
         {resa_html(p)}
-        <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full bq-btn-ghost" data-modele="{p["slug"]}">Recevoir un devis</a>
+        <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full bq-btn-ghost" data-modele="{p["slug"]}">Poser une question</a>
         <a href="{wa_link(wa_txt)}" class="bq-btn bq-btn-lg bq-btn-full bq-btn-wa" target="_blank" rel="noopener">{WA_SVG} Demander sur WhatsApp</a>
         <ul class="bq-reass">
           <li>Machine neuve, marquage CE et déclaration de conformité</li>
@@ -655,7 +674,7 @@ def build_fiche(p):
     </div>
   </section>
 
-  {form_html(p["slug"], "Recevez le devis de cette mini-pelle sous 48 h")}
+  {form_html(p["slug"])}
 
   <section class="bq-sec bq-alt">
     <div class="bq-in">
@@ -664,7 +683,7 @@ def build_fiche(p):
     </div>
   </section>
 </main>
-{sticky(p["ref"] + " · Mini-pelle " + tonnes(p["capacite"]), euros(p["prix"]) + " HT" if p.get("prix") else "Prix sur demande", p["slug"])}""" + B.footer() + B.wa_float(wa_txt) + B.TAIL
+{sticky(p["ref"] + " · " + euros(p["prix"]) + " HT", f"Acompte {euros2(acompte_ttc(p))} TTC")}""" + B.footer() + B.wa_float(wa_txt) + B.TAIL
     (B.ROOT / f"{p['slug']}.html").write_text(body, encoding="utf-8")
 
 
