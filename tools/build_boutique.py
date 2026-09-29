@@ -11,6 +11,8 @@ Produit :
 Pour afficher un prix : renseigner "prix" (€ HT) et, si besoin, "leasingMois"
 dans data/boutique.json, puis relancer le script. Tant que "prix" vaut null,
 la fiche affiche « Prix sur demande » et le bouton ouvre la demande de devis.
+Avec un prix, la fiche affiche l'encart de réservation (livraison par département,
+acompte) ; le lien de paiement Stripe se crée avec tools/stripe_acomptes.py.
 
 Les mini-pelles (rayon "minipelles") ont leur propre gabarit : tools/build_minipelles.py,
 appelé automatiquement par ce script.
@@ -77,14 +79,101 @@ def tel_link():
 
 def prix_html(p):
     if p.get("prix"):
-        out = f'<span class="px-val">{euros(p["prix"])} <small>HT</small></span>'
+        out = (f'<span class="px-val">{euros(p["prix"])} <small>HT</small></span>'
+               f'<span class="px-ttc">soit {euros2(ttc(p["prix"]))} TTC · batterie plomb-acide</span>')
         if p.get("leasingMois"):
             out += f'<span class="px-sub">ou {euros(p["leasingMois"])} HT/mois avec Cohesif Leasing</span>'
         else:
-            out += '<span class="px-sub">Livraison et mise en service sur devis</span>'
+            out += f'<span class="px-sub">Réservation en ligne avec un acompte de {RESA["acomptePct"]} %</span>'
         return out
     return ('<span class="px-val px-dem">Prix sur demande</span>'
             f'<span class="px-sub">Devis détaillé sous {ENG["delaiReponse"]} · achat ou leasing</span>')
+
+
+# ─────────────────────────── réservation en ligne (mini-pelles et chariots)
+
+RESA = DATA["reservation"]
+
+DEPARTEMENTS = [
+    ("01", "Ain"), ("02", "Aisne"), ("03", "Allier"), ("04", "Alpes-de-Haute-Provence"), ("05", "Hautes-Alpes"),
+    ("06", "Alpes-Maritimes"), ("07", "Ardèche"), ("08", "Ardennes"), ("09", "Ariège"), ("10", "Aube"),
+    ("11", "Aude"), ("12", "Aveyron"), ("13", "Bouches-du-Rhône"), ("14", "Calvados"), ("15", "Cantal"),
+    ("16", "Charente"), ("17", "Charente-Maritime"), ("18", "Cher"), ("19", "Corrèze"), ("2A", "Corse-du-Sud"),
+    ("2B", "Haute-Corse"), ("21", "Côte-d'Or"), ("22", "Côtes-d'Armor"), ("23", "Creuse"), ("24", "Dordogne"),
+    ("25", "Doubs"), ("26", "Drôme"), ("27", "Eure"), ("28", "Eure-et-Loir"), ("29", "Finistère"),
+    ("30", "Gard"), ("31", "Haute-Garonne"), ("32", "Gers"), ("33", "Gironde"), ("34", "Hérault"),
+    ("35", "Ille-et-Vilaine"), ("36", "Indre"), ("37", "Indre-et-Loire"), ("38", "Isère"), ("39", "Jura"),
+    ("40", "Landes"), ("41", "Loir-et-Cher"), ("42", "Loire"), ("43", "Haute-Loire"), ("44", "Loire-Atlantique"),
+    ("45", "Loiret"), ("46", "Lot"), ("47", "Lot-et-Garonne"), ("48", "Lozère"), ("49", "Maine-et-Loire"),
+    ("50", "Manche"), ("51", "Marne"), ("52", "Haute-Marne"), ("53", "Mayenne"), ("54", "Meurthe-et-Moselle"),
+    ("55", "Meuse"), ("56", "Morbihan"), ("57", "Moselle"), ("58", "Nièvre"), ("59", "Nord"),
+    ("60", "Oise"), ("61", "Orne"), ("62", "Pas-de-Calais"), ("63", "Puy-de-Dôme"), ("64", "Pyrénées-Atlantiques"),
+    ("65", "Hautes-Pyrénées"), ("66", "Pyrénées-Orientales"), ("67", "Bas-Rhin"), ("68", "Haut-Rhin"), ("69", "Rhône"),
+    ("70", "Haute-Saône"), ("71", "Saône-et-Loire"), ("72", "Sarthe"), ("73", "Savoie"), ("74", "Haute-Savoie"),
+    ("75", "Paris"), ("76", "Seine-Maritime"), ("77", "Seine-et-Marne"), ("78", "Yvelines"), ("79", "Deux-Sèvres"),
+    ("80", "Somme"), ("81", "Tarn"), ("82", "Tarn-et-Garonne"), ("83", "Var"), ("84", "Vaucluse"),
+    ("85", "Vendée"), ("86", "Vienne"), ("87", "Haute-Vienne"), ("88", "Vosges"), ("89", "Yonne"),
+    ("90", "Territoire de Belfort"), ("91", "Essonne"), ("92", "Hauts-de-Seine"), ("93", "Seine-Saint-Denis"),
+    ("94", "Val-de-Marne"), ("95", "Val-d'Oise"), ("971", "Guadeloupe"), ("972", "Martinique"), ("973", "Guyane"),
+    ("974", "La Réunion"), ("976", "Mayotte"),
+]
+
+
+def euros2(n):
+    """Montant avec centimes si besoin : 6 548,40 €."""
+    if round(n, 2) == int(n):
+        return euros(n)
+    return f"{n:,.2f}".replace(",", " ").replace(".", ",") + " €"
+
+
+def ttc(ht):
+    return round(ht * (1 + RESA["tva"] / 100), 2)
+
+
+def acompte_ttc(p):
+    return round(p["prix"] * RESA["acomptePct"] / 100 * (1 + RESA["tva"] / 100), 2)
+
+
+def zones_livraison(p):
+    """Zones de livraison du produit (mini-pelles : départ Île-de-France, chariots : départ Benelux), supplément compris."""
+    zones = RESA["zonesChariots"] if p["rayon"] == "chariots" else RESA["zones"]
+    sup = p.get("livraisonSupplement", 0)
+    return [{"nom": z["nom"], "prix": z["prix"] + sup, "deps": z["departements"]} for z in zones]
+
+
+def resa_html(p, libelle):
+    """Encart : département → livraison, total et acompte ; bouton de paiement de l'acompte."""
+    if not p.get("prix"):
+        return ""
+    opts = "".join(f'<option value="{c}">{c} · {E(n)}</option>' for c, n in DEPARTEMENTS)
+    data = {"ref": p["ref"], "nom": p["nom"], "slug": p["slug"], "prix": p["prix"], "pct": RESA["acomptePct"],
+            "tva": RESA["tva"], "stripe": p.get("stripeAcompte"), "zones": zones_livraison(p)}
+    label = (f"Payer l'acompte de {euros2(acompte_ttc(p))} TTC" if p.get("stripeAcompte")
+             else "Réserver avec un acompte")
+    return f"""<div class="mp-resa" id="reserver" data-resa>
+          <script type="application/json" data-resa-data>{json.dumps(data, ensure_ascii=False)}</script>
+          <label class="mp-resa-dep">Livraison dans votre département
+            <select data-resa-dep><option value="">Choisir mon département…</option>{opts}</select>
+          </label>
+          <dl class="mp-resa-calc" data-resa-calc hidden>
+            <div><dt>{E(libelle)} {E(p["ref"])}</dt><dd>{euros(p["prix"])} HT</dd></div>
+            <div><dt>Livraison <span data-resa-zone></span></dt><dd data-resa-liv></dd></div>
+            <div class="mp-resa-tot"><dt>Total</dt><dd><span data-resa-tot></span><small data-resa-ttc></small></dd></div>
+            <div class="mp-resa-ac"><dt>Acompte à la réservation ({RESA["acomptePct"]} %)</dt><dd>{euros2(acompte_ttc(p))} TTC</dd></div>
+          </dl>
+          <p class="mp-resa-dev" data-resa-devis hidden>Livraison en Corse et outre-mer : nous vous envoyons un devis de transport sous {ENG["delaiReponse"]}.</p>
+          <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full mp-resa-btn" data-resa-btn data-modele="{p["slug"]}">{label}</a>
+          <p class="mp-resa-note">Paiement sécurisé par carte. Le solde et la livraison sont réglés avant l'expédition de votre machine. <a href="cgv.html#vente-materiel">Conditions de réservation</a></p>
+        </div>"""
+
+
+def nav_reserver(lien, label_lg):
+    """Menu de la boutique avec le bouton principal orienté réservation."""
+    sm = '<a href="#devis" class="bq-btn bq-btn-sm">Demander un devis</a>'
+    lg = '<a href="#devis" class="bq-btn bq-btn-lg">Demander un devis</a>'
+    assert sm in NAV and lg in NAV, "menu de la boutique modifié : mettre à jour nav_reserver()"
+    return (NAV.replace(sm, f'<a href="{lien}" class="bq-btn bq-btn-sm">Réserver</a>')
+               .replace(lg, f'<a href="{lien}" class="bq-btn bq-btn-lg">{E(label_lg)}</a>'))
 
 
 def ld(obj):
@@ -343,7 +432,7 @@ def card(p):
       <div class="bq-px">{prix_html(p)}</div>
       <div class="bq-card-btns">
         <a href="{p["slug"]}.html" class="bq-btn bq-btn-ghost">Voir la fiche</a>
-        <a href="#devis" class="bq-btn" data-modele="{p["slug"]}">Devis</a>
+        {f'<a href="{p["slug"]}.html#reserver" class="bq-btn">Réserver</a>' if p.get("prix") else f'<a href="#devis" class="bq-btn" data-modele="{p["slug"]}">Devis</a>'}
       </div>
     </div>
   </div>
@@ -411,16 +500,19 @@ def financement_html(label="Demander un financement"):
 
 
 FAQ = [
-    ("Pourquoi les prix ne sont-ils pas affichés ?",
-     "Le prix dépend de la batterie choisie (plomb-acide ou lithium-ion), de la hauteur de levée, des options, de la couleur et du lieu de livraison. Nous vous envoyons sous 48 h un devis complet et détaillé, sans engagement."),
+    ("Les prix affichés comprennent quoi ?",
+     "Le prix affiché correspond au chariot neuf équipé comme décrit sur sa fiche, avec sa batterie plomb-acide, dédouané en Europe. Il est indiqué hors taxes (HT) et toutes taxes comprises (TTC, TVA 20 %). "
+     "La livraison sur votre site est calculée selon votre département et affichée avant la réservation (Corse et outre-mer sur devis). "
+     f"Vous réservez en ligne avec un acompte de {RESA['acomptePct']} % ; le solde et la livraison sont réglés avant l'expédition. "
+     "La batterie lithium-ion, les mâts plus hauts et les accessoires sont en option, chiffrés sur devis."),
     ("Faut-il un CACES pour conduire ces chariots ?",
      "Oui. En France, la conduite d'un chariot élévateur nécessite une autorisation de conduite délivrée par l'employeur, généralement après un CACES R489. Tous nos modèles (jusqu'à 5 t) relèvent de la catégorie 3 ; les chariots de plus de 6 t, disponibles sur commande, relèvent de la catégorie 4."),
     ("Batterie plomb ou lithium : que choisir ?",
      "Le plomb-acide est le choix le plus économique à l'achat, parfait pour un usage d'une équipe par jour avec une recharge la nuit. Le lithium-ion coûte plus cher mais se recharge vite, à tout moment, sans entretien : idéal pour un usage intensif ou en plusieurs équipes. Nous vous conseillons selon votre activité."),
     ("Quelle hauteur de levée ?",
-     "Les chariots sont proposés avec un mât de 3 m de levée en standard. D'autres hauteurs de mât peuvent être étudiées sur demande : précisez votre hauteur de stockage dans votre demande de devis."),
+     "Les chariots sont livrés avec un mât de 3 m de levée en standard, et de 5 m sur le chariot 2 tonnes (CPD-20). D'autres hauteurs de mât peuvent être étudiées sur demande : précisez votre hauteur de stockage dans votre demande de devis."),
     ("Quel est le délai de livraison ?",
-     "Le délai dépend du modèle, de la batterie et de la personnalisation (couleur, logo). Il est indiqué clairement dans votre devis, avec la date de livraison prévue sur votre site."),
+     "Le délai dépend du modèle, de la batterie et de la personnalisation (couleur, logo). La date de livraison prévue sur votre site vous est confirmée par écrit sous 48 h après votre réservation."),
     ("Comment se recharge le chariot ?",
      "Le chariot est livré avec son chargeur, alimenté en 220 V. Pas besoin de station de carburant ni de stockage de gaz : vous rechargez sur site, le plus souvent la nuit."),
     ("Peut-on utiliser un chariot électrique en extérieur ?",
@@ -429,6 +521,8 @@ FAQ = [
      f"Garantie constructeur de {ENG['garantie']}, mise en service et prise en main à la livraison, pièces détachées disponibles et assistance par téléphone, email ou WhatsApp. Nous vous accompagnons aussi pour l'entretien et les VGP (vérifications générales périodiques)."),
     ("Peut-on payer en plusieurs fois ?",
      "Oui. Avec Cohesif Leasing, vous réglez une mensualité fixe sur la durée de votre choix. Indiquez « Leasing » dans votre demande de devis pour recevoir les deux options."),
+    ("Je suis professionnel : comment récupérer la TVA ?",
+     "Après le paiement de l'acompte, vous recevez automatiquement une facture qui détaille le montant HT, la TVA à 20 % et le total TTC. Le solde fait l'objet d'une facture de solde, qui reprend le prix total HT, la TVA et l'acompte déjà versé. Pensez à indiquer le nom et le numéro de TVA de votre société au moment du paiement."),
     ("Proposez-vous des accessoires ?",
      "Oui : tablier à déplacement latéral, positionneur de fourches, pinces, rotateurs, pousseurs… Ces équipements s'adaptent sur nos chariots selon votre métier. Demandez-les dans votre devis."),
 ]
@@ -455,7 +549,11 @@ def compare_table():
         ("Longueur avec fourches", lambda p: mm(p["longueur"])),
         ("Poids à vide", lambda p: kg(p["poids"])),
         ("CACES", lambda p: E(caces(p))),
-        ("", lambda p: f'<a href="#devis" class="bq-btn bq-btn-sm" data-modele="{p["slug"]}">Devis</a>'),
+        ("Prix HT", lambda p: f'<b>{euros(p["prix"])}</b>' if p.get("prix") else "Sur demande"),
+        ("Prix TTC", lambda p: euros2(ttc(p["prix"])) if p.get("prix") else "Sur demande"),
+        ("Acompte à la réservation", lambda p: f'{euros2(acompte_ttc(p))} TTC' if p.get("prix") else "—"),
+        ("", lambda p: f'<a href="{p["slug"]}.html#reserver" class="bq-btn bq-btn-sm">Réserver</a>' if p.get("prix")
+         else f'<a href="#devis" class="bq-btn bq-btn-sm" data-modele="{p["slug"]}">Devis</a>'),
     ]
     rows = "".join(f'<tr><th scope="row">{E(l)}</th>' + "".join(f"<td>{f(p)}</td>" for p in PRODUITS) + "</tr>" for l, f in lignes)
     return f'<div class="bq-cmp-wrap" tabindex="0" role="region" aria-label="Tableau comparatif des chariots"><table class="bq-cmp"><thead><tr><th></th>{head_}</tr></thead><tbody>{rows}</tbody></table></div>'
@@ -478,13 +576,14 @@ CAP_MIN = _t(min(p["capacite"] for p in PRODUITS))
 CAP_MAX = _t(max(p["capacite"] for p in PRODUITS)) + " tonnes"
 CAP_MIN_C = CAP_MIN
 CAP_MAX_C = _t(max(p["capacite"] for p in PRODUITS)) + " t"
+PMIN = min(p["prix"] for p in PRODUITS if p.get("prix"))
 
 
 def build_catalogue():
     url = f"{SITE}/boutique.html"
     title = f"Chariots élévateurs électriques de {CAP_MIN} à {CAP_MAX} | Boutique Cohesif BTP"
-    desc = (f"Achetez votre chariot élévateur électrique neuf de {CAP_MIN} à {CAP_MAX} : conforme CE, batterie plomb ou lithium, "
-            "livré et mis en service partout en France, avec garantie et SAV. Devis sous 48 h, achat ou leasing.")
+    desc = (f"Chariots élévateurs électriques neufs de {CAP_MIN} à {CAP_MAX}, dès {euros(PMIN)} HT : conformes CE, "
+            "livrés et mis en service partout en France, avec garantie et SAV. Réservation en ligne, achat ou leasing.")
     ld_obj = {"@context": "https://schema.org", "@graph": [
         {"@type": "CollectionPage", "name": "Boutique Cohesif BTP : chariots élévateurs électriques", "url": url, "description": desc},
         {"@type": "ItemList", "itemListElement": [
@@ -547,7 +646,7 @@ def build_catalogue():
     <div class="bq-hero-txt">
       <p class="bq-pill">Boutique Cohesif BTP · Vente, livraison et SAV</p>
       <h1>Chariots élévateurs électriques, <span class="accent">sélectionnés pour durer.</span></h1>
-      <p class="bq-hero-p">{N} modèles neufs de {CAP_MIN} à {CAP_MAX}, choisis pour leur robustesse et leur fiabilité, livrés et mis en service sur votre site partout en France. Garantie, pièces détachées et SAV inclus dans notre accompagnement.</p>
+      <p class="bq-hero-p">{N} modèles neufs de {CAP_MIN} à {CAP_MAX}, dès {euros(PMIN)} HT, choisis pour leur robustesse et leur fiabilité, livrés et mis en service sur votre site partout en France. Prix affichés, réservation en ligne, garantie et SAV inclus.</p>
       <div class="bq-hero-btns">
         <a href="#catalogue" class="bq-btn bq-btn-lg">Voir les {N} modèles</a>
         <a href="#choisir" class="bq-btn bq-btn-lg bq-btn-line">Trouver mon chariot</a>
@@ -555,7 +654,7 @@ def build_catalogue():
       <ul class="bq-hero-kpis">
         <li><b>{E(ENG["garantie"])}</b><span>de garantie</span></li>
         <li><b>{CAP_MIN_C} → {CAP_MAX_C}</b><span>de capacité</span></li>
-        <li><b>{E(ENG["delaiReponse"])}</b><span>pour votre devis</span></li>
+        <li><b>En ligne</b><span>réservation avec acompte</span></li>
       </ul>
     </div>
     <div class="bq-hero-vis" aria-hidden="true">
@@ -669,9 +768,9 @@ def build_catalogue():
       <h2>De votre demande à votre premier levage</h2>
     </div>
     <ol class="bq-steps">
-      <li><b>1</b><h3>Votre demande</h3><p>Vous choisissez un modèle ou décrivez votre besoin. Un conseiller vous rappelle.</p></li>
-      <li><b>2</b><h3>Devis sous {E(ENG["delaiReponse"])}</h3><p>Un prix clair : chariot, batterie, chargeur, livraison. En achat ou en leasing.</p></li>
-      <li><b>3</b><h3>Livraison sur site</h3><p>Votre chariot est livré chez vous, contrôlé et mis en service.</p></li>
+      <li><b>1</b><h3>Votre réservation</h3><p>Vous choisissez votre chariot et votre département, puis réglez l'acompte de {RESA["acomptePct"]} % en ligne. Besoin d'un conseil ou d'une flotte ? Demandez un devis.</p></li>
+      <li><b>2</b><h3>Confirmation sous {E(ENG["delaiReponse"])}</h3><p>Un conseiller vous appelle pour confirmer la batterie, la couleur, les options et la date de livraison.</p></li>
+      <li><b>3</b><h3>Livraison sur site</h3><p>Le solde est réglé avant l'expédition. Votre chariot est livré chez vous, contrôlé et mis en service.</p></li>
       <li><b>4</b><h3>Suivi SAV</h3><p>Garantie, pièces, entretien : nous restons votre interlocuteur.</p></li>
     </ol>
   </div>
@@ -705,8 +804,8 @@ def build_catalogue():
 {form_html()}
 </main>
 <div class="bq-sticky">
-  <div><b>Chariots élévateurs</b><span>Devis gratuit sous {E(ENG["delaiReponse"])}</span></div>
-  <a href="#devis" class="bq-btn">Mon devis</a>
+  <div><b>Chariots élévateurs</b><span>Dès {euros(PMIN)} HT · réservation en ligne</span></div>
+  <a href="#catalogue" class="bq-btn">Choisir</a>
 </div>
 """ + footer() + wa_float("Bonjour, je souhaite des informations sur vos chariots élévateurs électriques.") + data_script() + TAIL
     (ROOT / "boutique.html").write_text(body, encoding="utf-8")
@@ -721,15 +820,19 @@ SWATCHES = [("Orange", "#ea5b1f"), ("Rouge", "#c62828"), ("Jaune", "#f2b705"), (
 def build_fiche(p):
     url = f"{SITE}/{p['slug']}.html"
     title = f"{p['nom']} {p['ref']} | Boutique Cohesif BTP"
-    desc = (f"{p['nom']} ({p['ref']}) : {p['accroche']} Conforme CE, livré et mis en service en France, "
-            f"garantie {ENG['garantie']}. Devis sous 48 h, achat ou leasing.")
+    px = f"{euros(p['prix'])} HT. " if p.get("prix") else ""
+    desc = (f"{p['nom']} ({p['ref']}) : {p['accroche']} {px}Conforme CE, livré et mis en service en France, "
+            f"garantie {ENG['garantie']}. Réservation en ligne, achat ou leasing.")
     produit_ld = {"@type": "Product", "name": p["nom"], "sku": p["ref"], "mpn": p["ref"], "description": p["accroche"],
                   "image": [f"{SITE}/{p['image']}"] + [f"{SITE}/img/boutique/details/{d}.webp" for d in p["details"]],
                   "category": "Chariot élévateur électrique",
                   "brand": {"@type": "Brand", "name": "Cohesif BTP"},
                   "weight": {"@type": "QuantitativeValue", "value": p["poids"], "unitCode": "KGM"}}
     if p.get("prix"):
-        produit_ld["offers"] = {"@type": "Offer", "price": p["prix"], "priceCurrency": "EUR", "url": url,
+        produit_ld["offers"] = {"@type": "Offer", "price": ttc(p["prix"]), "priceCurrency": "EUR", "url": url,
+                                "priceSpecification": {"@type": "UnitPriceSpecification", "price": ttc(p["prix"]),
+                                                       "priceCurrency": "EUR", "valueAddedTaxIncluded": True},
+                                "itemCondition": "https://schema.org/NewCondition",
                                 "availability": "https://schema.org/PreOrder",
                                 "seller": {"@type": "Organization", "name": "Cohesif BTP"}}
     ld_obj = {"@context": "https://schema.org", "@graph": [
@@ -757,7 +860,7 @@ def build_fiche(p):
         ("Moteur de traction", p["traction"]),
         ("Moteur de levage (hydraulique)", p["levage"]),
         ("Tension", p["tension"] + " (autres tensions sur demande)"),
-        ("Batterie", "Plomb-acide ou lithium-ion, au choix"),
+        ("Batterie", "Plomb-acide (lithium-ion en option, sur devis)"),
         ("Chargeur", "Alimentation 220 V, fourni"),
         ("Pont avant", "Acier moulé"),
         ("Pneumatiques", p["pneus"]),
@@ -792,9 +895,10 @@ def build_fiche(p):
     voisins = sorted(voisins, key=lambda q: abs(PRODUITS.index(q) - idx))[:3]
     voisins = sorted(voisins, key=lambda q: q["capacite"])
 
-    faq_fiche = [FAQ[0], FAQ[2], FAQ[1], FAQ[4], FAQ[7]]
+    faq_fiche = [FAQ[0], FAQ[3], FAQ[2], FAQ[1], FAQ[4], FAQ[9], FAQ[7]]
+    menu = nav_reserver("#reserver", "Réserver ce chariot") if p.get("prix") else NAV
 
-    body = head(title, desc, url, p["image"], ld(ld_obj)) + NAV + f"""
+    body = head(title, desc, url, p["image"], ld(ld_obj)) + menu + f"""
 <main class="bq-fiche">
   <div class="bq-in">
     <nav class="bq-crumb" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a> › <a href="boutique.html">Boutique</a> › <a href="boutique.html#catalogue">Chariots élévateurs</a> › <span>{E(p["ref"])}</span></nav>
@@ -820,8 +924,8 @@ def build_fiche(p):
       <div class="bq-cfg" data-cfg-box data-ref="{E(p["ref"])}" data-nom="{E(p["nom"])}">
         <p class="bq-cfg-t">1. Batterie</p>
         <div class="bq-opts">
-          <button type="button" class="bq-opt is-on" data-cfg="batterie" data-val="Plomb-acide" aria-pressed="true"><b>Plomb-acide</b><span>Le plus économique</span></button>
-          <button type="button" class="bq-opt" data-cfg="batterie" data-val="Lithium-ion" aria-pressed="false"><b>Lithium-ion</b><span>Recharge rapide, sans entretien</span></button>
+          <button type="button" class="bq-opt is-on" data-cfg="batterie" data-val="Plomb-acide" aria-pressed="true"><b>Plomb-acide</b><span>{"Incluse dans le prix" if p.get("prix") else "Le plus économique"}</span></button>
+          <button type="button" class="bq-opt" data-cfg="batterie" data-val="Lithium-ion" aria-pressed="false"><b>Lithium-ion</b><span>{"En option, supplément sur devis" if p.get("prix") else "Recharge rapide, sans entretien"}</span></button>
         </div>
         <p class="bq-cfg-t">2. Couleur <span data-cfg-coul>Standard, comme sur la photo</span></p>
         <div class="bq-sws">{swatches}</div>
@@ -829,10 +933,11 @@ def build_fiche(p):
 
       <div class="bq-buy">
         <div class="bq-px bq-px-lg">{prix_html(p)}</div>
-        <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full" data-modele="{p["slug"]}" data-cfg-apply>Recevoir le devis de ce chariot</a>
+        {resa_html(p, "Chariot")}
+        <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full{" bq-btn-ghost" if p.get("prix") else ""}" data-modele="{p["slug"]}" data-cfg-apply>{"Devis flotte, options ou leasing" if p.get("prix") else "Recevoir le devis de ce chariot"}</a>
         <a href="{wa_link(wa_txt)}" class="bq-btn bq-btn-lg bq-btn-full bq-btn-wa" target="_blank" rel="noopener" data-cfg-wa>{WA_SVG} Demander sur WhatsApp</a>
         <ul class="bq-reass">
-          <li>Chariot neuf, marquage CE et déclaration de conformité</li>
+          <li>Chariot neuf, marquage CE et déclaration de conformité</li>{"<li>Batterie plomb-acide incluse ; lithium-ion en option</li>" if p.get("prix") else ""}
           <li>Chargeur 220 V fourni</li>
           <li>Livraison et mise en service sur votre site</li>
           <li>Pièces détachées et SAV assurés par Cohesif BTP</li>
@@ -899,8 +1004,8 @@ def build_fiche(p):
   </section>
 </main>
 <div class="bq-sticky">
-  <div><b>{E(p["ref"])} · {E(tonnes(p["capacite"]))}</b><span>{"Prix sur demande" if not p.get("prix") else euros(p["prix"]) + " HT"}</span></div>
-  <a href="#devis" class="bq-btn" data-modele="{p["slug"]}" data-cfg-apply>Mon devis</a>
+  <div><b>{E(p["ref"])} · {E(tonnes(p["capacite"]))}{" · " + euros(p["prix"]) + " HT" if p.get("prix") else ""}</b><span>{"Acompte " + euros2(acompte_ttc(p)) + " TTC" if p.get("prix") else "Prix sur demande"}</span></div>
+  {'<a href="#reserver" class="bq-btn">Réserver</a>' if p.get("prix") else f'<a href="#devis" class="bq-btn" data-modele="{p["slug"]}" data-cfg-apply>Mon devis</a>'}
 </div>
 """ + footer() + wa_float(wa_txt) + TAIL
     (ROOT / f"{p['slug']}.html").write_text(body, encoding="utf-8")

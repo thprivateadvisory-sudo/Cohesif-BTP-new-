@@ -15,7 +15,7 @@ Le prix affiché est "prix" (€ HT) : ne jamais mettre de prix d'achat dans le 
 il est publié avec le site.
 """
 import build_boutique as B
-from build_boutique import E, ENG, TEL, ico, kg, mm, tonnes, euros, wa_link, tel_link, ld, WA_SVG
+from build_boutique import E, ENG, TEL, ico, kg, mm, tonnes, euros, euros2, ttc, acompte_ttc, wa_link, tel_link, ld, WA_SVG
 
 SITE = B.SITE
 MP = B.MINIPELLES
@@ -23,75 +23,6 @@ RAYON = next(r for r in B.RAYONS if r["id"] == "minipelles")
 CAT = "boutique-mini-pelles.html"
 CAT_URL = f"{SITE}/{CAT}"
 N = len(MP)
-
-
-RESA = B.DATA["reservation"]
-
-DEPARTEMENTS = [
-    ("01", "Ain"), ("02", "Aisne"), ("03", "Allier"), ("04", "Alpes-de-Haute-Provence"), ("05", "Hautes-Alpes"),
-    ("06", "Alpes-Maritimes"), ("07", "Ardèche"), ("08", "Ardennes"), ("09", "Ariège"), ("10", "Aube"),
-    ("11", "Aude"), ("12", "Aveyron"), ("13", "Bouches-du-Rhône"), ("14", "Calvados"), ("15", "Cantal"),
-    ("16", "Charente"), ("17", "Charente-Maritime"), ("18", "Cher"), ("19", "Corrèze"), ("2A", "Corse-du-Sud"),
-    ("2B", "Haute-Corse"), ("21", "Côte-d'Or"), ("22", "Côtes-d'Armor"), ("23", "Creuse"), ("24", "Dordogne"),
-    ("25", "Doubs"), ("26", "Drôme"), ("27", "Eure"), ("28", "Eure-et-Loir"), ("29", "Finistère"),
-    ("30", "Gard"), ("31", "Haute-Garonne"), ("32", "Gers"), ("33", "Gironde"), ("34", "Hérault"),
-    ("35", "Ille-et-Vilaine"), ("36", "Indre"), ("37", "Indre-et-Loire"), ("38", "Isère"), ("39", "Jura"),
-    ("40", "Landes"), ("41", "Loir-et-Cher"), ("42", "Loire"), ("43", "Haute-Loire"), ("44", "Loire-Atlantique"),
-    ("45", "Loiret"), ("46", "Lot"), ("47", "Lot-et-Garonne"), ("48", "Lozère"), ("49", "Maine-et-Loire"),
-    ("50", "Manche"), ("51", "Marne"), ("52", "Haute-Marne"), ("53", "Mayenne"), ("54", "Meurthe-et-Moselle"),
-    ("55", "Meuse"), ("56", "Morbihan"), ("57", "Moselle"), ("58", "Nièvre"), ("59", "Nord"),
-    ("60", "Oise"), ("61", "Orne"), ("62", "Pas-de-Calais"), ("63", "Puy-de-Dôme"), ("64", "Pyrénées-Atlantiques"),
-    ("65", "Hautes-Pyrénées"), ("66", "Pyrénées-Orientales"), ("67", "Bas-Rhin"), ("68", "Haut-Rhin"), ("69", "Rhône"),
-    ("70", "Haute-Saône"), ("71", "Saône-et-Loire"), ("72", "Sarthe"), ("73", "Savoie"), ("74", "Haute-Savoie"),
-    ("75", "Paris"), ("76", "Seine-Maritime"), ("77", "Seine-et-Marne"), ("78", "Yvelines"), ("79", "Deux-Sèvres"),
-    ("80", "Somme"), ("81", "Tarn"), ("82", "Tarn-et-Garonne"), ("83", "Var"), ("84", "Vaucluse"),
-    ("85", "Vendée"), ("86", "Vienne"), ("87", "Haute-Vienne"), ("88", "Vosges"), ("89", "Yonne"),
-    ("90", "Territoire de Belfort"), ("91", "Essonne"), ("92", "Hauts-de-Seine"), ("93", "Seine-Saint-Denis"),
-    ("94", "Val-de-Marne"), ("95", "Val-d'Oise"), ("971", "Guadeloupe"), ("972", "Martinique"), ("973", "Guyane"),
-    ("974", "La Réunion"), ("976", "Mayotte"),
-]
-
-
-def euros2(n):
-    """Montant avec centimes si besoin : 6 548,40 €."""
-    if round(n, 2) == int(n):
-        return euros(n)
-    return f"{n:,.2f}".replace(",", " ").replace(".", ",") + " €"
-
-
-def ttc(ht):
-    return round(ht * (1 + RESA["tva"] / 100), 2)
-
-
-def acompte_ttc(p):
-    return round(p["prix"] * RESA["acomptePct"] / 100 * (1 + RESA["tva"] / 100), 2)
-
-
-def resa_html(p):
-    """Encart : département → livraison, total et acompte ; bouton de paiement de l'acompte."""
-    if not p.get("prix"):
-        return ""
-    opts = "".join(f'<option value="{c}">{c} · {E(n)}</option>' for c, n in DEPARTEMENTS)
-    data = {"ref": p["ref"], "nom": p["nom"], "slug": p["slug"], "prix": p["prix"], "pct": RESA["acomptePct"],
-            "tva": RESA["tva"], "stripe": p.get("stripeAcompte"),
-            "zones": [{"nom": z["nom"], "prix": z["prix"], "deps": z["departements"]} for z in RESA["zones"]]}
-    label = (f"Payer l'acompte de {euros2(acompte_ttc(p))} TTC" if p.get("stripeAcompte")
-             else "Réserver avec un acompte")
-    return f"""<div class="mp-resa" id="reserver" data-resa>
-          <script type="application/json" data-resa-data>{B.json.dumps(data, ensure_ascii=False)}</script>
-          <label class="mp-resa-dep">Livraison dans votre département
-            <select data-resa-dep><option value="">Choisir mon département…</option>{opts}</select>
-          </label>
-          <dl class="mp-resa-calc" data-resa-calc hidden>
-            <div><dt>Mini-pelle {E(p["ref"])}</dt><dd>{euros(p["prix"])} HT</dd></div>
-            <div><dt>Livraison <span data-resa-zone></span></dt><dd data-resa-liv></dd></div>
-            <div class="mp-resa-tot"><dt>Total</dt><dd><span data-resa-tot></span><small data-resa-ttc></small></dd></div>
-            <div class="mp-resa-ac"><dt>Acompte à la réservation ({RESA["acomptePct"]} %)</dt><dd>{euros2(acompte_ttc(p))} TTC</dd></div>
-          </dl>
-          <p class="mp-resa-dev" data-resa-devis hidden>Livraison en Corse et outre-mer : nous vous envoyons un devis de transport sous {ENG["delaiReponse"]}.</p>
-          <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full mp-resa-btn" data-resa-btn data-modele="{p["slug"]}">{label}</a>
-          <p class="mp-resa-note">Paiement sécurisé par carte. Le solde et la livraison sont réglés avant l'expédition de votre machine. <a href="cgv.html#vente-materiel">Conditions de réservation</a></p>
-        </div>"""
 
 
 def metres(n):
@@ -355,12 +286,7 @@ def sticky(titre, sous, lien="#reserver", bouton="Réserver"):
 
 
 def nav(lien="#reserver"):
-    """Menu de la boutique, avec le bouton principal orienté réservation sur les pages mini-pelles."""
-    sm = '<a href="#devis" class="bq-btn bq-btn-sm">Demander un devis</a>'
-    lg = '<a href="#devis" class="bq-btn bq-btn-lg">Demander un devis</a>'
-    assert sm in B.NAV and lg in B.NAV, "menu de la boutique modifié : mettre à jour nav()"
-    return (B.NAV.replace(sm, f'<a href="{lien}" class="bq-btn bq-btn-sm">Réserver</a>')
-                 .replace(lg, f'<a href="{lien}" class="bq-btn bq-btn-lg">Réserver une mini-pelle</a>'))
+    return B.nav_reserver(lien, "Réserver une mini-pelle")
 
 
 def breadcrumb(*items):
@@ -616,7 +542,7 @@ def build_fiche(p):
       {poids_box(p, True)}
       <div class="bq-buy">
         <div class="bq-px bq-px-lg">{prix_html(p)}</div>
-        {resa_html(p)}
+        {B.resa_html(p, "Mini-pelle")}
         <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full bq-btn-ghost" data-modele="{p["slug"]}">Poser une question</a>
         <a href="{wa_link(wa_txt)}" class="bq-btn bq-btn-lg bq-btn-full bq-btn-wa" target="_blank" rel="noopener">{WA_SVG} Demander sur WhatsApp</a>
         <ul class="bq-reass">

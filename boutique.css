@@ -462,4 +462,5 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .mp-resa-note{font-size:.76rem;color:var(--g500)}
 .mp-resa-note a{text-decoration:underline}
 @media (max-width:640px){.mp-resa-calc dt span{display:block}}
+@media (max-width:380px){.bq-buy .bq-btn-full{white-space:normal;text-align:center}.mp-resa-calc div{flex-wrap:wrap;gap:0 .6rem}}
 .px-ttc{font-size:.8rem;font-weight:600;color:var(--g700)}
