@@ -6,7 +6,10 @@
   var burger = document.getElementById('bqBurger');
   var menu = document.getElementById('bqMenu');
   if (burger && menu) {
+    var nav = document.querySelector('.bq-nav');
     burger.addEventListener('click', function () {
+      // le menu démarre sous la barre de navigation (sa position varie avec la barre noire au-dessus)
+      if (nav) menu.style.top = Math.round(nav.getBoundingClientRect().bottom) + 'px';
       var open = menu.classList.toggle('open');
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.body.style.overflow = open ? 'hidden' : '';
