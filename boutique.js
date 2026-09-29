@@ -137,29 +137,53 @@
     };
     var btn = r('[data-resa-btn]');
     var depSel = r('[data-resa-dep]');
+    var buy = resa.closest('.bq-buy');
+    var V = { prix: R.prix, acompte: R.acompte, stripe: R.stripe };
+    // prix affiché ailleurs sur la fiche (bloc prix, barre mobile) : suit la batterie choisie
+    var afficher = function (sel, txt) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        if (el.closest('.bq-sticky') || (buy && buy.contains(el))) el.textContent = txt;
+      });
+    };
     majResa = function () {
       var dep = depSel.value;
+      // chariots : prix, acompte et lien de paiement selon la batterie (plomb-acide ou lithium-ion)
+      if (R.variantes) {
+        V = R.variantes[choix.batterie] || R.variantes['Plomb-acide'];
+        r('[data-resa-prix]').textContent = eur(V.prix) + ' HT';
+        r('[data-resa-ac]').textContent = eur(V.acompte) + ' TTC';
+        r('[data-resa-batt]').textContent = '(batterie ' + choix.batterie.toLowerCase() + ')';
+        afficher('[data-px-ht]', eur(V.prix));
+        afficher('[data-px-ttc]', eur(Math.round(V.prix * (100 + R.tva)) / 100));
+        afficher('[data-px-batt]', choix.batterie.toLowerCase());
+        afficher('[data-px-ac]', eur(V.acompte));
+      }
       var zone = null;
       R.zones.forEach(function (z) { if (z.deps.indexOf(dep) !== -1) zone = z; });
       var depTxt = dep ? depSel.options[depSel.selectedIndex].text : '';
       r('[data-resa-calc]').hidden = !zone;
       r('[data-resa-devis]').hidden = !dep || !!zone;
       if (zone) {
-        var tot = R.prix + zone.prix;
+        var tot = V.prix + zone.prix;
         r('[data-resa-zone]').textContent = '(' + zone.nom + ')';
         r('[data-resa-liv]').textContent = eur(zone.prix) + ' HT';
         r('[data-resa-tot]').textContent = eur(tot) + ' HT';
         r('[data-resa-ttc]').textContent = 'soit ' + eur(Math.round(tot * (100 + R.tva)) / 100) + ' TTC';
       }
       // lien Stripe : on transmet le modèle, le département (et la configuration du chariot) pour les retrouver dans le paiement
-      if (R.stripe) {
+      btn.textContent = V.stripe ? "Payer l'acompte de " + eur(V.acompte) + ' TTC' : 'Réserver avec un acompte';
+      if (!V.stripe) {
+        btn.href = '#devis';
+        btn.removeAttribute('target');
+        btn.removeAttribute('rel');
+      } else {
         var refPaiement = R.ref + '_dep' + dep;
         if (cfg) {
           refPaiement += '_' + [choix.batterie, choix.couleur].map(function (v) {
             return v.normalize('NFD').replace(/[^A-Za-z0-9]+/g, '');
           }).join('_');
         }
-        btn.href = R.stripe + (dep ? (R.stripe.indexOf('?') === -1 ? '?' : '&') +
+        btn.href = V.stripe + (dep ? (V.stripe.indexOf('?') === -1 ? '?' : '&') +
           'client_reference_id=' + encodeURIComponent(refPaiement.slice(0, 200)) : '');
         btn.target = '_blank';
         btn.rel = 'noopener';
@@ -171,7 +195,7 @@
     majResa();
     // sans lien Stripe : la demande de réservation passe par le formulaire, préremplie
     btn.addEventListener('click', function (e) {
-      if (R.stripe) {
+      if (V.stripe) {
         if (!depSel.value) { e.preventDefault(); depSel.focus(); }
         return;
       }

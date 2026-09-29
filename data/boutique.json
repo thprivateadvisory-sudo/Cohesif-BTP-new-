@@ -6,7 +6,7 @@
   "telephone": "07 60 90 37 74",
   "email": "cohesifbtp@gmail.com",
   "misAJour": "2026-09-29",
-  "note": "prix : null = « Prix sur demande ». Renseigner un nombre (€ HT) puis relancer python3 tools/build_boutique.py. leasingMois : mensualité indicative facultative (€ HT/mois). Les engagements SAV se modifient dans « engagements ». actif : false = modèle masqué de la boutique (données conservées, disponible sur commande).",
+  "note": "prix : null = « Prix sur demande ». Renseigner un nombre (€ HT) puis relancer python3 tools/build_boutique.py. leasingMois : mensualité indicative facultative (€ HT/mois). Les engagements SAV se modifient dans « engagements ». actif : false = modèle masqué de la boutique (données conservées, disponible sur commande). lithium (chariots) : supplément HT de l'option batterie lithium-ion et lien Stripe de l'acompte correspondant ; le client choisit la batterie sur la fiche, prix, total, acompte et lien de paiement suivent.",
   "engagements": {
     "garantie": "12 mois",
     "delaiReponse": "48 h",
@@ -251,7 +251,11 @@
       "prix": 9990,
       "leasingMois": null,
       "actif": true,
-      "stripeAcompte": "https://buy.stripe.com/4gM00lgHofgw6QUfrjaVa0z"
+      "stripeAcompte": "https://buy.stripe.com/4gM00lgHofgw6QUfrjaVa0z",
+      "lithium": {
+        "supplement": 2990,
+        "stripeAcompte": "https://buy.stripe.com/9B6bJ34YGfgw8Z26UNaVa0F"
+      }
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-1-5-tonne",
@@ -300,7 +304,11 @@
       "prix": 11900,
       "leasingMois": null,
       "actif": true,
-      "stripeAcompte": "https://buy.stripe.com/6oU28t62K2tKdfi92VaVa0A"
+      "stripeAcompte": "https://buy.stripe.com/6oU28t62K2tKdfi92VaVa0A",
+      "lithium": {
+        "supplement": 2990,
+        "stripeAcompte": "https://buy.stripe.com/bJe4gB2Qy4BSfnq7YRaVa0G"
+      }
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-2-tonnes",
@@ -349,7 +357,11 @@
       "prix": 14290,
       "leasingMois": null,
       "actif": true,
-      "stripeAcompte": "https://buy.stripe.com/eVq3cx3UCgkAdfi3IBaVa0B"
+      "stripeAcompte": "https://buy.stripe.com/eVq3cx3UCgkAdfi3IBaVa0B",
+      "lithium": {
+        "supplement": 2990,
+        "stripeAcompte": "https://buy.stripe.com/bJe6oJ3UCfgw7UY7YRaVa0H"
+      }
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-2-5-tonnes",
@@ -446,7 +458,11 @@
       "prix": 19900,
       "leasingMois": null,
       "actif": true,
-      "stripeAcompte": "https://buy.stripe.com/9B6bJ3aj0fgw7UY7YRaVa0C"
+      "stripeAcompte": "https://buy.stripe.com/9B6bJ3aj0fgw7UY7YRaVa0C",
+      "lithium": {
+        "supplement": 3990,
+        "stripeAcompte": "https://buy.stripe.com/14AeVf8aS1pGejmenfaVa0I"
+      }
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-3-5-tonnes",
@@ -544,7 +560,11 @@
       "leasingMois": null,
       "actif": true,
       "stripeAcompte": "https://buy.stripe.com/3cI3cx9eW4BSa36enfaVa0D",
-      "livraisonSupplement": 300
+      "livraisonSupplement": 300,
+      "lithium": {
+        "supplement": 5490,
+        "stripeAcompte": "https://buy.stripe.com/00wcN70Iqb0g0sw92VaVa0J"
+      }
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-5-tonnes",
@@ -594,7 +614,11 @@
       "leasingMois": null,
       "actif": true,
       "stripeAcompte": "https://buy.stripe.com/aFaaEZ76O3xOejm3IBaVa0E",
-      "livraisonSupplement": 300
+      "livraisonSupplement": 300,
+      "lithium": {
+        "supplement": 6990,
+        "stripeAcompte": "https://buy.stripe.com/cNi5kFaj05FWa367YRaVa0K"
+      }
     },
     {
       "slug": "boutique-chariot-elevateur-electrique-7-tonnes",

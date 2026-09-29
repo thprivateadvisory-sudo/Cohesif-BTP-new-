@@ -85,8 +85,10 @@ def tel_link():
 
 def prix_html(p):
     if p.get("prix"):
-        out = (f'<span class="px-val">{euros(p["prix"])} <small>HT</small></span>'
-               f'<span class="px-ttc">soit {euros2(ttc(p["prix"]))} TTC · batterie plomb-acide</span>')
+        out = (f'<span class="px-val"><span data-px-ht>{euros(p["prix"])}</span> <small>HT</small></span>'
+               f'<span class="px-ttc">soit <span data-px-ttc>{euros2(ttc(p["prix"]))}</span> TTC · batterie <span data-px-batt>plomb-acide</span></span>')
+        if p.get("lithium"):
+            out += f'<span class="px-sub">Option lithium-ion : +{euros(p["lithium"]["supplement"])} HT</span>'
         if p.get("leasingMois"):
             out += f'<span class="px-sub">ou {euros(p["leasingMois"])} HT/mois avec Cohesif Leasing</span>'
         else:
@@ -136,8 +138,17 @@ def ttc(ht):
     return round(ht * (1 + RESA["tva"] / 100), 2)
 
 
-def acompte_ttc(p):
-    return round(p["prix"] * RESA["acomptePct"] / 100 * (1 + RESA["tva"] / 100), 2)
+def acompte_ttc(p, prix=None):
+    return round((prix or p["prix"]) * RESA["acomptePct"] / 100 * (1 + RESA["tva"] / 100), 2)
+
+
+def variantes(p):
+    """Batteries proposées en réservation : {nom: (prix HT, lien Stripe de l'acompte)}. Vide si une seule batterie."""
+    li = p.get("lithium")
+    if not p.get("prix") or not li:
+        return {}
+    return {"Plomb-acide": (p["prix"], p.get("stripeAcompte")),
+            "Lithium-ion": (p["prix"] + li["supplement"], li.get("stripeAcompte"))}
 
 
 def zones_livraison(p):
@@ -153,7 +164,9 @@ def resa_html(p, libelle):
         return ""
     opts = "".join(f'<option value="{c}">{c} · {E(n)}</option>' for c, n in DEPARTEMENTS)
     data = {"ref": p["ref"], "nom": p["nom"], "slug": p["slug"], "prix": p["prix"], "pct": RESA["acomptePct"],
-            "tva": RESA["tva"], "stripe": p.get("stripeAcompte"), "zones": zones_livraison(p)}
+            "tva": RESA["tva"], "stripe": p.get("stripeAcompte"), "acompte": acompte_ttc(p), "zones": zones_livraison(p)}
+    if variantes(p):
+        data["variantes"] = {n: {"prix": v, "acompte": acompte_ttc(p, v), "stripe": s} for n, (v, s) in variantes(p).items()}
     label = (f"Payer l'acompte de {euros2(acompte_ttc(p))} TTC" if p.get("stripeAcompte")
              else "Réserver avec un acompte")
     return f"""<div class="mp-resa" id="reserver" data-resa>
@@ -162,10 +175,10 @@ def resa_html(p, libelle):
             <select data-resa-dep><option value="">Choisir mon département…</option>{opts}</select>
           </label>
           <dl class="mp-resa-calc" data-resa-calc hidden>
-            <div><dt>{E(libelle)} {E(p["ref"])}</dt><dd>{euros(p["prix"])} HT</dd></div>
+            <div><dt>{E(libelle)} {E(p["ref"])}{' <span data-resa-batt>(batterie plomb-acide)</span>' if variantes(p) else ""}</dt><dd data-resa-prix>{euros(p["prix"])} HT</dd></div>
             <div><dt>Livraison <span data-resa-zone></span></dt><dd data-resa-liv></dd></div>
             <div class="mp-resa-tot"><dt>Total</dt><dd><span data-resa-tot></span><small data-resa-ttc></small></dd></div>
-            <div class="mp-resa-ac"><dt>Acompte à la réservation ({RESA["acomptePct"]} %)</dt><dd>{euros2(acompte_ttc(p))} TTC</dd></div>
+            <div class="mp-resa-ac"><dt>Acompte à la réservation ({RESA["acomptePct"]} %)</dt><dd data-resa-ac>{euros2(acompte_ttc(p))} TTC</dd></div>
           </dl>
           <p class="mp-resa-dev" data-resa-devis hidden>Livraison en Corse et outre-mer : nous vous envoyons un devis de transport sous {ENG["delaiReponse"]}.</p>
           <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full mp-resa-btn" data-resa-btn data-modele="{p["slug"]}">{label}</a>
@@ -510,7 +523,7 @@ FAQ = [
      "Le prix affiché correspond au chariot neuf équipé comme décrit sur sa fiche, avec sa batterie plomb-acide, dédouané en Europe. Il est indiqué hors taxes (HT) et toutes taxes comprises (TTC, TVA 20 %). "
      "La livraison sur votre site est calculée selon votre département et affichée avant la réservation (Corse et outre-mer sur devis). "
      f"Vous réservez en ligne avec un acompte de {RESA['acomptePct']} % ; le solde et la livraison sont réglés avant l'expédition. "
-     "La batterie lithium-ion, les mâts plus hauts et les accessoires sont en option, chiffrés sur devis."),
+     "La batterie lithium-ion est proposée en option : choisissez-la sur la fiche, le prix, le total et l'acompte s'adaptent. Les mâts plus hauts et les accessoires sont chiffrés sur devis."),
     ("Faut-il un CACES pour conduire ces chariots ?",
      "Oui. En France, la conduite d'un chariot élévateur nécessite une autorisation de conduite délivrée par l'employeur, généralement après un CACES R489. Tous nos modèles (jusqu'à 5 t) relèvent de la catégorie 3 ; les chariots de plus de 6 t, disponibles sur commande, relèvent de la catégorie 4."),
     ("Batterie plomb ou lithium : que choisir ?",
@@ -557,6 +570,7 @@ def compare_table():
         ("CACES", lambda p: E(caces(p))),
         ("Prix HT", lambda p: f'<b>{euros(p["prix"])}</b>' if p.get("prix") else "Sur demande"),
         ("Prix TTC", lambda p: euros2(ttc(p["prix"])) if p.get("prix") else "Sur demande"),
+        ("Option lithium-ion", lambda p: f'+{euros(p["lithium"]["supplement"])} HT' if p.get("lithium") else "Sur devis"),
         ("Acompte à la réservation", lambda p: f'{euros2(acompte_ttc(p))} TTC' if p.get("prix") else "—"),
         ("", lambda p: f'<a href="{p["slug"]}.html#reserver" class="bq-btn bq-btn-sm">Réserver</a>' if p.get("prix")
          else f'<a href="#devis" class="bq-btn bq-btn-sm" data-modele="{p["slug"]}">Devis</a>'),
@@ -866,7 +880,7 @@ def build_fiche(p):
         ("Moteur de traction", p["traction"]),
         ("Moteur de levage (hydraulique)", p["levage"]),
         ("Tension", p["tension"] + " (autres tensions sur demande)"),
-        ("Batterie", "Plomb-acide (lithium-ion en option, sur devis)"),
+        ("Batterie", f"Plomb-acide ; lithium-ion en option (+{euros(p['lithium']['supplement'])} HT)" if p.get("lithium") else "Plomb-acide (lithium-ion en option, sur devis)"),
         ("Chargeur", "Alimentation 220 V, fourni"),
         ("Pont avant", "Acier moulé"),
         ("Pneumatiques", p["pneus"]),
@@ -930,8 +944,8 @@ def build_fiche(p):
       <div class="bq-cfg" data-cfg-box data-ref="{E(p["ref"])}" data-nom="{E(p["nom"])}">
         <p class="bq-cfg-t">1. Batterie</p>
         <div class="bq-opts">
-          <button type="button" class="bq-opt is-on" data-cfg="batterie" data-val="Plomb-acide" aria-pressed="true"><b>Plomb-acide</b><span>{"Incluse dans le prix" if p.get("prix") else "Le plus économique"}</span></button>
-          <button type="button" class="bq-opt" data-cfg="batterie" data-val="Lithium-ion" aria-pressed="false"><b>Lithium-ion</b><span>{"En option, supplément sur devis" if p.get("prix") else "Recharge rapide, sans entretien"}</span></button>
+          <button type="button" class="bq-opt is-on" data-cfg="batterie" data-val="Plomb-acide" aria-pressed="true"><b>Plomb-acide</b><span>{"Incluse dans le prix · recharge la nuit" if p.get("prix") else "Le plus économique"}</span></button>
+          <button type="button" class="bq-opt" data-cfg="batterie" data-val="Lithium-ion" aria-pressed="false"><b>Lithium-ion</b><span>{f"+{euros(p['lithium']['supplement'])} HT · recharge rapide, sans entretien" if p.get("lithium") and p.get("prix") else "Recharge rapide, sans entretien"}</span></button>
         </div>
         <p class="bq-cfg-t">2. Couleur <span data-cfg-coul>Standard, comme sur la photo</span></p>
         <div class="bq-sws">{swatches}</div>
@@ -943,7 +957,7 @@ def build_fiche(p):
         <a href="#devis" class="bq-btn bq-btn-lg bq-btn-full{" bq-btn-ghost" if p.get("prix") else ""}" data-modele="{p["slug"]}" data-cfg-apply>{"Devis flotte, options ou leasing" if p.get("prix") else "Recevoir le devis de ce chariot"}</a>
         <a href="{wa_link(wa_txt)}" class="bq-btn bq-btn-lg bq-btn-full bq-btn-wa" target="_blank" rel="noopener" data-cfg-wa>{WA_SVG} Demander sur WhatsApp</a>
         <ul class="bq-reass">
-          <li>Chariot neuf, marquage CE et déclaration de conformité</li>{"<li>Batterie plomb-acide incluse ; lithium-ion en option</li>" if p.get("prix") else ""}
+          <li>Chariot neuf, marquage CE et déclaration de conformité</li>{"<li>Batterie plomb-acide ou lithium-ion, au choix : le prix s'adapte</li>" if p.get("lithium") and p.get("prix") else ""}
           <li>Chargeur 220 V fourni</li>
           <li>Livraison et mise en service sur votre site</li>
           <li>Pièces détachées et SAV assurés par Cohesif BTP</li>
@@ -1010,7 +1024,7 @@ def build_fiche(p):
   </section>
 </main>
 <div class="bq-sticky">
-  <div><b>{E(p["ref"])} · {E(tonnes(p["capacite"]))}{" · " + euros(p["prix"]) + " HT" if p.get("prix") else ""}</b><span>{"Acompte " + euros2(acompte_ttc(p)) + " TTC" if p.get("prix") else "Prix sur demande"}</span></div>
+  <div><b>{E(p["ref"])} · {E(tonnes(p["capacite"]))}{' · <span data-px-ht>' + euros(p["prix"]) + "</span> HT" if p.get("prix") else ""}</b><span>{'Acompte <span data-px-ac>' + euros2(acompte_ttc(p)) + "</span> TTC" if p.get("prix") else "Prix sur demande"}</span></div>
   {'<a href="#reserver" class="bq-btn">Réserver</a>' if p.get("prix") else f'<a href="#devis" class="bq-btn" data-modele="{p["slug"]}" data-cfg-apply>Mon devis</a>'}
 </div>
 """ + footer() + wa_float(wa_txt) + TAIL

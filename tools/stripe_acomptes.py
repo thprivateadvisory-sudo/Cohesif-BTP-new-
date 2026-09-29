@@ -40,9 +40,10 @@ def stripe(path, params):
         raise RuntimeError(json.load(e).get("error", {}).get("message", str(e))) from None
 
 
-def lien_acompte(p, montant_centimes):
+def lien_acompte(p, montant_centimes, batterie=None):
     ref = p["ref"]
-    produit = stripe("products", {"name": f"Acompte 30 % — {p['nom']} {ref}",
+    suffixe = f" · batterie {batterie}" if batterie else ""
+    produit = stripe("products", {"name": f"Acompte 30 % — {p['nom']} {ref}{suffixe}",
                                   "description": "Acompte de réservation. Solde et livraison réglés par virement avant expédition.",
                                   "images[0]": f"https://cohesifbtp.fr/img/boutique/stripe/{ref.lower()}.jpg",
                                   "metadata[marque]": "Cohesif BTP", "metadata[ref]": ref})
@@ -68,16 +69,23 @@ def main():
     resa = data["reservation"]
     crees = 0
     for p in data["produits"]:
-        if not p.get("actif", True) or not p.get("prix") or p.get("stripeAcompte"):
+        if not p.get("actif", True) or not p.get("prix"):
             continue
-        centimes = round(p["prix"] * resa["acomptePct"] / 100 * (1 + resa["tva"] / 100) * 100)
-        print(f"{p['ref']} : acompte {centimes / 100:.2f} € TTC…")
-        lien = lien_acompte(p, centimes)
-        p["stripeAcompte"] = lien["url"]
-        print(f"  → {lien['url']}")
-        crees += 1
-        # enregistrement après chaque lien : pas de doublon si le script s'arrête en route
-        DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        # variantes : la machine telle quelle, et l'option batterie lithium-ion (chariots)
+        cibles = [(p, p["prix"], None)]
+        if p.get("lithium"):
+            cibles.append((p["lithium"], p["prix"] + p["lithium"]["supplement"], "lithium-ion"))
+        for cible, prix, batterie in cibles:
+            if cible.get("stripeAcompte"):
+                continue
+            centimes = round(prix * resa["acomptePct"] / 100 * (1 + resa["tva"] / 100) * 100)
+            print(f"{p['ref']}{' ' + batterie if batterie else ''} : acompte {centimes / 100:.2f} € TTC…")
+            lien = lien_acompte(p, centimes, batterie)
+            cible["stripeAcompte"] = lien["url"]
+            print(f"  → {lien['url']}")
+            crees += 1
+            # enregistrement après chaque lien : pas de doublon si le script s'arrête en route
+            DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     if not crees:
         print("Aucun lien à créer : toutes les machines en vente ont déjà leur lien d'acompte.")
         return

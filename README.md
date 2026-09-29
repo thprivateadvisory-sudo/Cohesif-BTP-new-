@@ -36,6 +36,7 @@ Réglages dans `reservation` : acompte en %, TVA, tarifs de livraison par zone d
 Pour activer le paiement en ligne, renseigner `"stripeAcompte": "https://buy.stripe.com/..."` sur chaque machine
 (lien de paiement Stripe du montant de l'acompte TTC), ou lancer `tools/stripe_acomptes.py`.
 Tant qu'il vaut `null`, le bouton ouvre la demande de réservation.
+Chariots : `"lithium": {"supplement": …, "stripeAcompte": …}` ajoute l'option batterie lithium-ion (prix, acompte et lien de paiement suivent le choix du client).
 ⚠️ Si un prix change, l'acompte change : créer un nouveau lien Stripe et désactiver l'ancien.
 
 ⚠️ `data/boutique.json` est publié avec le site : n'y mettre que des prix de vente, jamais de prix d'achat ni de nom de fournisseur.
