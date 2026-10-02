@@ -10,6 +10,8 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `toiture-couverture.html` — Page métier Toiture & couverture (SEO couvreur Paris / IDF)
 - `facade-ravalement.html` — Page métier Façade & ravalement (SEO ravalement Paris / IDF)
 - `services.css` + `services.js` — Styles et formulaire de devis communs aux pages métiers
+- `toiture-3d.js` — Simulateur 3D de la page toiture (pose, démoussage, fenêtre de toit, isolation), chargé à la demande
+- `vendor/three/` — Three.js 0.169 (licence MIT), hébergé avec le site
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD
 - `cgv.html` — Conditions générales de vente

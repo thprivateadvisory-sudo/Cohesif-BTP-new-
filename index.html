@@ -1406,6 +1406,9 @@
     .env-body li { font-size: 14px; color: var(--grey-700); padding: 7px 0 7px 22px; position: relative; line-height: 1.5; }
     .env-body li::before { content: '✓'; position: absolute; left: 0; top: 7px; font-weight: 700; color: var(--accent); }
     .env-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .env-3d { display: flex; align-items: center; gap: 10px; margin: -8px 0 22px; padding: 12px 14px; border-radius: 14px; background: var(--accent-soft); font-size: 14px; font-weight: 600; color: var(--black); transition: background .15s; }
+    .env-3d:hover { background: #ffe4d4; }
+    .env-3d span { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); color: var(--white); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
     .env-actions .btn { padding: 12px 22px; font-size: 14px; }
     @media (max-width: 900px) {
       .envelope-grid { grid-template-columns: minmax(0, 1fr); }
@@ -2513,6 +2516,7 @@
               <li>Zinguerie : gouttières, faîtage, solins</li>
               <li>Isolation de toiture, démoussage et traitement hydrofuge</li>
             </ul>
+            <a href="toiture-couverture.html#simulateur-3d" class="env-3d"><span>3D</span>Voir la pose, le démoussage et la fenêtre de toit en 3D →</a>
             <div class="env-actions">
               <a href="toiture-couverture.html" class="btn btn-dark">Découvrir la toiture →</a>
               <a href="#devis" class="btn btn-outline" onclick="selectService('toiture')">Devis toiture</a>
