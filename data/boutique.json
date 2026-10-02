@@ -3,7 +3,7 @@
   "site": "https://cohesifbtp.fr",
   "formspree": "https://formspree.io/f/mzdnndna",
   "whatsapp": "33756855727",
-  "telephone": "07 60 90 37 74",
+  "telephone": "07 56 85 57 27",
   "email": "cohesifbtp@gmail.com",
   "misAJour": "2026-09-29",
   "note": "prix : null = « Prix sur demande ». Renseigner un nombre (€ HT) puis relancer python3 tools/build_boutique.py. leasingMois : mensualité indicative facultative (€ HT/mois). Les engagements SAV se modifient dans « engagements ». actif : false = modèle masqué de la boutique (données conservées, disponible sur commande). lithium (chariots) : supplément HT de l'option batterie lithium-ion et lien Stripe de l'acompte correspondant ; le client choisit la batterie sur la fiche, prix, total, acompte et lien de paiement suivent.",
