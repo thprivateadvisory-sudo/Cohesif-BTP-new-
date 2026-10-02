@@ -426,3 +426,7 @@ footer { background: var(--white); border-top: 1px solid var(--grey-200); paddin
   .r3d-info { padding: 20px 16px; }
   .r3d-specs { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
+
+.r3d-steps { display: inline-flex; gap: 6px; margin-left: 6px; }
+.r3d-steps i { width: 26px; height: 6px; border-radius: 3px; background: var(--grey-200); transition: background .3s; }
+.r3d-steps i.on { background: var(--accent); }
