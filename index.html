@@ -8,9 +8,9 @@
   <meta name="theme-color" content="#ea5b1f" />
 
   <!-- ──────────────────────── SEO PRIMARY ──────────────────────── -->
-  <title>Cohesif BTP — Construction & Rénovation Paris Île-de-France | Devis 48h</title>
-  <meta name="description" content="Cohesif BTP : entreprise tous corps d'état à Paris et Île-de-France. Construction, rénovation, désamiantage, bureau d'études. Certifiée Qualibat, RGE, FFB. Devis gratuit sous 48h." />
-  <meta name="keywords" content="entreprise BTP Paris, rénovation Paris, construction Île-de-France, désamiantage SS4, bureau études bâtiment, gros œuvre, second œuvre, Qualibat RGE, entreprise tous corps d'état, Cohesif BTP, Groupe Cohesif" />
+  <title>Cohesif BTP — Construction, Rénovation, Toiture & Façade Paris IDF | Devis 48h</title>
+  <meta name="description" content="Cohesif BTP : entreprise tous corps d'état à Paris et Île-de-France. Construction, rénovation, toiture, ravalement de façade, désamiantage, bureau d'études. Devis gratuit sous 48h." />
+  <meta name="keywords" content="entreprise BTP Paris, rénovation Paris, construction Île-de-France, désamiantage SS4, bureau études bâtiment, gros œuvre, second œuvre, couvreur Paris, réfection toiture, remplacement tuiles, ravalement façade Paris, isolation par l'extérieur, Qualibat RGE, entreprise tous corps d'état, Cohesif BTP, Groupe Cohesif" />
   <meta name="author" content="Groupe Cohesif" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow" />
@@ -52,7 +52,8 @@
     "url": "https://cohesifbtp.fr/",
     "logo": "https://cohesifbtp.fr/logo.png",
     "image": "https://cohesifbtp.fr/og-image.jpg",
-    "description": "Entreprise tous corps d'état à Paris et Île-de-France. Construction, rénovation, désamiantage, bureau d'études. Certifiée Qualibat, RGE, FFB.",
+    "description": "Entreprise tous corps d'état à Paris et Île-de-France. Construction, rénovation, toiture et couverture, ravalement de façade, désamiantage, bureau d'études. Certifiée Qualibat, RGE, FFB.",
+    "telephone": "+33756855727",
     "email": "cohesifbtp@gmail.com",
     "priceRange": "€€",
     "address": {
@@ -155,6 +156,24 @@
           "@type": "Service",
           "name": "Second œuvre",
           "description": "Plomberie, électricité, peinture, carrelage, menuiserie"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Toiture et couverture",
+          "description": "Remplacement de tuiles, réfection de toiture, recherche de fuite, zinguerie, isolation de toiture",
+          "url": "https://cohesifbtp.fr/toiture-couverture.html"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Façade et ravalement",
+          "description": "Nettoyage de façade, fissures, enduits, peinture, isolation thermique par l'extérieur",
+          "url": "https://cohesifbtp.fr/facade-ravalement.html"
         }
       }
     ],
@@ -1336,6 +1355,65 @@
       line-height: 1.6;
     }
 
+    /* ──────────────────────────────────── TOITURE & FAÇADE */
+    nav a { white-space: nowrap; }
+    @media (max-width: 1279px) { nav .nav-opt { display: none; } }
+    @media (max-width: 1023px) { nav .nav-opt-sm { display: none; } }
+    .hero-new {
+      display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;
+      font-size: 15px; font-weight: 600; color: var(--black);
+      padding: 6px 16px 6px 6px; border: 1px solid var(--grey-200); border-radius: var(--pill);
+      background: var(--white); transition: border-color .15s;
+    }
+    .hero-new:hover { border-color: var(--accent); }
+    .hero-new span { background: var(--accent); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 5px 10px; border-radius: var(--pill); }
+    .envelope { margin-top: 96px; scroll-margin-top: 90px; }
+    .envelope-title { font-size: clamp(28px, 3.6vw, 44px); font-weight: 800; letter-spacing: -1.3px; line-height: 1.08; max-width: 860px; margin-bottom: 16px; }
+    .envelope-desc { font-size: 17px; color: var(--grey-700); line-height: 1.65; max-width: 640px; margin-bottom: 40px; }
+    .envelope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .env-card {
+      background: var(--white); border: 1px solid var(--grey-200); border-radius: 24px; overflow: hidden;
+      display: flex; flex-direction: column; transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .env-card:hover { border-color: var(--black); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    .env-visual { height: 150px; position: relative; }
+    .env-roof {
+      background:
+        radial-gradient(circle at 50% 0, #f07a45 0 15px, transparent 16px) 0 0 / 32px 18px,
+        radial-gradient(circle at 50% 0, #ea5b1f 0 15px, transparent 16px) 16px 9px / 32px 18px,
+        #c94a14;
+    }
+    .env-facade {
+      background:
+        linear-gradient(90deg, transparent 0 46%, rgba(10,10,10,.08) 46% 100%),
+        repeating-linear-gradient(90deg, transparent 0 28px, #2a2a2a 28px 52px, transparent 52px 80px) 0 30px / 100% 44px no-repeat,
+        repeating-linear-gradient(90deg, transparent 0 28px, #2a2a2a 28px 52px, transparent 52px 80px) 0 92px / 100% 44px no-repeat,
+        #f3ece6;
+    }
+    .env-facade::after {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 46%; width: 4px; background: var(--accent);
+    }
+    .env-body { padding: 32px 36px 36px; display: flex; flex-direction: column; flex: 1; }
+    .env-body .service-num { margin-bottom: 16px; color: var(--accent); }
+    .env-body h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; }
+    .env-body h3 a:hover { color: var(--accent); }
+    .env-body > p { font-size: 15px; color: var(--grey-700); line-height: 1.65; margin-bottom: 18px; }
+    .env-body ul { list-style: none; margin-bottom: 28px; flex: 1; }
+    .env-body li { font-size: 14px; color: var(--grey-700); padding: 7px 0 7px 22px; position: relative; line-height: 1.5; }
+    .env-body li::before { content: '✓'; position: absolute; left: 0; top: 7px; font-weight: 700; color: var(--accent); }
+    .env-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .env-actions .btn { padding: 12px 22px; font-size: 14px; }
+    @media (max-width: 900px) {
+      .envelope-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .envelope { margin-top: 64px; }
+      .env-visual { height: 110px; }
+      .env-body { padding: 26px 22px 28px; }
+      .env-actions .btn { flex: 1 1 100%; }
+      .hero-new { font-size: 14px; }
+    }
+
     /* ──────────────────────────────────── BOUTIQUE CHARIOTS */
     .nav-shop { color: var(--accent) !important; font-weight: 700 !important; }
     .nav-shop::after { content: 'Nouveau'; margin-left: 6px; font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); padding: 2px 6px; border-radius: 999px; vertical-align: 2px; }
@@ -2170,11 +2248,12 @@
     </a>
     <nav aria-label="Navigation principale">
       <a href="#services">Services</a>
-      <a href="#pourquoi">Pourquoi nous</a>
+      <a href="#toiture-facade">Toiture & façade</a>
+      <a href="#pourquoi" class="nav-opt">Pourquoi nous</a>
       <a href="#packs">Offres</a>
-      <a href="#partenaires">Partenaires</a>
+      <a href="#partenaires" class="nav-opt">Partenaires</a>
       <a href="boutique.html" class="nav-shop">Boutique</a>
-      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-opt-sm">Contact</a>
       <a href="#devis" class="btn btn-dark header-cta">Demander un devis →</a>
     </nav>
     <a href="boutique.html" class="header-shop-mobile">Boutique</a>
@@ -2198,6 +2277,8 @@
     <a href="#devis" class="btn btn-dark btn-large">Demander un devis gratuit →</a>
     <a href="#services" class="btn btn-outline btn-large">Voir nos services</a>
   </div>
+
+  <a href="#toiture-facade" class="hero-new"><span>Nouveau</span>Toiture, couverture & ravalement de façade →</a>
 </section>
 
 <!-- ════════════════════════════════════════════ STATS -->
@@ -2404,6 +2485,58 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- Toiture & façade : l'enveloppe du bâtiment -->
+    <div class="envelope" id="toiture-facade">
+      <div class="envelope-head">
+        <span class="section-tag">Nouveau · Extérieur du bâtiment</span>
+        <h3 class="envelope-title">Toiture & façade : <span class="accent">protégez votre bâtiment, de haut en bas.</span></h3>
+        <p class="envelope-desc">Couverture, zinguerie, ravalement et isolation par l'extérieur : un seul interlocuteur, un seul échafaudage, un devis détaillé sous 48h.</p>
+      </div>
+      <div class="envelope-grid">
+
+        <article class="env-card">
+          <div class="env-visual env-roof" aria-hidden="true"></div>
+          <div class="env-body">
+            <div class="service-num">07 / TOITURE</div>
+            <h3><a href="toiture-couverture.html">Toiture & couverture</a></h3>
+            <p>Couvreur à Paris et en Île-de-France : tuiles, ardoise, zinc. De la tuile cassée à la réfection complète.</p>
+            <ul>
+              <li>Pose et remplacement de tuiles (terre cuite, béton, ardoise)</li>
+              <li>Réfection complète : charpente, écran sous-toiture, liteaux</li>
+              <li>Recherche et réparation de fuites, mise hors d'eau</li>
+              <li>Zinguerie : gouttières, faîtage, solins</li>
+              <li>Isolation de toiture, démoussage et traitement hydrofuge</li>
+            </ul>
+            <div class="env-actions">
+              <a href="toiture-couverture.html" class="btn btn-dark">Découvrir la toiture →</a>
+              <a href="#devis" class="btn btn-outline" onclick="selectService('toiture')">Devis toiture</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="env-card">
+          <div class="env-visual env-facade" aria-hidden="true"></div>
+          <div class="env-body">
+            <div class="service-num">08 / FAÇADE</div>
+            <h3><a href="facade-ravalement.html">Façade & ravalement</a></h3>
+            <p>Maisons, copropriétés et locaux pros : une façade propre, saine et mieux isolée, démarches comprises.</p>
+            <ul>
+              <li>Nettoyage, hydrogommage et traitement anti-mousse</li>
+              <li>Traitement des fissures et reprise d'enduit</li>
+              <li>Enduits, peinture et revêtements imperméabilisants</li>
+              <li>Isolation thermique par l'extérieur (ITE)</li>
+              <li>Déclaration préalable et autorisation de voirie prises en charge</li>
+            </ul>
+            <div class="env-actions">
+              <a href="facade-ravalement.html" class="btn btn-dark">Découvrir le ravalement →</a>
+              <a href="#devis" class="btn btn-outline" onclick="selectService('facade')">Devis façade</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
     </div>
   </div>
 </section>
@@ -3021,6 +3154,8 @@
               <option value="bureau-etudes">Bureau d'études</option>
               <option value="desamiantage">Désamiantage</option>
               <option value="second-oeuvre">Second œuvre / Finitions</option>
+              <option value="toiture">Toiture / Couverture</option>
+              <option value="facade">Façade / Ravalement</option>
               <option value="materiel">Vente / Location matériel</option>
               <option value="autre">Autre</option>
             </select>
@@ -3061,6 +3196,8 @@
         <h5>Services</h5>
         <a href="#services">Gros œuvre</a>
         <a href="#services">Rénovation</a>
+        <a href="toiture-couverture.html">Toiture & couverture</a>
+        <a href="facade-ravalement.html">Façade & ravalement</a>
         <a href="#services">Bureau d'études</a>
         <a href="#services">Désamiantage</a>
         <a href="#services">Location matériel</a>
@@ -3448,12 +3585,14 @@
   const aiResponses = {
     services: {
       label: "Quels sont vos services ?",
-      reply: `Cohesif BTP propose 6 services principaux :<br/><br/>
+      reply: `Cohesif BTP propose 8 services principaux :<br/><br/>
         🏗️ <strong>Gros œuvre</strong> — Construction, maçonnerie<br/>
         🔨 <strong>Rénovation</strong> — Logements, bureaux, commerces<br/>
         📐 <strong>Bureau d'études</strong> — Plans & optimisation<br/>
         ⚠️ <strong>Désamiantage</strong> — Diagnostic & retrait certifié<br/>
         🧱 <strong>Second œuvre</strong> — Cloisons, isolation, finitions<br/>
+        🏠 <strong><a href="toiture-couverture.html">Toiture & couverture</a></strong> — Tuiles, réfection, fuites, zinguerie<br/>
+        🏢 <strong><a href="facade-ravalement.html">Façade & ravalement</a></strong> — Nettoyage, enduit, peinture, ITE<br/>
         🚜 <strong>Vente & location de matériel</strong><br/><br/>
         <a href="#services" onclick="toggleAiChat()">→ Voir tous nos services en détail</a>`
     },
