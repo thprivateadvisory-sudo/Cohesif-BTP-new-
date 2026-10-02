@@ -1,0 +1,14 @@
+{
+  "name": "Cohesif BTP",
+  "short_name": "Cohesif BTP",
+  "description": "Travaux BTP et matériel de chantier partout en France",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#ea5b1f",
+  "lang": "fr",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png" }
+  ]
+}
