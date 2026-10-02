@@ -8,7 +8,7 @@
 
   <title>Couvreur Paris, Île-de-France & partout en France : toiture, tuiles | Cohesif BTP</title>
   <meta name="description" content="Couvreur à Paris, en Île-de-France et partout en France : remplacement de tuiles, réfection complète de toiture, recherche de fuite, zinguerie, isolation. Visite et devis gratuit sous 48h." />
-  <meta name="keywords" content="couvreur Paris, couvreur Île-de-France, couvreur France, entreprise de couverture, réfection toiture, rénovation toiture, remplacement tuiles, réparation toiture, fuite toiture, zinguerie, gouttières, démoussage toiture, isolation toiture, toiture zinc Paris, ardoise, Cohesif BTP" />
+  <meta name="keywords" content="couvreur Paris, couvreur Île-de-France, couvreur France, entreprise de couverture, réfection toiture, rénovation toiture, remplacement tuiles, réparation toiture, fuite toiture, zinguerie, gouttières, démoussage toiture, isolation toiture, pose fenêtre de toit, pose velux, remplacement velux, démoussage toiture 3D, simulateur toiture 3D, toiture zinc Paris, ardoise, Cohesif BTP" />
   <meta name="author" content="Groupe Cohesif" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="https://cohesifbtp.fr/toiture-couverture.html" />
@@ -155,6 +155,7 @@
       <li>Un interlocuteur unique</li>
       <li>Bureau d'études intégré</li>
     </ul>
+    <a href="#simulateur-3d" class="svc-new"><span>Nouveau</span>Voir votre toiture en 3D →</a>
   </div>
 
   <div class="svc-visual">
@@ -186,6 +187,77 @@
       <rect x="120" y="472" width="400" height="10" rx="5" fill="#0a0a0a" opacity=".08"/>
     </svg>
     <div class="svc-visual-tag"><strong>Visite & diagnostic</strong>Gratuits, avec devis détaillé sous 48h</div>
+  </div>
+</section>
+
+<!-- ════════════ SIMULATEUR 3D -->
+<section class="svc-section r3d-section" id="simulateur-3d">
+  <div class="svc-inner">
+    <span class="tag">Nouveau · Simulateur 3D</span>
+    <h2>Votre toiture en 3D, <span class="accent">avant le premier coup de marteau.</span></h2>
+    <p class="svc-desc">Regardez comment se pose une couverture, ce que change un démoussage, comment s'intègre une fenêtre de toit et ce qu'il y a sous vos tuiles. Faites pivoter la maquette avec le doigt ou la souris.</p>
+
+    <div class="r3d" id="r3d" data-mode="pose">
+      <div class="r3d-modes" role="tablist" aria-label="Choisir une vue 3D">
+        <button type="button" role="tab" data-r3d-mode="pose" aria-selected="true">Pose de la couverture</button>
+        <button type="button" role="tab" data-r3d-mode="demoussage" aria-selected="false">Démoussage & peinture</button>
+        <button type="button" role="tab" data-r3d-mode="fenetre" aria-selected="false">Fenêtre de toit</button>
+        <button type="button" role="tab" data-r3d-mode="coupe" aria-selected="false">Isolation en coupe</button>
+      </div>
+
+      <div class="r3d-bar">
+        <div class="r3d-ctl" data-for="pose">
+          <button type="button" class="r3d-chip" data-r3d-kind="ardoise" aria-pressed="false"><i style="background:#3e4752"></i>Ardoise</button>
+          <button type="button" class="r3d-chip" data-r3d-kind="plate" aria-pressed="false"><i style="background:#b4532f"></i>Tuile plate</button>
+          <button type="button" class="r3d-chip" data-r3d-kind="mecanique" aria-pressed="true"><i style="background:#c05a31"></i>Tuile mécanique</button>
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="replay">↻ Rejouer la pose</button>
+        </div>
+        <div class="r3d-ctl" data-for="demoussage">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="clean">▶ Lancer le nettoyage</button>
+          <label class="r3d-range"><span>Avant</span><input type="range" min="0" max="100" value="50" data-r3d="split" aria-label="Curseur avant / après" /><span>Après</span></label>
+          <div class="r3d-swatches" role="group" aria-label="Teinte de la peinture de toiture">
+            <button type="button" data-r3d-color="#b5482a" aria-pressed="true" title="Rouge tuile" style="background:#b5482a"></button>
+            <button type="button" data-r3d-color="#c7663b" aria-pressed="false" title="Terre cuite" style="background:#c7663b"></button>
+            <button type="button" data-r3d-color="#6e3d2b" aria-pressed="false" title="Brun" style="background:#6e3d2b"></button>
+            <button type="button" data-r3d-color="#3b3f45" aria-pressed="false" title="Anthracite" style="background:#3b3f45"></button>
+            <button type="button" data-r3d-color="#56606b" aria-pressed="false" title="Gris ardoise" style="background:#56606b"></button>
+          </div>
+        </div>
+        <div class="r3d-ctl" data-for="fenetre">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="explode">Assembler</button>
+          <span class="r3d-hint-inline">Ouverture, chevêtre, cadre, raccord, ouvrant : chaque élément se sépare.</span>
+        </div>
+        <div class="r3d-ctl" data-for="coupe">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="explode">Assembler</button>
+          <span class="r3d-hint-inline">Huit couches, de l'intérieur vers l'extérieur.</span>
+        </div>
+      </div>
+
+      <div class="r3d-stage">
+        <canvas aria-label="Maquette 3D interactive de toiture"></canvas>
+        <div class="r3d-labels" aria-hidden="true"></div>
+        <div class="r3d-loading"><span></span>Chargement de la maquette 3D…</div>
+        <div class="r3d-fallback">La maquette 3D n'est pas disponible sur cet appareil. <a href="#devis">Demandez votre devis</a> : nous vous montrons le projet lors de la visite.</div>
+        <div class="r3d-drag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 12h8M5 9l-3 3 3 3M19 9l3 3-3 3"/></svg>Glissez pour faire pivoter</div>
+      </div>
+      <p class="r3d-caption" aria-live="polite">&nbsp;</p>
+
+      <div class="r3d-info">
+        <div>
+          <h3 class="r3d-info-title">La tuile mécanique</h3>
+          <p class="r3d-info-text">Tuile de terre cuite à emboîtement, c'est la plus répandue en France.</p>
+          <div class="r3d-specs"></div>
+          <ul class="r3d-points"></ul>
+          <p class="r3d-note">Valeurs indicatives, à confirmer selon le fabricant, la région et la configuration du chantier.</p>
+        </div>
+        <aside class="r3d-cta">
+          <p class="r3d-cta-title">Vous voulez ce résultat chez vous ?</p>
+          <p>Visite et diagnostic de votre toiture, puis devis détaillé sous 48h.</p>
+          <a href="#devis" class="btn btn-accent">Demander mon devis gratuit →</a>
+          <a href="tel:+33756855727" class="btn btn-outline">07 56 85 57 27</a>
+        </aside>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -228,7 +300,7 @@
         <p>Nettoyage de la couverture, traitement anti-mousse et hydrofuge pour prolonger la durée de vie de vos tuiles.</p>
       </article>
     </div>
-    <p class="svc-desc" style="margin:32px 0 0;font-size:15px">Également : réparation de charpente, pose de fenêtres de toit, couverture de bâtiments professionnels et d'entrepôts.</p>
+    <p class="svc-desc" style="margin:32px 0 0;font-size:15px">Également : réparation de charpente, pose et remplacement de fenêtres de toit (type Velux®), couverture de bâtiments professionnels et d'entrepôts.</p>
   </div>
 </section>
 
@@ -499,5 +571,19 @@
 </div>
 
 <script src="services.js"></script>
+<script>
+  // Simulateur 3D : chargé seulement quand il approche de l'écran
+  (function () {
+    var el = document.getElementById('r3d');
+    if (!el) return;
+    var go = function () {
+      import('./toiture-3d.js').then(function (m) { m.init(el); }).catch(function () { el.classList.add('r3d-fail'); });
+    };
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '600px 0px' });
+      io.observe(el);
+    } else go();
+  })();
+</script>
 </body>
 </html>
