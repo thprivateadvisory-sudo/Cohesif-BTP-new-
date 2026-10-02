@@ -43,7 +43,7 @@ Chariots : `"lithium": {"supplement": …, "stripeAcompte": …}` ajoute l'optio
 
 ## Contact
 
-📞 07 60 90 37 74  
+📞 07 56 85 57 27  
 ✉️ cohesifbtp@gmail.com  
 📍 200 rue de la Croix Nivert, 75015 Paris
 

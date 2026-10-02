@@ -232,7 +232,7 @@
           form.reset();
         })
         .catch(function () {
-          alert("L'envoi n'a pas fonctionné. Réessayez ou appelez-nous au 07 60 90 37 74.");
+          alert("L'envoi n'a pas fonctionné. Réessayez ou appelez-nous au 07 56 85 57 27.");
         })
         .finally(function () { btn.disabled = false; btn.textContent = label; });
     });
