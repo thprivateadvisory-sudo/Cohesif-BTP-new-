@@ -8,7 +8,7 @@
 
   <title>Ravalement de façade Paris, IDF & toute la France : enduit, ITE | Cohesif BTP</title>
   <meta name="description" content="Ravalement de façade à Paris, en Île-de-France et partout en France : nettoyage, fissures, enduit, peinture, isolation par l'extérieur. Maisons et copropriétés. Devis gratuit sous 48h." />
-  <meta name="keywords" content="ravalement façade Paris, ravalement façade Île-de-France, ravalement façade France, entreprise ravalement, ravalement copropriété, nettoyage façade, enduit façade, peinture façade, isolation thermique par l'extérieur, ITE, fissures façade, pierre de taille, Cohesif BTP" />
+  <meta name="keywords" content="ravalement façade Paris, ravalement façade Île-de-France, ravalement façade France, entreprise ravalement, ravalement copropriété, nettoyage façade, enduit façade, peinture façade, isolation thermique par l'extérieur, ITE, simulateur façade 3D, échafaudage façade, fissures façade, pierre de taille, Cohesif BTP" />
   <meta name="author" content="Groupe Cohesif" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="https://cohesifbtp.fr/facade-ravalement.html" />
@@ -156,6 +156,7 @@
       <li>Maisons, copropriétés, syndics</li>
       <li>Un interlocuteur unique</li>
     </ul>
+    <a href="#simulateur-3d" class="svc-new"><span>Nouveau</span>Voir votre façade en 3D →</a>
   </div>
 
   <div class="svc-visual">
@@ -214,6 +215,75 @@
       <rect x="120" y="480" width="400" height="10" rx="5" fill="#0a0a0a" opacity=".08"/>
     </svg>
     <div class="svc-visual-tag"><strong>Façade + toiture</strong>Un seul échafaudage, un seul interlocuteur</div>
+  </div>
+</section>
+
+<!-- ════════════ SIMULATEUR 3D -->
+<section class="svc-section r3d-section" id="simulateur-3d">
+  <div class="svc-inner">
+    <span class="tag">Nouveau · Simulateur 3D</span>
+    <h2>Votre façade en 3D, <span class="accent">avant / après ravalement.</span></h2>
+    <p class="svc-desc">Comparez une façade encrassée et la même façade ravalée, choisissez la teinte, regardez l'échafaudage se monter, découvrez l'isolation par l'extérieur et le traitement d'une fissure. Faites pivoter la maquette avec le doigt ou la souris.</p>
+
+    <div class="r3d" id="r3d" data-mode="ravalement">
+      <div class="r3d-modes" role="tablist" aria-label="Choisir une vue 3D">
+        <button type="button" role="tab" data-r3d-mode="ravalement" aria-selected="true">Avant / après</button>
+        <button type="button" role="tab" data-r3d-mode="echafaudage" aria-selected="false">Échafaudage</button>
+        <button type="button" role="tab" data-r3d-mode="ite" aria-selected="false">Isolation par l'extérieur</button>
+        <button type="button" role="tab" data-r3d-mode="fissures" aria-selected="false">Traitement des fissures</button>
+      </div>
+
+      <div class="r3d-bar">
+        <div class="r3d-ctl" data-for="ravalement">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="clean">▶ Lancer le ravalement</button>
+          <label class="r3d-range"><span>Avant</span><input type="range" min="0" max="100" value="50" data-r3d="split" aria-label="Curseur avant / après" /><span>Après</span></label>
+          <div class="r3d-swatches" role="group" aria-label="Teinte de la façade">
+            <button type="button" data-r3d-color="#e9dfcb" aria-pressed="true" title="Pierre de Paris" style="background:#e9dfcb"></button>
+            <button type="button" data-r3d-color="#f2eee6" aria-pressed="false" title="Blanc cassé" style="background:#f2eee6"></button>
+            <button type="button" data-r3d-color="#e4cfa8" aria-pressed="false" title="Sable" style="background:#e4cfa8"></button>
+            <button type="button" data-r3d-color="#d9d9d4" aria-pressed="false" title="Gris perle" style="background:#d9d9d4"></button>
+            <button type="button" data-r3d-color="#dcb886" aria-pressed="false" title="Ocre clair" style="background:#dcb886"></button>
+          </div>
+        </div>
+        <div class="r3d-ctl" data-for="echafaudage">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="replay">↻ Rejouer le montage</button>
+          <span class="r3d-hint-inline">Montants, planchers, garde-corps, plinthes puis filet de protection.</span>
+        </div>
+        <div class="r3d-ctl" data-for="ite">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="explode">Assembler</button>
+          <span class="r3d-hint-inline">Six couches, du mur existant à l'enduit de finition.</span>
+        </div>
+        <div class="r3d-ctl" data-for="fissures">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="step">Étape suivante →</button>
+          <span class="r3d-steps" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+
+      <div class="r3d-stage">
+        <canvas aria-label="Maquette 3D interactive de façade"></canvas>
+        <div class="r3d-labels" aria-hidden="true"></div>
+        <div class="r3d-loading"><span></span>Chargement de la maquette 3D…</div>
+        <div class="r3d-fallback">La maquette 3D n'est pas disponible sur cet appareil. <a href="#devis">Demandez votre devis</a> : nous vous montrons le projet lors de la visite.</div>
+        <div class="r3d-drag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 12h8M5 9l-3 3 3 3M19 9l3 3-3 3"/></svg>Glissez pour faire pivoter</div>
+      </div>
+      <p class="r3d-caption" aria-live="polite">&nbsp;</p>
+
+      <div class="r3d-info">
+        <div>
+          <h3 class="r3d-info-title">Ravalement de façade : avant / après</h3>
+          <p class="r3d-info-text">Comparez une façade encrassée et la même façade après ravalement.</p>
+          <div class="r3d-specs"></div>
+          <ul class="r3d-points"></ul>
+          <p class="r3d-note">Valeurs indicatives, à confirmer selon le support, la réglementation locale et la configuration du chantier.</p>
+        </div>
+        <aside class="r3d-cta">
+          <p class="r3d-cta-title">Vous voulez ce résultat sur votre façade ?</p>
+          <p>Visite et diagnostic du support, puis devis détaillé sous 48h, démarches comprises.</p>
+          <a href="#devis" class="btn btn-accent">Demander mon devis gratuit →</a>
+          <a href="tel:+33756855727" class="btn btn-outline">07 56 85 57 27</a>
+        </aside>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -491,5 +561,19 @@
 </div>
 
 <script src="services.js"></script>
+<script>
+  // Simulateur 3D : chargé seulement quand il approche de l'écran
+  (function () {
+    var el = document.getElementById('r3d');
+    if (!el) return;
+    var go = function () {
+      import('./facade-3d.js').then(function (m) { m.init(el); }).catch(function () { el.classList.add('r3d-fail'); });
+    };
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '600px 0px' });
+      io.observe(el);
+    } else go();
+  })();
+</script>
 </body>
 </html>
