@@ -1,0 +1,67 @@
+/* Boutique Cohesif BTP · page plaque de plâtre BA13 (calculateur + 3D) */
+.bq-links a[aria-current="page"]{color:var(--accent)}
+.ba-hero{padding-bottom:0}
+.ba-hero-grid>*{min-width:0}
+.ba-hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,460px);align-items:start;gap:clamp(1.5rem,4vw,3.5rem)}
+.ba-hero .bq-hero-txt{padding-top:clamp(0px,3vw,32px)}
+
+.ba-calc{background:#fff;color:var(--black);border-radius:24px;padding:clamp(1.2rem,2.6vw,1.8rem);display:flex;flex-direction:column;gap:1rem;box-shadow:0 30px 80px rgba(0,0,0,.35);scroll-margin-top:110px}
+.ba-calc-title{font-size:1.25rem;font-weight:800;letter-spacing:-.02em}
+.ba-field{display:flex;flex-direction:column;gap:.35rem;font-size:.82rem;font-weight:700}
+.ba-field small{font-weight:500;color:var(--g500);font-size:.76rem}
+.ba-field input,.ba-field select{width:100%;border:1px solid var(--g300);border-radius:12px;padding:.7rem .85rem;font-size:.95rem;font-weight:500;background:#fff;transition:border-color .15s,box-shadow .15s}
+.ba-field input:focus,.ba-field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(234,91,31,.15)}
+.ba-input-unit{position:relative;display:block}
+.ba-input-unit i{position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-style:normal;font-weight:800;color:var(--g500)}
+.ba-field-big input{font-size:1.6rem;font-weight:800;padding:.6rem 3.4rem .6rem .9rem;letter-spacing:-.02em}
+.ba-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.ba-lxh summary,.ba-acc summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--accent);list-style:none}
+.ba-lxh summary::-webkit-details-marker,.ba-acc summary::-webkit-details-marker{display:none}
+.ba-lxh summary::before,.ba-acc summary::before{content:"+ "}
+.ba-lxh[open] summary::before,.ba-acc[open] summary::before{content:"− "}
+.ba-lxh .ba-row{margin-top:.6rem}
+.ba-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;background:var(--g100);padding:.3rem;border-radius:14px}
+.ba-seg button{border:0;background:transparent;border-radius:10px;padding:.55rem .3rem;font-weight:700;font-size:.88rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.2;color:var(--g700);transition:background .15s,color .15s,box-shadow .15s}
+.ba-seg button small{font-size:.7rem;font-weight:500;color:var(--g500)}
+.ba-seg button[aria-checked="true"]{background:#fff;color:var(--black);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.ba-result{background:var(--accent-s);border-radius:16px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.7rem}
+.ba-big{display:flex;align-items:baseline;gap:.6rem}
+.ba-big b{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;color:var(--accent);line-height:1}
+.ba-big span{font-weight:700}
+.ba-dl{display:grid;gap:.35rem;font-size:.88rem}
+.ba-dl div{display:flex;justify-content:space-between;gap:1rem}
+.ba-dl div[hidden]{display:none}
+.ba-dl dt{color:var(--g700)}
+.ba-dl dd{font-weight:700;text-align:right}
+.ba-acc .ba-dl{margin-top:.6rem}
+.ba-acc p{font-size:.74rem;color:var(--g500);margin-top:.4rem}
+.ba-note{font-size:.76rem;color:var(--g500);text-align:center;margin-top:-.3rem}
+
+.r3d-section,.ba-hero~main .r3d{scroll-margin-top:110px}
+#plaque-3d .r3d-stage{height:clamp(360px,46vw,540px)}
+
+.ba-specs{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.ba-specs table{width:100%;border-collapse:collapse;font-size:.95rem;background:#fff;border:1px solid var(--g200);border-radius:var(--r);overflow:hidden}
+.ba-specs th,.ba-specs td{text-align:left;padding:.85rem 1.1rem;border-bottom:1px solid var(--g200)}
+.ba-specs tr:last-child th,.ba-specs tr:last-child td{border-bottom:0}
+.ba-specs th{font-weight:600;color:var(--g700);width:42%;background:var(--g50)}
+.ba-specs td{font-weight:700}
+.ba-usages{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.ba-usages>div{border:1px solid var(--g200);border-radius:var(--r);padding:1.1rem}
+.ba-usages b{display:block;margin-bottom:.3rem}
+.ba-usages p{font-size:.88rem;color:var(--g700)}
+.ba-usage-pose{background:var(--black);color:#fff;border-color:var(--black)!important}
+.ba-usage-pose p{color:rgba(255,255,255,.72)}
+.ba-usage-pose a{color:var(--accent);font-weight:700}
+
+@media (max-width:900px){
+  .ba-hero-grid{grid-template-columns:minmax(0,1fr)}
+  .ba-specs>*{min-width:0}
+  .ba-specs{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .ba-usages{grid-template-columns:1fr}
+  .ba-big b{font-size:2.2rem}
+  #plaque-3d .r3d-stage{height:380px}
+}
+@media (max-width:420px){.ba-hero h1{font-size:2.1rem}.ba-row{grid-template-columns:1fr}}
