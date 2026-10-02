@@ -7,6 +7,9 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 ## Structure
 
 - `index.html` — Page d'accueil
+- `toiture-couverture.html` — Page métier Toiture & couverture (SEO couvreur Paris / IDF)
+- `facade-ravalement.html` — Page métier Façade & ravalement (SEO ravalement Paris / IDF)
+- `services.css` + `services.js` — Styles et formulaire de devis communs aux pages métiers
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD
 - `cgv.html` — Conditions générales de vente
