@@ -1,4 +1,4 @@
-// Cohesif BTP — simulateur 3D de façade (ravalement avant / après, échafaudage, ITE, fissures)
+// Cohesif BTP — simulateur 3D de façade (maison entière, ravalement avant / après, échafaudage, ITE, fissures)
 // Chargé à la demande par facade-ravalement.html quand le bloc #r3d approche de l'écran.
 import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, ringGeometry, mat } from './r3d-core.js';
 import { createViewer } from './r3d-core.js';
@@ -6,6 +6,18 @@ import { createViewer } from './r3d-core.js';
 /* ────────────────────────────────────────── Données affichées */
 
 const MODES = {
+  maison: {
+    titre: "Ravalement d'une maison : avant / après",
+    texte: "Toute la maison d'un coup d'œil : à gauche, des façades grisées, un soubassement verdi par les algues, des fissures et des volets délavés. À droite, la même maison après ravalement. Choisissez la teinte de l'enduit et la couleur des volets, faites glisser le curseur ou faites pivoter la maison.",
+    specs: [['Nettoyage', 'Démoussage + lavage basse pression'], ['Réparation', 'Fissures, appuis, soubassement'], ['Finition', 'Enduit, peinture ou revêtement'], ['Teinte', 'Selon le PLU de votre commune']],
+    points: [
+      'Façades, pignons et soubassement traités ensemble : un aspect uniforme tout autour de la maison.',
+      'Traitement anti-mousse et anti-algues, surtout en pied de mur où l’humidité remonte.',
+      'Fissures ouvertes, rebouchées et armées avant la finition, pour qu’elles ne réapparaissent pas.',
+      'Volets, appuis et porte remis en peinture dans la couleur de votre choix.',
+      'Déclaration préalable en mairie lorsque l’aspect change : nous la préparons avec vous.'
+    ]
+  },
   ravalement: {
     titre: 'Ravalement de façade : avant / après',
     texte: "À gauche, une façade encrassée par la pollution, marquée de coulures et de fissures. À droite, la même façade après nettoyage, réparations et mise en teinte. Faites glisser le curseur, changez la teinte ou lancez le ravalement.",
@@ -92,7 +104,8 @@ function stoneTexture() {
 }
 
 // Façade encrassée : pollution plus marquée en bas, coulures sous les appuis de fenêtre
-function grimeTexture(windowXs, W) {
+// joints = false : enduit sans pierre de taille (maison)
+function grimeTexture(windowXs, W, joints = true) {
   return canvasTexture(1024, 1024, (g, w, h) => {
     g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
     const r = rng(9);
@@ -116,7 +129,7 @@ function grimeTexture(windowXs, W) {
         g.fillRect(u - 34 + r() * 68, 120 + r() * 700, 2 + r() * 4, 60 + r() * 120);
       }
     });
-    drawStone(g, w, h, 38, 'rgba(80,70,60,0.45)');
+    if (joints) drawStone(g, w, h, 38, 'rgba(80,70,60,0.45)');
   });
 }
 
@@ -259,6 +272,239 @@ function buildBuilding(M, opts = {}) {
   return g;
 }
 
+/* ────────────────────────────────────────── Vue 0 : toute la maison, avant / après */
+
+const TEINTES_MAISON = {
+  '#f2eee6': 'Blanc cassé',
+  '#e9dfcb': 'Ton pierre',
+  '#e4cfa8': 'Sable',
+  '#d9d9d4': 'Gris perle',
+  '#dcb886': 'Ocre clair',
+  '#e3c4ae': 'Rose ancien'
+};
+const VOLETS = {
+  '#3b3f45': 'Gris anthracite',
+  '#6d8299': 'Bleu gris',
+  '#8fa58a': 'Vert sauge',
+  '#f4f2ee': 'Blanc',
+  '#8a5a3b': 'Bois'
+};
+
+// Maison R+1 : x = longueur, z = profondeur, pignons en x = ±W/2
+const MH = { W: 8, D: 6.5, H: 5.4, pitch: 35 };
+MH.Hr = MH.H + (MH.D / 2) * Math.tan(THREE.MathUtils.degToRad(MH.pitch));
+
+function enduitTexture() {
+  return canvasTexture(256, 256, (g, w, h) => {
+    const img = g.createImageData(w, h);
+    const r = rng(4);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = 228 + r() * 27;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+      img.data[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+  });
+}
+
+// Tuiles mécaniques vues de loin : rangs horizontaux, légères variations de teinte
+function roofTexture() {
+  return canvasTexture(512, 512, (g, w, h) => {
+    const r = rng(12);
+    const rows = 22, cols = 30, rh = h / rows, cw = w / cols;
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        g.fillStyle = `hsl(${14 + r() * 6}, ${46 + r() * 12}%, ${34 + r() * 9}%)`;
+        g.fillRect(x * cw, y * rh, cw, rh);
+        g.fillStyle = 'rgba(255,255,255,0.08)';
+        g.fillRect(x * cw + cw * 0.2, y * rh, cw * 0.35, rh);
+      }
+      g.fillStyle = 'rgba(0,0,0,0.35)';
+      g.fillRect(0, y * rh + rh - 3, w, 3);
+    }
+  });
+}
+
+// Recalcule des UV « une face = toute la texture » pour le triangle des pignons
+function gableGeometry() {
+  const { W, D, H, Hr } = MH;
+  const s = new THREE.Shape();
+  s.moveTo(-D / 2, H); s.lineTo(D / 2, H); s.lineTo(0, Hr); s.closePath();
+  const geo = new THREE.ExtrudeGeometry(s, { depth: W, bevelEnabled: false });
+  geo.rotateY(Math.PI / 2);
+  geo.translate(-W / 2, 0, 0);
+  const pos = geo.attributes.position, uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) uv.setXY(i, (pos.getZ(i) + D / 2) / D, 0.8 + (0.2 * (pos.getY(i) - H)) / (Hr - H));
+  uv.needsUpdate = true;
+  return geo;
+}
+
+function maisonMaterials(dirty, plane, map, teinte, volet) {
+  const clip = { clippingPlanes: [plane] };
+  const c = new THREE.Color(teinte);
+  return {
+    wall: std(dirty ? '#b3a690' : c, { map, roughness: 0.95, ...clip }),
+    plinth: std(dirty ? '#5f6a4a' : '#a9a49b', { map: dirty ? map : null, roughness: 0.95, ...clip }),
+    trim: std(dirty ? '#a49a88' : '#f1efea', { roughness: 0.8, ...clip }),
+    frame: std(dirty ? '#bdb5a6' : '#f7f5f0', { roughness: 0.6, ...clip }),
+    glass: std(dirty ? '#2c3136' : '#33414d', { roughness: 0.12, metalness: 0.35, ...clip }),
+    shutter: std(dirty ? '#7d877c' : volet, { roughness: dirty ? 0.95 : 0.55, ...clip }),
+    crack: std('#3a322b', clip)
+  };
+}
+
+// Façades, pignons, soubassement, menuiseries et volets (tout ce que le ravalement touche)
+function buildMaisonFacades(M, gGeo, dirty) {
+  const { W, D, H } = MH;
+  const g = new THREE.Group();
+  g.add(box(W, H, D, M.wall, 0, H / 2, 0));
+  const gable = new THREE.Mesh(gGeo, M.wall);
+  gable.castShadow = true; gable.receiveShadow = true;
+  g.add(gable);
+  g.add(box(W + 0.06, 0.45, D + 0.06, M.plinth, 0, 0.225, 0));
+  g.add(box(W + 0.08, 0.1, D + 0.08, M.trim, 0, H / 2 - 0.05, 0)); // bandeau d'étage
+
+  const face = (x, z, ry) => { const f = new THREE.Group(); f.position.set(x, 0, z); f.rotation.y = ry; g.add(f); return f; };
+  const win = (f, x, y0, w, h) => {
+    f.add(box(w, h, 0.02, M.glass, x, y0 + h / 2, 0.005));
+    const fr = new THREE.Mesh(ringGeometry(w + 0.12, h + 0.12, 0.08, 0.06), M.frame);
+    fr.position.set(x, y0 + h / 2, 0.02); fr.castShadow = true; f.add(fr);
+    f.add(box(0.05, h, 0.04, M.frame, x, y0 + h / 2, 0.02));
+    f.add(box(w + 0.3, 0.06, 0.14, M.trim, x, y0 - 0.06, 0.07)); // appui
+    [-1, 1].forEach((s) => f.add(box(w / 2 + 0.02, h + 0.06, 0.04, M.shutter, x + s * (w * 0.75 + 0.1), y0 + h / 2, 0.03)));
+  };
+  const front = face(0, D / 2, 0), back = face(0, -D / 2, Math.PI);
+  const right = face(W / 2, 0, Math.PI / 2), left = face(-W / 2, 0, -Math.PI / 2);
+  [-2.6, 2.6].forEach((x) => win(front, x, 0.95, 1.0, 1.3));
+  [-2.6, 0, 2.6].forEach((x) => win(front, x, 3.55, 0.9, 1.15));
+  [-2, 2].forEach((x) => { win(back, x, 0.95, 1.0, 1.3); win(back, x, 3.55, 0.9, 1.15); });
+  [right, left].forEach((f) => { win(f, 0, 0.95, 0.9, 1.2); win(f, 0, 3.55, 0.8, 1.1); win(f, 0, H + 0.55, 0.5, 0.7); });
+  // porte d'entrée, de la couleur des volets, sous une marquise
+  front.add(box(1.0, 2.2, 0.05, M.shutter, 0, 1.1, 0.02));
+  const dfr = new THREE.Mesh(ringGeometry(1.14, 2.34, 0.08, 0.06), M.frame);
+  dfr.position.set(0, 1.12, 0.03); front.add(dfr);
+  front.add(box(1.5, 0.08, 0.6, M.trim, 0, 2.45, 0.3));
+
+  if (dirty) {
+    const r = rng(31);
+    // fissures typiques : en biais depuis les angles des fenêtres, et une sur le pignon
+    [[front, -2.05, 2.3], [front, 3.15, 4.75], [front, 0.5, 3.4], [right, 0.55, 3.5]].forEach(([f, cx, cy]) => {
+      let x = cx, y = cy;
+      for (let i = 0; i < 10; i++) {
+        const nx = x + (r() - 0.35) * 0.14, ny = y - 0.08 - r() * 0.05;
+        const seg = box(0.016, Math.hypot(nx - x, ny - y) + 0.01, 0.006, M.crack, (x + nx) / 2, (y + ny) / 2, 0.004);
+        seg.rotation.z = Math.atan2(nx - x, y - ny);
+        seg.castShadow = false;
+        f.add(seg);
+        x = nx; y = ny;
+      }
+    });
+  }
+  return g;
+}
+
+// Toiture, gouttières, cheminée, pelouse : identiques avant et après (non découpés)
+function buildMaisonRoof() {
+  const { W, D, Hr, pitch } = MH;
+  const p = THREE.MathUtils.degToRad(pitch);
+  const g = new THREE.Group();
+  const L = (D / 2 + 0.5) / Math.cos(p);
+  const roofMat = std('#ffffff', { map: roofTexture(), roughness: 0.7 });
+  const under = std('#d9cfc2');
+  [1, -1].forEach((s) => {
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(W + 0.5, 0.14, L), [under, under, roofMat, under, under, under]);
+    slab.rotation.x = s * p;
+    slab.position.set(0, Hr + 0.12 - (L / 2) * Math.sin(p), s * (L / 2) * Math.cos(p));
+    slab.castShadow = true; slab.receiveShadow = true;
+    g.add(slab);
+    const eaveY = Hr + 0.12 - L * Math.sin(p);
+    const gutter = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, W + 0.5, 14), mat.zinc());
+    gutter.rotation.z = Math.PI / 2;
+    gutter.position.set(0, eaveY - 0.06, s * (L * Math.cos(p) - 0.02));
+    gutter.castShadow = true;
+    g.add(gutter);
+    [-1, 1].forEach((k) => {
+      const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, eaveY, 10), mat.zinc());
+      pipe.position.set(k * (W / 2 - 0.2), eaveY / 2, s * (D / 2 + 0.12));
+      pipe.castShadow = true;
+      g.add(pipe);
+    });
+  });
+  const ridge = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, W + 0.5, 16, 1, false, 0, Math.PI), std('#9c4429', { roughness: 0.7 }));
+  ridge.rotation.z = Math.PI / 2;
+  ridge.position.set(0, Hr + 0.13, 0);
+  g.add(ridge);
+  g.add(box(0.6, 1.6, 0.6, std('#a65a42'), 2.3, Hr + 0.1, -1.0));
+  g.add(box(0.72, 0.1, 0.72, std('#8d8a84'), 2.3, Hr + 0.95, -1.0));
+  const lawn = new THREE.Mesh(new THREE.CircleGeometry(9.5, 72), std('#8cb866', { roughness: 1 }));
+  lawn.rotation.x = -Math.PI / 2; lawn.position.y = 0.003; lawn.receiveShadow = true;
+  g.add(lawn);
+  g.add(box(1.4, 0.03, 3.6, std('#cfc9be', { roughness: 1 }), 0, 0.015, D / 2 + 1.8)); // allée
+  return g;
+}
+
+function buildMaison(api, teinte, volet, onChange) {
+  const { addLabel, frame, caption, world } = api;
+  const { W, D } = MH;
+  const pDirty = new THREE.Plane(), pClean = new THREE.Plane();
+  const localDirty = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0);
+  const localClean = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0);
+  const Md = maisonMaterials(true, pDirty, grimeTexture([-2.6, 0, 2.6], W, false), teinte, volet);
+  const Mc = maisonMaterials(false, pClean, enduitTexture(), teinte, volet);
+  const gGeo = gableGeometry();
+
+  const group = new THREE.Group();
+  group.add(buildMaisonRoof());
+  group.add(buildMaisonFacades(Md, gGeo, true));
+  group.add(buildMaisonFacades(Mc, gGeo, false));
+  const sweep = box(0.04, MH.H + 0.1, D + 0.5, new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 }), 0, (MH.H + 0.1) / 2, 0);
+  sweep.castShadow = false;
+  group.add(sweep);
+  world.add(group);
+  frame(group, new THREE.Vector3(0, 3.3, 0), 26, 1.22, 0.42);
+
+  const state = { split: 0.5, anim: null, teinte, volet };
+  const tmp = new THREE.Vector3();
+  const lAvant = addLabel('Avant', group, tmp, { show: () => state.split > 0.12 });
+  const lApres = addLabel('Après', group, tmp, { show: () => state.split < 0.88, cls: 'r3d-label-accent' });
+  function planes() {
+    const sx = -W / 2 + state.split * W;
+    localDirty.constant = sx;
+    localClean.constant = -sx;
+    group.updateMatrixWorld();
+    pDirty.copy(localDirty).applyMatrix4(group.matrixWorld);
+    pClean.copy(localClean).applyMatrix4(group.matrixWorld);
+    sweep.position.x = sx;
+    sweep.visible = state.split > 0.01 && state.split < 0.99;
+    lAvant.local.set((-W / 2 + sx) / 2, 2.4, D / 2 + 0.2);
+    lApres.local.set((sx + W / 2) / 2, 2.4, D / 2 + 0.2);
+  }
+  const range = api.root.querySelector('.r3d-ctl[data-for="maison"] [data-r3d="split"]');
+  function setSplit(v, fromRange) {
+    state.split = clamp01(v);
+    if (!fromRange && range) range.value = Math.round(state.split * 100);
+    planes();
+    caption.textContent = `Maison individuelle : à gauche avant ravalement, à droite après, enduit « ${TEINTES_MAISON[state.teinte]} », volets « ${VOLETS[state.volet]} ». ${Math.round((1 - state.split) * 100)} % des façades ravalées.`;
+  }
+  setSplit(0.5);
+
+  return {
+    group,
+    setSplit(v) { state.anim = null; setSplit(v, true); },
+    setColor(hex) { state.teinte = hex; Mc.wall.color.set(hex); onChange({ teinte: hex }); setSplit(state.split); },
+    setVolet(hex) { state.volet = hex; Mc.shutter.color.set(hex); onChange({ volet: hex }); setSplit(state.split); },
+    run() { state.anim = { t: 0 }; setSplit(1); },
+    update(dt) {
+      planes(); // suit la légère rotation de la scène
+      if (!state.anim) return false;
+      state.anim.t += dt / (REDUCED ? 0.01 : 4);
+      setSplit(1 - easeInOut(clamp01(state.anim.t)));
+      if (state.anim.t >= 1) state.anim = null;
+      return true;
+    }
+  };
+}
+
 /* ────────────────────────────────────────── Vue 1 : ravalement avant / après */
 
 function buildRavalement(api) {
@@ -296,7 +542,7 @@ function buildRavalement(api) {
   }
   const lAvant = addLabel('Avant', group, tmp, { show: () => state.split > 0.12 });
   const lApres = addLabel('Après', group, tmp, { show: () => state.split < 0.88, cls: 'r3d-label-accent' });
-  const range = api.root.querySelector('[data-r3d="split"]');
+  const range = api.root.querySelector('.r3d-ctl[data-for="ravalement"] [data-r3d="split"]');
   function setSplit(v, fromRange) {
     state.split = clamp01(v);
     if (!fromRange && range) range.value = Math.round(state.split * 100);
@@ -592,9 +838,20 @@ function buildFissures(api) {
 }
 
 export function init(root) {
+  const choix = { teinte: '#f2eee6', volet: '#3b3f45' };
+  let scene = null;
   createViewer(root, {
-    initial: 'ravalement',
-    builders: { ravalement: buildRavalement, echafaudage: buildEchafaudage, ite: buildIte, fissures: buildFissures },
-    info: (m) => MODES[m]
+    initial: root.dataset.mode || 'maison',
+    builders: {
+      maison: (api) => (scene = buildMaison(api, choix.teinte, choix.volet, (c) => Object.assign(choix, c))),
+      ravalement: buildRavalement, echafaudage: buildEchafaudage, ite: buildIte, fissures: buildFissures
+    },
+    info: (m) => MODES[m],
+    onButton(b, api) {
+      if (!b.dataset.r3dVolet) return false;
+      if (api.mode === 'maison' && scene) scene.setVolet(b.dataset.r3dVolet);
+      b.parentElement.querySelectorAll('[data-r3d-volet]').forEach((s) => s.setAttribute('aria-pressed', String(s === b)));
+      return true;
+    }
   });
 }
