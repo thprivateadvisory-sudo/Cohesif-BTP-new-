@@ -253,6 +253,7 @@ function enduitTexture() {
   enduitTex.wrapS = enduitTex.wrapT = THREE.RepeatWrapping;
   enduitTex.repeat.set(3, 3);
   enduitTex.colorSpace = THREE.SRGBColorSpace;
+  enduitTex.userData.keep = true; // partagée entre les vues : jamais libérée
   return enduitTex;
 }
 

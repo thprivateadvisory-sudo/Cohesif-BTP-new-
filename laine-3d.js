@@ -77,6 +77,7 @@ function canvasTexture(w, h, draw) {
   t.colorSpace = THREE.SRGBColorSpace;
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.anisotropy = 4;
+  t.userData.keep = true; // en cache, partagée entre les vues : jamais libérée
   return t;
 }
 
@@ -293,7 +294,7 @@ function buildPanneau(api, st) {
     group,
     setDens(d) {
       setPanelDens(panel, d);
-      holder.remove(hair); hair.geometry.dispose(); hair.material.dispose();
+      holder.remove(hair); hair.geometry.dispose(); hair.material.dispose(); hair.dispose();
       hair = fuzz(d, P.L, P.W, 900, 5); holder.add(hair);
       apply();
     },

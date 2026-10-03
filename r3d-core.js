@@ -141,7 +141,12 @@ export function createViewer(root, cfg) {
     world.remove(current.group);
     current.group.traverse((o) => {
       if (o.geometry) o.geometry.dispose();
-      if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose());
+      if (o.isInstancedMesh) o.dispose(); // positions et couleurs des objets répétés (tuiles, fibres…)
+      if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => {
+        // libère aussi les textures de la vue (sauf celles gardées en cache, marquées userData.keep)
+        Object.values(m).forEach((v) => { if (v && v.isTexture && !v.userData.keep) v.dispose(); });
+        m.dispose();
+      });
     });
     labels.forEach((l) => l.el.remove());
     labels = [];
@@ -257,7 +262,8 @@ export function createViewer(root, cfg) {
   }
   controls.addEventListener('change', wake);
   new ResizeObserver(() => { resize(); wake(); }).observe(stage);
-  new IntersectionObserver((e) => { visible = e[0].isIntersecting; if (visible) wake(); }, { threshold: 0.05 }).observe(stage);
+  // plusieurs changements peuvent arriver d'un coup (sortie puis retour à l'écran) : la dernière entrée est l'état actuel
+  new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) wake(); }, { threshold: 0.05 }).observe(stage);
   document.addEventListener('visibilitychange', wake);
 
 
