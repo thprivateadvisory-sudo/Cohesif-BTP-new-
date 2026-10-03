@@ -10,7 +10,7 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `toiture-couverture.html` — Page métier Toiture & couverture (SEO couvreur Paris / IDF)
 - `facade-ravalement.html` — Page métier Façade & ravalement (SEO ravalement Paris / IDF)
 - `services.css` + `services.js` — Styles et formulaire de devis communs aux pages métiers
-- `r3d-core.js` — Moteur commun des simulateurs 3D (scène, caméra, étiquettes, interface)
+- `r3d-core.js` — Moteur commun des simulateurs 3D (scène, caméra, étiquettes, interface ; baisse la résolution automatiquement sur les appareils lents)
 - `toiture-3d.js` — Simulateur 3D de la page toiture (maison entière avec choix du matériau et de la teinte, pose, démoussage, fenêtre de toit, isolation), chargé à la demande
 - `r3d.css` — Styles communs des simulateurs 3D
 - `facade-3d.js` — Simulateur 3D de la page façade (maison entière avant / après avec teinte de l’enduit et des volets, immeuble avant / après, échafaudage, ITE, fissures), chargé à la demande
