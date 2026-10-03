@@ -113,6 +113,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="stylesheet" href="services.css" />
   <link rel="stylesheet" href="r3d.css" />
+  <link rel="stylesheet" href="menu.css" />
 </head>
 <body>
 
@@ -289,7 +290,7 @@
         <canvas aria-label="Maquette 3D interactive de façade"></canvas>
         <div class="r3d-labels" aria-hidden="true"></div>
         <div class="r3d-loading"><span></span>Chargement de la maquette 3D…</div>
-        <div class="r3d-fallback">La maquette 3D n'est pas disponible sur cet appareil. <a href="#devis">Demandez votre devis</a> : nous vous montrons le projet lors de la visite.</div>
+        <div class="r3d-fallback"><p>La maquette 3D n'a pas pu s'afficher.</p><button type="button" class="r3d-retry" onclick="location.reload()">Réessayer</button><p class="r3d-alt"><a href="#devis">Demandez votre devis</a> : nous vous montrons le projet lors de la visite.</p><small class="r3d-err"></small></div>
         <div class="r3d-drag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 12h8M5 9l-3 3 3 3M19 9l3 3-3 3"/></svg>Glissez pour faire pivoter</div>
       </div>
       <p class="r3d-caption" aria-live="polite">&nbsp;</p>
@@ -595,7 +596,7 @@
     var el = document.getElementById('r3d');
     if (!el) return;
     var go = function () {
-      import('./facade-3d.js').then(function (m) { m.init(el); }).catch(function () { el.classList.add('r3d-fail'); });
+      import('./facade-3d.js?v=20261003').then(function (m) { m.init(el); }).catch(function (e) { el.classList.add('r3d-fail'); var d = el.querySelector('.r3d-err'); if (d) d.textContent = 'Détail : ' + ((e && e.message) || e); });
     };
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '600px 0px' });
@@ -603,5 +604,6 @@
     } else go();
   })();
 </script>
+<script src="menu.js" defer></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 // Chargé à la demande par laine.js. Suit le calculateur via l'évènement window « laine:calc »
 // (detail = { n: nombre de panneaux, dens: densité en kg/m³ }) ; un choix de densité dans la 3D
 // est renvoyé au calculateur par « laine:pick ».
-import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, mat, createViewer } from './r3d-core.js';
+import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, mat, createViewer } from './r3d-core.js?v=20261003';
 
 const P = { L: 1.2, W: 0.6, T: 0.05 }; // 1 200 × 600 × 50 mm
 const TILE = 0.6; // une texture couvre 60 × 60 cm de face

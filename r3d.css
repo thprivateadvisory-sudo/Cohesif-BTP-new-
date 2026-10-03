@@ -76,8 +76,12 @@
 @keyframes r3dspin { to { transform: rotate(360deg); } }
 .r3d-ready .r3d-loading, .r3d-fail .r3d-loading { display: none; }
 .r3d-fallback { display: none; }
-.r3d-fail .r3d-fallback { display: flex; }
-.r3d-fallback a { color: var(--accent); text-decoration: underline; margin-left: 4px; }
+.r3d-fail .r3d-fallback { display: flex; flex-direction: column; }
+.r3d-fallback p { margin: 0; max-width: 340px; line-height: 1.5; }
+.r3d-fallback a { color: var(--accent); text-decoration: underline; }
+.r3d-retry { font: inherit; font-weight: 700; color: #fff; background: var(--black); border: 0; border-radius: var(--pill); padding: 11px 22px; cursor: pointer; }
+.r3d-alt { font-weight: 500; }
+.r3d-err { font-size: 11px; font-weight: 500; color: var(--grey-400, #999); max-width: 320px; word-break: break-word; }
 .r3d-drag {
   white-space: nowrap; position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); display: none; align-items: center; gap: 8px;
   background: rgba(10,10,10,0.78); color: var(--white); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: var(--pill);

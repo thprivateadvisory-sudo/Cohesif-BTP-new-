@@ -1,6 +1,6 @@
 // Cohesif BTP — simulateur 3D de toiture (maison entière, pose, démoussage, fenêtre de toit, isolation)
 // Chargé à la demande par toiture-couverture.html quand le bloc #r3d approche de l'écran.
-import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, ringGeometry, mat, createViewer } from './r3d-core.js';
+import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, ringGeometry, mat, createViewer } from './r3d-core.js?v=20261003';
 
 /* ────────────────────────────────────────── Données affichées */
 
