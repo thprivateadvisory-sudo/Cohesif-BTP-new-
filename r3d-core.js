@@ -67,7 +67,8 @@ export function createViewer(root, cfg) {
     root.classList.add('r3d-fail');
     return;
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(pixelRatio);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -215,6 +216,19 @@ export function createViewer(root, cfg) {
 
   /* ─────────── Boucle de rendu (uniquement quand le bloc est visible) */
   let visible = true, running = false, last = 0, idleFrames = 0;
+  // Appareil trop lent (moins de ~28 images/s) : on baisse la résolution par paliers, jamais sous 1
+  let perfFrames = 0, perfTime = 0;
+  function adaptQuality(dt) {
+    if (pixelRatio <= 1) return;
+    perfFrames++; perfTime += dt;
+    if (perfFrames < 45) return;
+    if (perfTime / perfFrames > 1 / 28) {
+      pixelRatio = Math.max(1, pixelRatio - 0.5);
+      renderer.setPixelRatio(pixelRatio);
+      resize();
+    }
+    perfFrames = 0; perfTime = 0;
+  }
   function resize() {
     const w = stage.clientWidth, h = stage.clientHeight;
     if (!w || !h) return;
@@ -226,6 +240,7 @@ export function createViewer(root, cfg) {
   function tick(now) {
     if (!visible || document.hidden) { running = false; return; }
     const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+    if (last) adaptQuality(dt);
     last = now;
     const animating = current && current.update(dt);
     if (!touched && !REDUCED) world.rotation.y = Math.sin(now / 4200) * 0.16;
