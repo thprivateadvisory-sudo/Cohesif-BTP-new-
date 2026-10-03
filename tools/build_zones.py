@@ -23,6 +23,9 @@ SERVICES = {
     'desamiantage': ('desamiantage.html', 'Désamiantage', 'shield'),
 }
 GUIDE = {g['slug']: g for g in GUIDES}
+REGIONS = ['Île-de-France', 'Hauts-de-France', 'Normandie', 'Grand Est', 'Centre-Val de Loire', 'Pays de la Loire', 'Bretagne',
+           'Bourgogne-Franche-Comté', 'Auvergne-Rhône-Alpes', 'Nouvelle-Aquitaine', 'Occitanie', 'Provence-Alpes-Côte d\'Azur', 'Corse']
+GRANDES_VILLES = ['Lyon', 'Marseille', 'Lille', 'Bordeaux', 'Toulouse', 'Nantes', 'Nice', 'Strasbourg', 'Rennes', 'Montpellier', 'Rouen', 'Orléans', 'Reims', 'Tours']
 STYLE = '''  <style>
     .svc-hero .note-card { position: static; }
     .note-card ul { list-style: none; display: grid; gap: 10px; margin-bottom: 28px; }
@@ -129,7 +132,7 @@ def fin():
 
 
 def cta(z=None):
-    titre = f'Un projet {z["dans"]} ?' if z else 'Un projet en Île-de-France ?'
+    titre = f'Un projet {z["dans"]} ?' if z else 'Un projet, où que vous soyez ?'
     return f'''
 <section class="svc-section" style="padding-top:24px">
   <div class="svc-inner z-cta">
@@ -242,7 +245,7 @@ def page_zone(z):
 <section class="svc-section" style="padding-top:24px;padding-bottom:72px">
   <div class="svc-inner">
     <span class="tag">Nos autres zones d'intervention</span>
-    <div class="z-zones" style="margin-top:16px">{autres}<a href="zones-intervention.html">Toutes les zones →</a></div>
+    <div class="z-zones" style="margin-top:16px">{autres}<a href="zones-intervention.html#france">Partout en France →</a></div>
   </div>
 </section>
 
@@ -254,14 +257,17 @@ def page_hub():
     url = SITE + 'zones-intervention.html'
     liste_ld = ld({
         '@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Zones d\'intervention de Cohesif BTP', 'url': url,
+        'about': {'@type': 'GeneralContractor', '@id': SITE + '#organization', 'name': 'Cohesif BTP', 'areaServed': {'@type': 'Country', 'name': 'France'}},
         'mainEntity': {'@type': 'ItemList', 'itemListElement': [
             {'@type': 'ListItem', 'position': i + 1, 'url': f'{SITE}{z["slug"]}.html', 'name': f'{z["nom"]} ({z["code"]})'} for i, z in enumerate(ZONES)]}
     })
     bc = [('Accueil', ''), ('Zones d\'intervention', 'zones-intervention.html')]
+    regions = ''.join(f'<li>{e(r)}</li>' for r in REGIONS)
+    villes = ', '.join(GRANDES_VILLES)
     cartes = ''.join(f'<a class="z-card" href="{z["slug"]}.html"><div class="z-code">{z["code"]}</div><h2>{e(z["nom"])}</h2>'
                      f'<p>{e(texte(z["h1"]).split(" : ", 1)[1][:1].upper() + texte(z["h1"]).split(" : ", 1)[1][1:])}</p><span>Voir la page →</span></a>' for z in ZONES)
-    return (head('Zones d\'intervention : Paris et toute l\'Île-de-France | Cohesif BTP',
-                 'Cohesif BTP intervient à Paris et dans toute l\'Île-de-France (92, 93, 94, 78, 91, 95, 77) pour la toiture, le ravalement, la rénovation, le gros œuvre, l\'isolation et le désamiantage, et partout en France sur projet.',
+    return (head('Zones d\'intervention : Paris, Île-de-France et partout en France | Cohesif BTP',
+                 'Cohesif BTP intervient partout en France pour la toiture, le ravalement, la rénovation, le gros œuvre, l\'isolation et le désamiantage : siège à Paris, toute l\'Île-de-France (92, 93, 94, 78, 91, 95, 77) et toutes les régions.',
                  url, liste_ld + breadcrumb_ld(bc))
             + crumbs([('Accueil', 'index.html'), ('Zones d\'intervention', None)]) + f'''
 <main>
@@ -269,15 +275,42 @@ def page_hub():
 <section class="svc-section" style="padding-top:48px;padding-bottom:40px">
   <div class="svc-inner">
     <div class="svc-badge">Siège : 200 rue de la Croix-Nivert, Paris 15e</div>
-    <h1 style="font-size:clamp(36px,5.2vw,60px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;max-width:900px">Paris et toute l'Île-de-France, <span class="accent">département par département.</span></h1>
-    <p class="svc-desc" style="margin-bottom:0">Chaque territoire a son bâti, ses règles et ses risques : toits en zinc à Paris, meulière en petite couronne, longères en Seine-et-Marne, sols argileux en grande couronne. Choisissez votre département.</p>
+    <h1 style="font-size:clamp(36px,5.2vw,60px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;max-width:900px">Partout en France, <span class="accent">depuis notre siège parisien.</span></h1>
+    <p class="svc-desc" style="margin-bottom:0">Nous intervenons dans toute la France, avec une présence quotidienne à Paris et en Île-de-France. Chaque territoire a son bâti, ses règles et ses risques : choisissez votre département francilien, ou découvrez comment nous menons les chantiers en régions.</p>
+    <div class="z-zones" style="margin-top:28px"><a href="#ile-de-france">Île-de-France</a><a href="#france">Partout en France</a></div>
   </div>
 </section>
 
-<section class="svc-section" style="padding-top:0">
+<section class="svc-section" id="ile-de-france" style="padding-top:0">
   <div class="svc-inner">
-    <div class="z-grid">{cartes}</div>
-    <p class="svc-desc" style="margin:40px 0 0">En dehors de l'Île-de-France, nous intervenons aussi partout en France sur projet : <a href="index.html#devis" style="color:var(--accent);font-weight:600">décrivez-nous votre chantier</a>.</p>
+    <span class="tag">Île-de-France</span>
+    <h2>Paris et toute l'Île-de-France, <span class="accent">département par département.</span></h2>
+    <div class="z-grid" style="margin-top:32px">{cartes}</div>
+  </div>
+</section>
+
+<section class="svc-section alt" id="france">
+  <div class="svc-inner split">
+    <div>
+      <span class="tag">Partout en France</span>
+      <h2>Un chantier en régions ? <span class="accent">Même méthode, même interlocuteur.</span></h2>
+      <p class="svc-desc" style="margin-bottom:24px">Toiture, façade, rénovation, gros œuvre, isolation ou désamiantage : nous intervenons dans toutes les régions, pour les particuliers, les copropriétés, les entreprises et les investisseurs. Le matériel de notre boutique est lui aussi livré partout en France.</p>
+      <ul class="z-villes">{regions}</ul>
+      <p class="svc-desc" style="margin:24px 0 0">Et dans les grandes villes : {villes}…</p>
+    </div>
+    <div class="note-card">
+      <h3>Comment ça se passe en régions</h3>
+      <ul>
+        <li>Échange sur votre projet, photos et plans à distance</li>
+        <li>Visite technique sur place et devis détaillé</li>
+        <li>Un chef de projet unique pendant tout le chantier</li>
+        <li>Suivi écrit et photos à chaque étape</li>
+      </ul>
+      <div class="note-actions">
+        <a href="index.html#devis" class="btn btn-accent">Décrire mon chantier →</a>
+        <a href="tel:+33756855727" class="btn btn-outline">07 56 85 57 27</a>
+      </div>
+    </div>
   </div>
 </section>
 {cta()}

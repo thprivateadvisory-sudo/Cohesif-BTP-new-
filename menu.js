@@ -29,7 +29,7 @@
       ['index.html', 'Accueil', ''],
       [home('#pourquoi'), 'Pourquoi nous choisir', ''],
       [home('#packs'), 'Nos offres', ''],
-      ['zones-intervention.html', 'Zones d\'intervention', 'Paris et toute l\'Île-de-France']
+      ['zones-intervention.html', 'Zones d\'intervention', 'Paris, Île-de-France et partout en France']
     ]]
   ];
 
