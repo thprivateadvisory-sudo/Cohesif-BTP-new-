@@ -198,17 +198,25 @@
   <div class="svc-inner">
     <span class="tag">Nouveau · Simulateur 3D</span>
     <h2>Votre toiture en 3D, <span class="accent">avant le premier coup de marteau.</span></h2>
-    <p class="svc-desc">Regardez comment se pose une couverture, ce que change un démoussage, comment s'intègre une fenêtre de toit et ce qu'il y a sous vos tuiles. Faites pivoter la maquette avec le doigt ou la souris.</p>
+    <p class="svc-desc">Choisissez votre couverture et sa teinte sur une maison entière, puis regardez comment elle se pose, ce que change un démoussage, comment s'intègre une fenêtre de toit et ce qu'il y a sous vos tuiles. Faites pivoter la maquette avec le doigt ou la souris.</p>
 
-    <div class="r3d" id="r3d" data-mode="pose">
+    <div class="r3d" id="r3d" data-mode="maison">
       <div class="r3d-modes" role="tablist" aria-label="Choisir une vue 3D">
-        <button type="button" role="tab" data-r3d-mode="pose" aria-selected="true">Pose de la couverture</button>
+        <button type="button" role="tab" data-r3d-mode="maison" aria-selected="true">Toute la maison</button>
+        <button type="button" role="tab" data-r3d-mode="pose" aria-selected="false">Pose de la couverture</button>
         <button type="button" role="tab" data-r3d-mode="demoussage" aria-selected="false">Démoussage & peinture</button>
         <button type="button" role="tab" data-r3d-mode="fenetre" aria-selected="false">Fenêtre de toit</button>
         <button type="button" role="tab" data-r3d-mode="coupe" aria-selected="false">Isolation en coupe</button>
       </div>
 
       <div class="r3d-bar">
+        <div class="r3d-ctl" data-for="maison">
+          <button type="button" class="r3d-chip" data-r3d-kind="ardoise" aria-pressed="false"><i style="background:#3e4752"></i>Ardoise</button>
+          <button type="button" class="r3d-chip" data-r3d-kind="plate" aria-pressed="false"><i style="background:#b4532f"></i>Tuile plate</button>
+          <button type="button" class="r3d-chip" data-r3d-kind="mecanique" aria-pressed="true"><i style="background:#c05a31"></i>Tuile mécanique</button>
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="replay">↻ Rejouer la pose</button>
+          <div class="r3d-swatches" role="group" aria-label="Teinte de la couverture" data-r3d-teintes></div>
+        </div>
         <div class="r3d-ctl" data-for="pose">
           <button type="button" class="r3d-chip" data-r3d-kind="ardoise" aria-pressed="false"><i style="background:#3e4752"></i>Ardoise</button>
           <button type="button" class="r3d-chip" data-r3d-kind="plate" aria-pressed="false"><i style="background:#b4532f"></i>Tuile plate</button>

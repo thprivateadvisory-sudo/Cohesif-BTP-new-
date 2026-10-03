@@ -16,6 +16,7 @@
 
 .r3d-bar { min-height: 44px; margin-bottom: 14px; }
 .r3d-ctl { display: none; flex-wrap: wrap; align-items: center; gap: 8px; }
+.r3d[data-mode="maison"] .r3d-ctl[data-for="maison"],
 .r3d[data-mode="pose"] .r3d-ctl[data-for="pose"],
 .r3d[data-mode="demoussage"] .r3d-ctl[data-for="demoussage"],
 .r3d[data-mode="fenetre"] .r3d-ctl[data-for="fenetre"],
@@ -105,7 +106,8 @@
   .r3d-ctl { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
   .r3d-ctl::-webkit-scrollbar { display: none; }
   .r3d-chip { flex: 0 0 auto; padding: 9px 14px; font-size: 13px; }
-  .r3d[data-mode="demoussage"] .r3d-ctl[data-for="demoussage"] { flex-wrap: wrap; }
+  .r3d[data-mode="demoussage"] .r3d-ctl[data-for="demoussage"],
+  .r3d[data-mode="maison"] .r3d-ctl[data-for="maison"] { flex-wrap: wrap; }
   .r3d-range { flex: 1 1 100%; padding: 4px 4px 0; }
   .r3d-range input { flex: 1; width: auto; }
   .r3d-swatches { margin-left: 0; }
