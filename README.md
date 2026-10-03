@@ -26,6 +26,7 @@ Site vitrine du pôle BTP du Groupe Cohesif.
   Pages générées : modifier `tools/guides_contenu.py` puis lancer `python3 tools/build_guides.py` (met aussi à jour les sitemaps).
   Ajouter un guide = ajouter une entrée à `GUIDES`. Revoir les fourchettes de prix et la date `MAJ` chaque année.
 - `vendor/three/` — Three.js 0.169 (licence MIT), hébergé avec le site
+- `404.html` — Page « introuvable » servie par GitHub Pages pour toute adresse inexistante (balise `<base href="/">` : liens valables même depuis un sous-dossier ; non indexée).
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD
 - `cgv.html` — Conditions générales de vente
