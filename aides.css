@@ -1,0 +1,67 @@
+/* Cohesif BTP — page Aides & financement (simulateur, tableaux des plafonds) */
+
+/* Simulateur */
+.simu { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; align-items: start; }
+.simu-form { background: var(--white); border: 1px solid var(--grey-200); border-radius: 28px; padding: 36px; }
+.simu-step { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 8px 0 14px; }
+.simu-step:not(:first-child) { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-200); }
+.form-hint { font-size: 12px; color: var(--grey-500); margin-top: 6px; line-height: 1.45; }
+.form-hint a { color: var(--accent); text-decoration: underline; }
+.simu-out { position: sticky; top: 100px; background: var(--black); color: var(--white); border-radius: 28px; padding: 36px; }
+.simu-profil { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; margin-bottom: 24px; font-size: 14px; color: rgba(255,255,255,0.7); }
+.simu-profil strong { font-size: 14px; font-weight: 800; padding: 4px 12px; border-radius: var(--pill); color: var(--black); }
+.simu-profil em { font-style: normal; }
+.simu-bleu strong { background: #93c5fd; }
+.simu-jaune strong { background: #fde047; }
+.simu-violet strong { background: #c4b5fd; }
+.simu-rose strong { background: #f9a8d4; }
+.simu-total span { display: block; font-size: 14px; color: rgba(255,255,255,0.7); }
+.simu-total strong { display: block; font-size: clamp(40px, 5vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; color: var(--accent); margin-bottom: 20px; }
+.simu-line { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.12); font-size: 15px; }
+.simu-line span { color: rgba(255,255,255,0.75); }
+.simu-line strong { white-space: nowrap; }
+.simu-reste { font-size: 17px; }
+.simu-reste span { color: var(--white); font-weight: 700; }
+.simu-plus span, .simu-plus strong { color: #86efac; font-weight: 600; }
+.simu-notes { list-style: none; margin-top: 18px; display: grid; gap: 10px; }
+.simu-notes li { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.07); border-radius: 14px; padding: 12px 14px; }
+.simu-notes strong { color: var(--white); }
+.simu-cta { margin-top: 24px; width: 100%; white-space: normal; text-align: center; }
+.simu-legal { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 14px; line-height: 1.5; }
+
+/* Encadré « Ce qui change en 2026 » */
+.news { background: var(--accent-soft); border: 1px solid #fde0cf; border-radius: 24px; padding: 28px 32px; margin-top: 40px; }
+.news h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+.news ul { padding-left: 20px; display: grid; gap: 6px; }
+.news li { font-size: 15px; color: var(--grey-900); line-height: 1.55; }
+
+/* Montant clé dans les cartes d'aides */
+.svc-card .amount { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 5px 12px; border-radius: var(--pill); }
+
+/* Tableaux des plafonds */
+.tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--grey-200); border-radius: 20px; background: var(--white); }
+.table-wrap h3 { font-size: 17px; font-weight: 800; padding: 20px 20px 4px; }
+.plafonds { width: 100%; border-collapse: collapse; font-size: 14px; }
+.plafonds caption { text-align: left; font-size: 13px; color: var(--grey-500); padding: 0 20px 12px; }
+.plafonds th, .plafonds td { padding: 11px 14px; text-align: right; border-top: 1px solid var(--grey-200); white-space: nowrap; }
+.plafonds th:first-child, .plafonds td:first-child { text-align: left; }
+.plafonds thead th { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.plafonds .c-bleu { color: #1d4ed8; }
+.plafonds .c-jaune { color: #a16207; }
+.plafonds .c-violet { color: #6d28d9; }
+.tables-note { font-size: 14px; color: var(--grey-500); margin-top: 16px; line-height: 1.6; }
+
+@media (max-width: 1024px) {
+  .simu, .tables { grid-template-columns: minmax(0, 1fr); }
+  .simu-out { position: static; }
+}
+@media (max-width: 768px) {
+  .simu-form, .simu-out { padding: 28px 22px; }
+  .news { padding: 24px 22px; }
+  .plafonds { font-size: 12.5px; }
+  .plafonds th, .plafonds td { padding: 10px 6px; }
+  .plafonds th:first-child, .plafonds td:first-child { padding-left: 14px; white-space: normal; }
+  .plafonds th:last-child, .plafonds td:last-child { padding-right: 14px; }
+  .plafonds thead th { letter-spacing: 0; }
+}

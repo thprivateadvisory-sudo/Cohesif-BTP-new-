@@ -14,6 +14,10 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `toiture-3d.js` — Simulateur 3D de la page toiture (maison entière avec choix du matériau et de la teinte, pose, démoussage, fenêtre de toit, isolation), chargé à la demande
 - `r3d.css` — Styles communs des simulateurs 3D
 - `facade-3d.js` — Simulateur 3D de la page façade (maison entière avant / après avec teinte de l’enduit et des volets, immeuble avant / après, échafaudage, ITE, fissures), chargé à la demande
+- `aides-financement.html` — Page Aides & financement (MaPrimeRénov', CEE, TVA 5,5 %, éco-PTZ) avec simulateur (`aides.js`, styles `aides.css`).
+  Barèmes 2026 regroupés en tête de `aides.js` (`PLAFONDS`, `TRAVAUX`, `ECRETEMENT`, `AMPLEUR`) : à mettre à jour chaque 1er janvier,
+  avec les tableaux de plafonds et la FAQ de la page. Lien direct vers un type de travaux : `aides-financement.html?travaux=ite#simulateur`
+  (`rampants`, `terrasse`, `ite`, `fenetres`, `ravalement`, `ampleur`).
 - `vendor/three/` — Three.js 0.169 (licence MIT), hébergé avec le site
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD
