@@ -11,6 +11,8 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `facade-ravalement.html` — Page métier Façade & ravalement (SEO ravalement Paris / IDF)
 - `renovation-appartement-maison.html`, `gros-oeuvre-maconnerie.html`, `desamiantage.html`, `isolation-combles-murs.html` — Pages métier générées :
   modifier `tools/metiers_contenu.py` puis lancer `python3 tools/build_metiers.py` (met aussi à jour les sitemaps). Toiture et façade restent écrites à la main.
+- `zones-intervention.html` + `travaux-<département>-<n°>.html` — Pages locales (Paris et les 7 départements d'Île-de-France), générées :
+  modifier `tools/zones_contenu.py` puis lancer `python3 tools/build_zones.py`. Garder un contenu propre à chaque département (pas de copier-coller).
 - `services.css` + `services.js` — Styles et formulaire de devis communs aux pages métiers
 - `r3d-core.js` — Moteur commun des simulateurs 3D (scène, caméra, étiquettes, interface ; baisse la résolution automatiquement sur les appareils lents)
 - `toiture-3d.js` — Simulateur 3D de la page toiture (maison entière avec choix du matériau et de la teinte, pose, démoussage, fenêtre de toit, isolation), chargé à la demande
