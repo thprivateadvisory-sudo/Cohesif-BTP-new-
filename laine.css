@@ -90,3 +90,6 @@
 @media (prefers-reduced-motion:reduce){
   .lr-gal-thumbs button,.lr-dcard{transition:none}
 }
+
+/* maquette 3D : bouton d’action et densités sur la même ligne */
+#panneau-3d .r3d-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}

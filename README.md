@@ -41,6 +41,8 @@ Vide = « prix sur devis ». Ne jamais y mettre un prix d'achat fournisseur.
 `boutique-laine-de-roche.html` est écrite à la main (hors générateur) : galerie photos et vidéo, calculateur de panneaux
 1 200 × 600 × 50 mm (`laine.js`), styles `laine.css` (le calculateur réutilise `ba13.css`).
 Photos et vidéo dans `img/boutique/isolation/` (vidéo muette, sans logo ni texte).
+Panneau en 3D (`laine-3d.js`, chargé à la demande) : le panneau, les 5 densités sous charge, la pose dans un mur, votre commande en paquets.
+La 3D suit le calculateur (évènement `laine:calc`) et renvoie le choix de densité (`laine:pick`).
 Prix : renseigner l'attribut `data-prix-ht` de chaque bouton de densité (40 à 120 kg/m³) du bloc `#calcul`
 (ex. `data-prix-ht="3.20"`, en € HT par panneau). Vide = « prix sur devis ».
 
