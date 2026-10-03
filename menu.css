@@ -1,5 +1,5 @@
 /* Cohesif BTP — menu mobile (accueil, toiture, façade, aides). Bouton ajouté par menu.js dans .header-inner */
-.mm-btn { display: none; }
+.mm-btn, .mm-call { display: none; }
 .mm-panel { display: none; }
 
 @media (max-width: 768px) {
@@ -8,6 +8,12 @@
     font: 700 14px/1 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: #0a0a0a;
     background: #fff; border: 1px solid #d4d4d4; border-radius: 999px; padding: 8px 14px 8px 12px; cursor: pointer;
   }
+  /* Accueil : pastille « Appeler », comme sur les autres pages */
+  .mm-call {
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    width: 42px; height: 42px; border-radius: 50%; background: #ea5b1f; color: #fff;
+  }
+  .mm-call svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .mm-btn i { position: relative; width: 16px; height: 2px; background: currentColor; border-radius: 2px; transition: background .2s; }
   .mm-btn i::before, .mm-btn i::after {
     content: ''; position: absolute; left: 0; width: 16px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .2s;
@@ -57,12 +63,6 @@
   .header-tel { font-size: 0 !important; width: 42px; height: 42px; padding: 0 !important; justify-content: center; gap: 0 !important; }
   .header-tel svg { width: 19px !important; height: 19px !important; }
   .mm-btn { padding: 8px 12px 8px 11px; }
-  .header-shop-mobile { padding: 9px 12px !important; font-size: 13px !important; }
-}
-/* Très petits écrans (accueil) : le logo seul, sans le nom, plutôt qu'un nom illisible */
-@media (max-width: 360px) {
-  header .logo .logo-full { display: none !important; }
-  header .logo .logo-icon { display: block !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mm-panel, .mm-btn i, .mm-btn i::before, .mm-btn i::after { transition: none !important; }
