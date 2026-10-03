@@ -1,0 +1,54 @@
+/* Cohesif BTP — menu mobile (accueil, toiture, façade, aides). Bouton ajouté par menu.js dans .header-inner */
+.mm-btn { display: none; }
+.mm-panel { display: none; }
+
+@media (max-width: 768px) {
+  .mm-btn {
+    display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
+    font: 700 14px/1 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: #0a0a0a;
+    background: #fff; border: 1px solid #d4d4d4; border-radius: 999px; padding: 8px 14px 8px 12px; cursor: pointer;
+  }
+  .mm-btn i { position: relative; width: 16px; height: 2px; background: currentColor; border-radius: 2px; transition: background .2s; }
+  .mm-btn i::before, .mm-btn i::after {
+    content: ''; position: absolute; left: 0; width: 16px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .2s;
+  }
+  .mm-btn i::before { top: -5px; }
+  .mm-btn i::after { top: 5px; }
+  .mm-open .mm-btn i { background: transparent; }
+  .mm-open .mm-btn i::before { transform: translateY(5px) rotate(45deg); }
+  .mm-open .mm-btn i::after { transform: translateY(-5px) rotate(-45deg); }
+  /* L'en-tête garde le logo à gauche, les boutons à droite */
+  .header-inner { gap: 8px !important; }
+  .header-inner > .logo { margin-right: auto; }
+
+  .mm-panel {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; top: var(--mm-top, 64px); z-index: 9000;
+    background: #fff; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    padding: 8px 20px 40px; opacity: 0; visibility: hidden; transform: translateY(-8px);
+    transition: opacity .2s, transform .2s, visibility 0s .2s;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: #0a0a0a;
+  }
+  .mm-open .mm-panel { opacity: 1; visibility: visible; transform: none; transition: opacity .2s, transform .2s; }
+  .mm-open { overflow: hidden; }
+  .mm-group { padding: 18px 0 10px; border-bottom: 1px solid #e5e5e5; }
+  .mm-title { font-size: 11px; font-weight: 700; color: #ea5b1f; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .mm-panel a.mm-link {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 12px 0; font-size: 17px; font-weight: 600; color: #0a0a0a; text-decoration: none;
+  }
+  .mm-panel a.mm-link::after { content: '→'; color: #999; font-weight: 500; }
+  .mm-panel a.mm-link[aria-current="page"] { color: #ea5b1f; }
+  .mm-panel a.mm-link small { display: block; font-size: 13px; font-weight: 500; color: #737373; margin-top: 2px; }
+  .mm-new { font-size: 10px; font-weight: 700; color: #fff; background: #ea5b1f; padding: 3px 7px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; }
+  .mm-actions { display: grid; gap: 10px; padding-top: 22px; }
+  .mm-actions a {
+    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 20px; border-radius: 999px;
+    font-size: 16px; font-weight: 700; text-decoration: none;
+  }
+  .mm-actions .mm-devis { background: #ea5b1f; color: #fff; }
+  .mm-actions .mm-tel { background: #0a0a0a; color: #fff; }
+  .mm-actions .mm-wa { border: 1px solid #d4d4d4; color: #0a0a0a; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mm-panel, .mm-btn i, .mm-btn i::before, .mm-btn i::after { transition: none !important; }
+}

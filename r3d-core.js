@@ -6,6 +6,8 @@ export { THREE };
 export const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const easeOut = (p) => 1 - Math.pow(1 - p, 3);
 export const easeInOut = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+// Téléphones et tablettes : ombres plus légères (la mémoire graphique y est limitée, surtout sur iPhone)
+export const LIGHT = window.matchMedia('(pointer: coarse)').matches || Math.min(screen.width, screen.height) < 820;
 export const clamp01 = (v) => Math.min(1, Math.max(0, v));
 export const fmt = (n) => n.toLocaleString('fr-FR');
 
@@ -53,19 +55,46 @@ export const mat = {
   cfg.initial    : vue affichée au chargement
   cfg.onButton(bouton, api) : boutons propres à un simulateur (renvoie true si traité)
 */
+// Affiche le message de secours et, en petit, la cause (utile pour un retour client)
+export function fail(root, err) {
+  root.classList.remove('r3d-ready');
+  root.classList.add('r3d-fail');
+  const box = root.querySelector('.r3d-err');
+  if (box) box.textContent = err ? 'Détail : ' + (err.message || err) : '';
+}
+
+// Crée le rendu WebGL ; si l'appareil refuse, réessaie avec des réglages plus légers sur un canvas neuf
+function makeRenderer(stage) {
+  const tries = [
+    { antialias: !LIGHT || (window.devicePixelRatio || 1) < 2, powerPreference: 'high-performance' },
+    { antialias: false },
+    { antialias: false, powerPreference: 'low-power', precision: 'mediump' }
+  ];
+  let err = null;
+  for (let i = 0; i < tries.length; i++) {
+    let canvas = stage.querySelector('canvas');
+    if (i > 0) { const c = canvas.cloneNode(false); canvas.replaceWith(c); canvas = c; }
+    try {
+      const r = new THREE.WebGLRenderer({ canvas, alpha: true, ...tries[i] });
+      if (r.getContext().isContextLost()) throw new Error('Contexte WebGL perdu');
+      return { renderer: r, canvas };
+    } catch (e) { err = e; }
+  }
+  throw err || new Error('WebGL indisponible');
+}
+
 export function createViewer(root, cfg) {
   const stage = root.querySelector('.r3d-stage');
-  const canvas = stage.querySelector('canvas');
   const labelsBox = stage.querySelector('.r3d-labels');
   const caption = root.querySelector('.r3d-caption');
   const info = root.querySelector('.r3d-info');
 
-  let renderer;
+  let renderer, canvas;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+    ({ renderer, canvas } = makeRenderer(stage));
   } catch (e) {
-    root.classList.add('r3d-fail');
-    return;
+    fail(root, e);
+    return null;
   }
   let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
   renderer.setPixelRatio(pixelRatio);
@@ -82,7 +111,7 @@ export function createViewer(root, cfg) {
   const sun = new THREE.DirectionalLight(0xffffff, 2.4);
   sun.position.set(4, 9, 6);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(LIGHT ? 1024 : 2048, LIGHT ? 1024 : 2048);
   Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 1, far: 30 });
   sun.shadow.bias = -0.0004;
   sun.shadow.normalBias = 0.02;
@@ -220,7 +249,7 @@ export function createViewer(root, cfg) {
   });
 
   /* ─────────── Boucle de rendu (uniquement quand le bloc est visible) */
-  let visible = true, running = false, last = 0, idleFrames = 0;
+  let visible = true, running = false, last = 0, idleFrames = 0, lost = false;
   // Appareil trop lent (moins de ~28 images/s) : on baisse la résolution par paliers, jamais sous 1
   let perfFrames = 0, perfTime = 0;
   function adaptQuality(dt) {
@@ -243,7 +272,7 @@ export function createViewer(root, cfg) {
     if (frame.last) frame(...frame.last);
   }
   function tick(now) {
-    if (!visible || document.hidden) { running = false; return; }
+    if (!visible || document.hidden || lost) { running = false; return; }
     const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
     if (last) adaptQuality(dt);
     last = now;
@@ -267,8 +296,44 @@ export function createViewer(root, cfg) {
   document.addEventListener('visibilitychange', wake);
 
 
+  // iPhone / iPad : le système peut reprendre la mémoire graphique (onglet en arrière-plan, autre app).
+  // On garde la main, puis on reconstruit la vue quand le contexte revient ; sinon, message de secours.
+  let lostTimer = 0;
+  let parked = false;
+  canvas.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    lost = true; running = false;
+    clearTimeout(lostTimer);
+    if (!parked) lostTimer = setTimeout(() => { if (lost && !parked) fail(root, new Error('Contexte WebGL perdu')); }, 4000);
+  });
+  // Page quittée (gardée en mémoire par le bouton « retour ») : on rend la mémoire graphique à Safari,
+  // sinon les pages 3D visitées s'additionnent et l'iPhone finit par refuser d'en afficher une nouvelle.
+  const loseExt = renderer.getContext().getExtension('WEBGL_lose_context');
+  window.addEventListener('pagehide', () => {
+    if (!loseExt || lost) return;
+    parked = true;
+    loseExt.loseContext();
+  });
+  window.addEventListener('pageshow', () => {
+    if (!parked) return;
+    parked = false;
+    loseExt.restoreContext();
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    lost = false;
+    clearTimeout(lostTimer);
+    root.classList.remove('r3d-fail');
+    root.classList.add('r3d-ready');
+    try { show(mode); } catch (err) { fail(root, err); }
+  });
+
   resize();
-  show(cfg.initial);
+  try {
+    show(cfg.initial);
+  } catch (e) {
+    fail(root, e);
+    return null;
+  }
   root.classList.add('r3d-ready');
   return api;
 }

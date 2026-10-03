@@ -18,6 +18,10 @@ Site vitrine du pôle BTP du Groupe Cohesif.
   Barèmes 2026 regroupés en tête de `aides.js` (`PLAFONDS`, `TRAVAUX`, `ECRETEMENT`, `AMPLEUR`) : à mettre à jour chaque 1er janvier,
   avec les tableaux de plafonds et la FAQ de la page. Lien direct vers un type de travaux : `aides-financement.html?travaux=ite#simulateur`
   (`rampants`, `terrasse`, `ite`, `fenetres`, `ravalement`, `ampleur`).
+- `menu.js` + `menu.css` — Menu mobile (bouton « Menu » dans l'en-tête, liste de toutes les pages) sur l'accueil, la toiture, la façade et les aides.
+  Liste des liens dans `menu.js`. Les pages boutique ont leur propre menu (`boutique.css`).
+- 3D : les modules sont importés avec `?v=AAAAMMJJ` (pages, `ba13.js`, `laine.js`, et `./r3d-core.js` dans chaque `*-3d.js`) : changer ce numéro partout après une modification de la 3D,
+  pour que les navigateurs ne mélangent pas d'anciens et de nouveaux fichiers.
 - `vendor/three/` — Three.js 0.169 (licence MIT), hébergé avec le site
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD

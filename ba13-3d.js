@@ -1,7 +1,7 @@
 // Cohesif BTP — plaque de plâtre BA13 en 3D (plaque, bord aminci en coupe, votre commande)
 // Chargé à la demande par boutique-plaque-platre-ba13.html. La vue « Votre commande » suit le calculateur
 // via l'évènement window « ba13:count » (detail = nombre de plaques).
-import { THREE, REDUCED, easeOut, clamp01, fmt, rng, createViewer } from './r3d-core.js';
+import { THREE, REDUCED, easeOut, clamp01, fmt, rng, createViewer } from './r3d-core.js?v=20261003';
 
 const PL = { w: 1.2, h: 2.5, t: 0.0125, kg: 23.8 }; // 1200 × 2500 × 12,5 mm
 const PAR_PILE = 50;

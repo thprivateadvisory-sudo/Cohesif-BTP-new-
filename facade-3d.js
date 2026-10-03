@@ -1,7 +1,7 @@
 // Cohesif BTP — simulateur 3D de façade (maison entière, ravalement avant / après, échafaudage, ITE, fissures)
 // Chargé à la demande par facade-ravalement.html quand le bloc #r3d approche de l'écran.
-import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, ringGeometry, mat } from './r3d-core.js';
-import { createViewer } from './r3d-core.js';
+import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, ringGeometry, mat } from './r3d-core.js?v=20261003';
+import { createViewer } from './r3d-core.js?v=20261003';
 
 /* ────────────────────────────────────────── Données affichées */
 

@@ -68,7 +68,7 @@
   var el = $('r3d');
   if (!el) return;
   var go = function () {
-    import('./ba13-3d.js').then(function (m) { m.init(el); }).catch(function () { el.classList.add('r3d-fail'); });
+    import('./ba13-3d.js?v=20261003').then(function (m) { m.init(el); }).catch(function (e) { el.classList.add('r3d-fail'); var d = el.querySelector('.r3d-err'); if (d) d.textContent = 'Détail : ' + ((e && e.message) || e); });
   };
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '600px 0px' });

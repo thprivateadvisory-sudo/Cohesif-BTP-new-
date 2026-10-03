@@ -134,7 +134,7 @@
   // 3D : chargée seulement quand elle approche de l'écran
   if (!r3d) return;
   var go = function () {
-    import('./laine-3d.js').then(function (m) { m.init(r3d); }).catch(function () { r3d.classList.add('r3d-fail'); });
+    import('./laine-3d.js?v=20261003').then(function (m) { m.init(r3d); }).catch(function (e) { r3d.classList.add('r3d-fail'); var d = r3d.querySelector('.r3d-err'); if (d) d.textContent = 'Détail : ' + ((e && e.message) || e); });
   };
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '600px 0px' });
