@@ -28,7 +28,8 @@
     ['Cohesif BTP', [
       ['index.html', 'Accueil', ''],
       [home('#pourquoi'), 'Pourquoi nous choisir', ''],
-      [home('#packs'), 'Nos offres', '']
+      [home('#packs'), 'Nos offres', ''],
+      ['zones-intervention.html', 'Zones d\'intervention', 'Paris et toute l\'Île-de-France']
     ]]
   ];
 
