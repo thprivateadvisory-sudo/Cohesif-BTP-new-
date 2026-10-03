@@ -14,7 +14,10 @@
       ['facade-ravalement.html', 'Façade & ravalement', 'Ravalement, enduits, isolation extérieure'],
       ['aides-financement.html', 'Aides & financement', 'Simulez MaPrimeRénov\', CEE, TVA 5,5 %', true],
       ['guides.html', 'Guides & conseils', 'Prix au m², démarches, ravalement obligatoire'],
-      [home('#services'), 'Tous nos services', 'Gros œuvre, rénovation, désamiantage…']
+      ['renovation-appartement-maison.html', 'Rénovation complète', 'Appartements, maisons, bureaux'],
+      ['gros-oeuvre-maconnerie.html', 'Gros œuvre & maçonnerie', 'Extension, surélévation, mur porteur'],
+      ['isolation-combles-murs.html', 'Isolation', 'Combles, murs, planchers, acoustique'],
+      ['desamiantage.html', 'Désamiantage', 'Repérage, retrait, déchets tracés']
     ]],
     ['Boutique', [
       ['boutique.html', 'Chariots élévateurs', 'Électriques, 1 à 5 tonnes'],
