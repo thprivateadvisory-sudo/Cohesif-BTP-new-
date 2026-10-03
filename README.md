@@ -22,6 +22,9 @@ Site vitrine du pôle BTP du Groupe Cohesif.
   Liste des liens dans `menu.js`. Les pages boutique ont leur propre menu (`boutique.css`).
 - 3D : les modules sont importés avec `?v=AAAAMMJJ` (pages, `ba13.js`, `laine.js`, et `./r3d-core.js` dans chaque `*-3d.js`) : changer ce numéro partout après une modification de la 3D,
   pour que les navigateurs ne mélangent pas d'anciens et de nouveaux fichiers.
+- `guides.html` + `guide-*.html` — Rubrique Guides & conseils (prix au m², démarches, ravalement obligatoire, ITE, arnaques), styles `guides.css`.
+  Pages générées : modifier `tools/guides_contenu.py` puis lancer `python3 tools/build_guides.py` (met aussi à jour les sitemaps).
+  Ajouter un guide = ajouter une entrée à `GUIDES`. Revoir les fourchettes de prix et la date `MAJ` chaque année.
 - `vendor/three/` — Three.js 0.169 (licence MIT), hébergé avec le site
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD

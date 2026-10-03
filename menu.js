@@ -13,6 +13,7 @@
       ['toiture-couverture.html', 'Toiture & couverture', 'Tuiles, réfection, fuites, isolation'],
       ['facade-ravalement.html', 'Façade & ravalement', 'Ravalement, enduits, isolation extérieure'],
       ['aides-financement.html', 'Aides & financement', 'Simulez MaPrimeRénov\', CEE, TVA 5,5 %', true],
+      ['guides.html', 'Guides & conseils', 'Prix au m², démarches, ravalement obligatoire'],
       [home('#services'), 'Tous nos services', 'Gros œuvre, rénovation, désamiantage…']
     ]],
     ['Boutique', [
