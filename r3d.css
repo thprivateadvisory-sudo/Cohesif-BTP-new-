@@ -25,6 +25,11 @@
 .r3d[data-mode="echafaudage"] .r3d-ctl[data-for="echafaudage"],
 .r3d[data-mode="ite"] .r3d-ctl[data-for="ite"],
 .r3d[data-mode="fissures"] .r3d-ctl[data-for="fissures"] { display: flex; }
+/* laine de roche : une même barre sert à plusieurs vues (data-for liste les vues) */
+.r3d[data-mode="panneau"] .r3d-ctl[data-for~="panneau"],
+.r3d[data-mode="densites"] .r3d-ctl[data-for~="densites"],
+.r3d[data-mode="mur"] .r3d-ctl[data-for~="mur"],
+.r3d[data-mode="commande"] .r3d-ctl[data-for~="commande"] { display: flex; }
 .r3d-chip {
   display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--grey-300);
   border-radius: var(--pill); background: var(--white); font-size: 14px; font-weight: 600; color: var(--black);

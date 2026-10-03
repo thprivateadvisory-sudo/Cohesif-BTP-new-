@@ -63,6 +63,7 @@
   var fDens = $('lr-f-dens');
   var cards = document.querySelectorAll('.lr-dcard');
   var dens = 80, prixHT = 0;
+  var r3d = $('r3d'), timer3d = null;
 
   function compute() {
     var surface = Math.max(0, num(m2));
@@ -90,6 +91,10 @@
     if (qte) qte.value = n || '';
     var resume = $('lr-calcul');
     if (resume) resume.value = nf(surface, 1) + ' m² · ' + dens + ' kg/m³ · ' + (nc * 50) + ' mm (' + nc + ' couche' + (nc > 1 ? 's' : '') + ') · chutes ' + Math.round(Number(chute.value) * 100) + ' % → ' + nf(n) + ' ' + pl;
+    // maquette 3D : elle lit ces valeurs à son chargement, puis suit l'évènement
+    if (r3d) { r3d.setAttribute('data-count', Math.max(1, n)); r3d.setAttribute('data-dens', dens); }
+    clearTimeout(timer3d);
+    timer3d = setTimeout(function () { window.dispatchEvent(new CustomEvent('laine:calc', { detail: { n: Math.max(1, n), dens: dens } })); }, 250);
   }
 
   function choisir(d) {
@@ -122,4 +127,17 @@
     if (d) choisir(d);
   });
   choisir(80);
+
+  // Densité choisie dans la maquette 3D
+  window.addEventListener('laine:pick', function (e) { if (Number(e.detail) !== dens) choisir(e.detail); });
+
+  // 3D : chargée seulement quand elle approche de l'écran
+  if (!r3d) return;
+  var go = function () {
+    import('./laine-3d.js').then(function (m) { m.init(r3d); }).catch(function () { r3d.classList.add('r3d-fail'); });
+  };
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '600px 0px' });
+    io.observe(r3d);
+  } else go();
 })();
