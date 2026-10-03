@@ -20,6 +20,7 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `cgv.html` — Conditions générales de vente
 - `boutique.html` + `boutique-chariot-*.html` — Boutique chariots élévateurs (pages générées)
 - `boutique-mini-pelles.html` + `boutique-mini-pelle-*.html` — Boutique mini-pelles (pages générées)
+- `boutique-plaque-platre-ba13.html`, `boutique-laine-de-roche.html` — Matériaux (pages écrites à la main)
 - `data/boutique.json` — Données de la boutique (produits, prix, engagements SAV)
 - `tools/build_boutique.py` — Générateur de la boutique (appelle `tools/build_minipelles.py`)
 - `sitemap.xml` — Plan du site pour les moteurs de recherche
@@ -34,6 +35,14 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 plaque en 3D (`ba13-3d.js`), styles `ba13.css` et `r3d.css`.
 Prix : renseigner l'attribut `data-prix-ht` du bloc `#calcul` (ex. `data-prix-ht="6.90"`, en € HT par plaque).
 Vide = « prix sur devis ». Ne jamais y mettre un prix d'achat fournisseur.
+
+### Laine de roche
+
+`boutique-laine-de-roche.html` est écrite à la main (hors générateur) : galerie photos et vidéo, calculateur de panneaux
+1 200 × 600 × 50 mm (`laine.js`), styles `laine.css` (le calculateur réutilise `ba13.css`).
+Photos et vidéo dans `img/boutique/isolation/` (vidéo muette, sans logo ni texte).
+Prix : renseigner l'attribut `data-prix-ht` de chaque bouton de densité (40 à 120 kg/m³) du bloc `#calcul`
+(ex. `data-prix-ht="3.20"`, en € HT par panneau). Vide = « prix sur devis ».
 
 Les pages boutique sont générées : ne pas les modifier à la main.
 

@@ -324,9 +324,9 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .bq-grid-3{grid-template-columns:repeat(3,1fr)}
 
 /* responsive */
-/* tablette : le menu complet ne tient qu'à partir de ~1370 px, on retire les liens secondaires puis on passe au burger */
-@media (max-width:1366px){.bq-l-opt{display:none}}
-@media (max-width:1180px){
+/* tablette : le menu complet ne tient qu'à partir de ~1540 px, on retire les liens secondaires puis on passe au burger */
+@media (max-width:1540px){.bq-l-opt{display:none}}
+@media (max-width:1240px){
   .bq-links{display:none}
   .bq-burger{display:flex}
 }

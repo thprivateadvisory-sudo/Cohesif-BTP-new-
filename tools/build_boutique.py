@@ -271,7 +271,8 @@ NAV = f"""<div class="bq-topbar">
     <li><a href="boutique.html#catalogue">Chariots élévateurs</a></li>
     <li><a href="boutique-mini-pelles.html">Mini-pelles</a></li>
     <li><a href="boutique-plaque-platre-ba13.html">Plaques BA13</a></li>
-    <li><a href="boutique.html#choisir">Bien choisir</a></li>
+    <li><a href="boutique-laine-de-roche.html">Laine de roche</a></li>
+    <li class="bq-l-opt"><a href="boutique.html#choisir">Bien choisir</a></li>
     <li class="bq-l-opt"><a href="boutique.html#comparer">Comparer</a></li>
     <li><a href="boutique.html#sav">SAV &amp; garanties</a></li>
     <li><a href="boutique.html#financement">Financement</a></li>
@@ -286,6 +287,7 @@ NAV = f"""<div class="bq-topbar">
   <a href="boutique.html#catalogue">Chariots élévateurs</a>
   <a href="boutique-mini-pelles.html">Mini-pelles</a>
   <a href="boutique-plaque-platre-ba13.html">Plaques de plâtre BA13</a>
+  <a href="boutique-laine-de-roche.html">Laine de roche (isolation)</a>
   <a href="boutique.html#choisir">Bien choisir</a>
   <a href="boutique.html#comparer">Comparer les modèles</a>
   <a href="boutique.html#sav">SAV &amp; garanties</a>
@@ -392,7 +394,7 @@ def footer():
   <div class="bq-in bq-foot-grid">
     <div>
       <img src="img/028d2fd4f4.png" alt="Cohesif BTP" width="600" height="104" class="bq-foot-logo" loading="lazy"/>
-      <p>Vente de chariots élévateurs électriques, de mini-pelles neufs et de plaques de plâtre BA13, livrés partout en France, avec garantie et service après-vente. Une société du Groupe Cohesif.</p>
+      <p>Vente de chariots élévateurs électriques, de mini-pelles neufs, de plaques de plâtre BA13 et de laine de roche, livrés partout en France, avec garantie et service après-vente. Une société du Groupe Cohesif.</p>
     </div>
     <div>
       <h4>Chariots élévateurs</h4>
@@ -400,7 +402,7 @@ def footer():
       <h4 class="bq-foot-h4b">Mini-pelles</h4>
       <div class="bq-foot-2col">{liens_mp}</div>
       <h4 class="bq-foot-h4b">Matériaux</h4>
-      <div class="bq-foot-2col"><a href="boutique-plaque-platre-ba13.html">Plaque de plâtre BA13</a></div>
+      <div class="bq-foot-2col"><a href="boutique-plaque-platre-ba13.html">Plaque de plâtre BA13</a><a href="boutique-laine-de-roche.html">Laine de roche</a></div>
     </div>
     <div>
       <h4>Boutique</h4>
