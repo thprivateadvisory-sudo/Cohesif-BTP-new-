@@ -19,7 +19,10 @@
   .mm-open .mm-btn i::after { transform: translateY(-5px) rotate(-45deg); }
   /* L'en-tête garde le logo à gauche, les boutons à droite */
   .header-inner { gap: 8px !important; }
-  .header-inner > .logo { margin-right: auto; }
+  .header-inner > .logo { margin-right: auto; min-width: 0; flex: 0 1 auto; }
+  /* Le logo rétrécit sans jamais être écrasé (proportions gardées) */
+  .header-inner > .logo img { width: auto; max-width: 100%; height: 100%; object-fit: contain; object-position: left center; }
+  .header-inner > a:not(.logo), .mm-btn { flex-shrink: 0; }
 
   .mm-panel {
     display: block; position: fixed; left: 0; right: 0; bottom: 0; top: var(--mm-top, 64px); z-index: 9000;
@@ -48,6 +51,18 @@
   .mm-actions .mm-devis { background: #ea5b1f; color: #fff; }
   .mm-actions .mm-tel { background: #0a0a0a; color: #fff; }
   .mm-actions .mm-wa { border: 1px solid #d4d4d4; color: #0a0a0a; }
+}
+/* Petits téléphones : « Appeler » devient une pastille avec l'icône, pour laisser la place au logo */
+@media (max-width: 430px) {
+  .header-tel { font-size: 0 !important; width: 42px; height: 42px; padding: 0 !important; justify-content: center; gap: 0 !important; }
+  .header-tel svg { width: 19px !important; height: 19px !important; }
+  .mm-btn { padding: 8px 12px 8px 11px; }
+  .header-shop-mobile { padding: 9px 12px !important; font-size: 13px !important; }
+}
+/* Très petits écrans (accueil) : le logo seul, sans le nom, plutôt qu'un nom illisible */
+@media (max-width: 360px) {
+  header .logo .logo-full { display: none !important; }
+  header .logo .logo-icon { display: block !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mm-panel, .mm-btn i, .mm-btn i::before, .mm-btn i::after { transition: none !important; }
