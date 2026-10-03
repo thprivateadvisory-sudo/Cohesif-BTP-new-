@@ -1,7 +1,7 @@
 // Boutique Cohesif BTP · calculateur de plaques BA13 et chargement de la 3D
 (function () {
   var M2_PLAQUE = 3;   // 1,2 × 2,5 m
-  var KG_PLAQUE = 26;  // poids indicatif
+  var KG_PLAQUE = 23.8;  // poids d'une plaque BA13 standard
   var calc = document.getElementById('calcul');
   if (!calc) return;
   var prixHT = parseFloat((calc.getAttribute('data-prix-ht') || '').replace(',', '.')) || 0;
@@ -18,9 +18,11 @@
     var surfacePose = surfaceMur * faces * Number(peau.value);
     var n = Math.ceil((surfacePose * (1 + Number(chute.value))) / M2_PLAQUE - 1e-9);
     $('ba-n').textContent = n ? nf(n) : '0';
+    var lbl = $('ba-n-lbl');
+    if (lbl) lbl.textContent = (n > 1 ? 'plaques' : 'plaque') + ' BA13';
     $('ba-surf').textContent = nf(surfacePose, 1) + ' m² (' + nf(n * M2_PLAQUE) + ' m² livrés)';
     var kg = n * KG_PLAQUE;
-    $('ba-poids').textContent = kg >= 1000 ? '≈ ' + nf(kg / 1000, 1) + ' t' : '≈ ' + nf(kg) + ' kg';
+    $('ba-poids').textContent = kg >= 1000 ? '≈ ' + nf(kg / 1000, 1) + ' t' : '≈ ' + nf(kg, 1) + ' kg';
     $('ba-vis').textContent = '≈ ' + nf(Math.ceil(surfacePose * 15 / 100) * 100) + ' vis';
     $('ba-bande').textContent = '≈ ' + nf(Math.ceil(surfacePose * 1.3)) + ' m';
     $('ba-enduit').textContent = '≈ ' + nf(Math.ceil(surfacePose * 0.35)) + ' kg';
@@ -32,7 +34,7 @@
     }
     $('ba-cta').textContent = n ? 'Recevoir le prix pour ' + nf(n) + ' plaque' + (n > 1 ? 's' : '') + ' →' : 'Recevoir un prix →';
     var sticky = $('ba-sticky');
-    if (sticky && n) sticky.textContent = nf(n) + ' plaques pour ' + nf(surfaceMur, 1) + ' m²';
+    if (sticky && n) sticky.textContent = nf(n) + ' plaque' + (n > 1 ? 's' : '') + ' pour ' + nf(surfaceMur, 1) + ' m²';
     var qte = $('ba-qte');
     if (qte) qte.value = n || '';
     var resume = $('ba-calcul');
