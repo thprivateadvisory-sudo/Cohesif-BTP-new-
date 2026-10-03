@@ -3,7 +3,7 @@
 // via l'évènement window « ba13:count » (detail = nombre de plaques).
 import { THREE, REDUCED, easeOut, clamp01, fmt, rng, createViewer } from './r3d-core.js';
 
-const PL = { w: 1.2, h: 2.5, t: 0.0125, kg: 26 }; // 1200 × 2500 × 12,5 mm, poids indicatif
+const PL = { w: 1.2, h: 2.5, t: 0.0125, kg: 23.8 }; // 1200 × 2500 × 12,5 mm
 const PAR_PILE = 50;
 const MAX_PILES = 16;
 
@@ -11,7 +11,7 @@ const INFOS = {
   plaque: {
     titre: 'Plaque de plâtre BA13 standard',
     texte: "La plaque la plus utilisée pour les cloisons, les doublages et les plafonds en pièces sèches. Ses bords amincis permettent des joints invisibles avec bande et enduit.",
-    specs: [['Dimensions', '1 200 × 2 500 mm'], ['Épaisseur', '12,5 mm'], ['Surface', '3 m² par plaque'], ['Poids', '≈ 25 à 27 kg / plaque']],
+    specs: [['Dimensions', '1 200 × 2 500 mm'], ['Épaisseur', '12,5 mm'], ['Surface', '3 m² par plaque'], ['Poids', '≈ 23,8 kg / plaque']],
     points: [
       'Plaque standard, pour les pièces sèches de l’habitat et du tertiaire.',
       'Bords amincis (BA) sur les deux grands côtés, pour des joints plats et invisibles.',
@@ -33,7 +33,7 @@ const INFOS = {
   commande: {
     titre: 'Votre commande en volume',
     texte: "La quantité calculée plus bas s'affiche ici en piles de plaques. Du chantier de rénovation au lot professionnel de plusieurs milliers de plaques, nous préparons un devis adapté au volume et au lieu de livraison.",
-    specs: [['Une plaque', '3 m² · ≈ 26 kg'], ['Pile de 50', '≈ 62 cm · ≈ 1,3 t'], ['Volumes', 'Du lot chantier au conteneur'], ['Livraison', 'Partout en France, sur devis']],
+    specs: [['Une plaque', '3 m² · ≈ 23,8 kg'], ['Pile de 50', '≈ 62 cm · ≈ 1,2 t'], ['Volumes', 'Du lot chantier au conteneur'], ['Livraison', 'Partout en France, sur devis']],
     points: [
       'Tarif dégressif selon la quantité commandée.',
       'Livraison sur chantier ou dépôt, ou enlèvement : à préciser dans la demande.',
