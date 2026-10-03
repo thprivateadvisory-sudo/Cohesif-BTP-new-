@@ -1,4 +1,4 @@
-// Cohesif BTP — simulateur 3D de toiture (pose, démoussage, fenêtre de toit, isolation)
+// Cohesif BTP — simulateur 3D de toiture (maison entière, pose, démoussage, fenêtre de toit, isolation)
 // Chargé à la demande par toiture-couverture.html quand le bloc #r3d approche de l'écran.
 import { THREE, REDUCED, easeOut, easeInOut, clamp01, fmt, rng, ringGeometry, mat, createViewer } from './r3d-core.js';
 
@@ -77,6 +77,33 @@ const MODES = {
       'Isolation par l’extérieur (sarking) possible lors d’une réfection complète.'
     ]
   }
+};
+
+// Teintes proposées dans la vue « Toute la maison », par matériau (la première est celle par défaut)
+const COULEURS = {
+  ardoise: [
+    { nom: 'Gris bleuté', hex: '#3e4752' },
+    { nom: 'Bleu-noir', hex: '#2c323b' },
+    { nom: 'Anthracite', hex: '#3a3c40' },
+    { nom: 'Gris clair', hex: '#6a737e' },
+    { nom: 'Vert-gris', hex: '#4c5650' }
+  ],
+  plate: [
+    { nom: 'Rouge flammé', hex: '#b4532f' },
+    { nom: 'Terre cuite', hex: '#c7663b' },
+    { nom: 'Vieilli', hex: '#8e5034' },
+    { nom: 'Brun', hex: '#6e3d2b' },
+    { nom: 'Sablé', hex: '#c38a57' },
+    { nom: 'Anthracite', hex: '#3b3f45' }
+  ],
+  mecanique: [
+    { nom: 'Rouge', hex: '#c05a31' },
+    { nom: 'Rouge vieilli', hex: '#a2472b' },
+    { nom: 'Brun', hex: '#6e3d2b' },
+    { nom: 'Sablé', hex: '#c98b55' },
+    { nom: 'Ardoisé', hex: '#56606b' },
+    { nom: 'Anthracite', hex: '#3b3f45' }
+  ]
 };
 
 const TEINTES = [
@@ -204,6 +231,245 @@ function battensFor(layout) {
 }
 
 /* ────────────────────────────────────────── Moteur commun */
+
+/* ─────────── Mode 0 : toute la maison (murs, charpente, couverture au choix et sa teinte) */
+const MAISON = { W: 6.2, D: 5.2, H: 2.7, ep: 0.22, ov: 0.4, rive: 0.22, raf: 0.16 };
+
+let enduitTex = null; // texture partagée, créée une seule fois
+function enduitTexture() {
+  if (enduitTex) return enduitTex;
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const img = g.createImageData(128, 128);
+  const r = rng(5);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const v = 226 + r() * 29;
+    img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+    img.data[i + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  enduitTex = new THREE.CanvasTexture(c);
+  enduitTex.wrapS = enduitTex.wrapT = THREE.RepeatWrapping;
+  enduitTex.repeat.set(3, 3);
+  enduitTex.colorSpace = THREE.SRGBColorSpace;
+  return enduitTex;
+}
+
+function buildMaison(api, kind, hex, onColor) {
+  const { addLabel, frame, caption, world } = api;
+  const { W, D, H, ep, ov, rive, raf } = MAISON;
+  const T = TILE[kind];
+  const p = THREE.MathUtils.degToRad(T.pitch);
+  const Hr = H + (D / 2) * Math.tan(p); // faîte de la maçonnerie (pignons)
+  const Wt = W + 2 * rive;
+  const layout = layoutTiles(kind, Wt, (D / 2 + ov) / Math.cos(p));
+  const { list, L, alpha } = layout;
+  const group = new THREE.Group();
+  const add = (mesh, parent = group) => { mesh.castShadow = true; mesh.receiveShadow = true; parent.add(mesh); return mesh; };
+
+  // Pelouse, soubassement, murs enduits, pignons, plancher des combles
+  const lawn = new THREE.Mesh(new THREE.CircleGeometry(8.5, 72), new THREE.MeshStandardMaterial({ color: 0x8cb866, roughness: 1 }));
+  lawn.rotation.x = -Math.PI / 2;
+  lawn.position.y = 0.003;
+  lawn.receiveShadow = true;
+  group.add(lawn);
+  const enduit = new THREE.MeshStandardMaterial({ color: 0xeee2cd, roughness: 0.95, map: enduitTexture() });
+  add(new THREE.Mesh(new THREE.BoxGeometry(W + 0.04, 0.32, D + 0.04), new THREE.MeshStandardMaterial({ color: 0xb8afa3, roughness: 0.95 }))).position.y = 0.16;
+  [1, -1].forEach((s) => {
+    add(new THREE.Mesh(new THREE.BoxGeometry(W - 2 * ep, H, ep), enduit)).position.set(0, H / 2, s * (D / 2 - ep / 2));
+  });
+  const gShape = new THREE.Shape();
+  gShape.moveTo(-D / 2, 0); gShape.lineTo(D / 2, 0); gShape.lineTo(D / 2, H); gShape.lineTo(0, Hr); gShape.lineTo(-D / 2, H); gShape.closePath();
+  const gGeo = new THREE.ExtrudeGeometry(gShape, { depth: ep, bevelEnabled: false });
+  gGeo.rotateY(Math.PI / 2); // épaisseur le long de x
+  [W / 2 - ep, -W / 2].forEach((x) => { add(new THREE.Mesh(gGeo, enduit)).position.x = x; });
+  add(new THREE.Mesh(new THREE.BoxGeometry(W - 2 * ep, 0.04, D - 2 * ep), new THREE.MeshStandardMaterial({ color: 0xcfae7f, roughness: 0.9 }))).position.y = H - 0.02;
+
+  // Fenêtres et porte
+  const frameM = mat.white();
+  const glassM = new THREE.MeshStandardMaterial({ color: 0x4d6577, roughness: 0.15, metalness: 0.3 });
+  const doorM = new THREE.MeshStandardMaterial({ color: 0x6b4a35, roughness: 0.7 });
+  const opening = (w, h, x, y, z, ry, door) => {
+    const o = new THREE.Group();
+    add(new THREE.Mesh(ringGeometry(w, h, 0.07, 0.08), frameM), o);
+    o.add(new THREE.Mesh(new THREE.BoxGeometry(w - 0.1, h - 0.1, 0.02), door ? doorM : glassM));
+    if (!door) o.add(new THREE.Mesh(new THREE.BoxGeometry(0.05, h - 0.1, 0.05), frameM));
+    o.position.set(x, y, z);
+    o.rotation.y = ry;
+    group.add(o);
+  };
+  opening(1.1, 1.25, -1.8, 1.55, D / 2, 0);
+  opening(1.1, 1.25, 1.8, 1.55, D / 2, 0);
+  opening(1.0, 2.15, 0, 1.075, D / 2, 0, true);
+  opening(1.1, 1.25, -1.4, 1.55, -D / 2, Math.PI);
+  opening(1.1, 1.25, 1.4, 1.55, -D / 2, Math.PI);
+  [1, -1].forEach((s) => {
+    opening(0.9, 1.15, s * W / 2, 1.5, 0, s * Math.PI / 2);
+    opening(0.55, 0.7, s * W / 2, H + 0.5, 0, s * Math.PI / 2);
+  });
+
+  // Les deux pans : repère local identique à celui du mode « Pose » (x largeur, y pente, z normale)
+  const nR = Math.round(W / 0.6);
+  const xs = [-Wt / 2 + 0.02, Wt / 2 - 0.02];
+  for (let i = 0; i <= nR; i++) xs.push(-W / 2 + 0.04 + (i * (W - 0.08)) / nR);
+  xs.sort((a, b) => a - b);
+  const battenYs = battensFor(layout);
+  const r = rng(kind.length * 131);
+  const rafterGeo = new THREE.BoxGeometry(0.075, L, raf);
+  const battenGeo = new THREE.BoxGeometry(Wt + 0.06, 0.04, BATTEN_TOP);
+  const tileGeoMesh = tileMesh(kind, list.length);
+  const pans = [0, Math.PI].map((ry, k) => {
+    const holder = new THREE.Group();
+    holder.rotation.y = ry;
+    group.add(holder);
+    const pan = new THREE.Group();
+    pan.rotation.x = p - Math.PI / 2;
+    pan.position.set(0, Hr + raf / Math.cos(p) - L * Math.sin(p), L * Math.cos(p)); // y = L tombe sur le faîte
+    holder.add(pan);
+    const rafters = add(new THREE.InstancedMesh(rafterGeo, mat.wood(), xs.length), pan);
+    const membrane = new THREE.Mesh(new THREE.PlaneGeometry(Wt, 1), mat.film(0x7d8a96, 0.92));
+    membrane.position.z = 0.003;
+    membrane.receiveShadow = true;
+    pan.add(membrane);
+    const battens = add(new THREE.InstancedMesh(battenGeo, mat.woodLight(), battenYs.length), pan);
+    const tiles = k === 0 ? tileGeoMesh : new THREE.InstancedMesh(tileGeoMesh.geometry, mat.tile(), list.length);
+    add(tiles, pan);
+    tiles.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    const gutter = add(new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, Wt + 0.1, 16), mat.zinc()), pan);
+    gutter.rotation.z = Math.PI / 2;
+    gutter.position.set(0, 0.02, -0.07);
+    return { pan, rafters, membrane, battens, tiles };
+  });
+
+  // Faîtage, dans un repère où z local = verticale
+  const ridgeGroup = new THREE.Group();
+  ridgeGroup.rotation.x = -Math.PI / 2;
+  group.add(ridgeGroup);
+  const ardoise = kind === 'ardoise';
+  const ridgeY = Hr + (raf + 0.05) / Math.cos(p);
+  const ridgeLen = ardoise ? Wt + 0.08 : 0.4;
+  const ridgeCount = ardoise ? 1 : Math.ceil((Wt + 0.08) / 0.38);
+  const ridge = add(new THREE.InstancedMesh(halfRidgeGeometry(ardoise ? 0.08 : 0.11, ridgeLen), ardoise ? mat.zinc() : mat.tile(), ridgeCount), ridgeGroup);
+  const ridgeFinals = [];
+  const ridgeVar = [];
+  for (let i = 0; i < ridgeCount; i++) {
+    const x = ridgeCount === 1 ? 0 : -Wt / 2 + 0.17 + i * 0.38;
+    ridgeFinals.push({ p: new THREE.Vector3(x, 0, ridgeY), q: new THREE.Quaternion(), s: new THREE.Vector3(1, 1, 1) });
+    ridgeVar.push((r() - 0.5) * 0.06);
+  }
+
+  // Couleurs : un écart propre à chaque tuile, réappliqué à chaque changement de teinte
+  const vari = list.map(() => {
+    let dl = (r() - 0.5) * 2 * T.jit;
+    if (kind === 'plate' && r() < 0.18) dl -= 0.08; // flammé
+    return [(r() - 0.5) * 0.02, 0.9 + r() * 0.15, dl];
+  });
+  const hsl = {}, col = new THREE.Color();
+  let current = hex;
+  function paint() {
+    new THREE.Color(current).getHSL(hsl);
+    vari.forEach(([dh, ds, dl], i) => {
+      col.setHSL(hsl.h + dh, clamp01(hsl.s * ds), clamp01(hsl.l + dl));
+      pans.forEach((pn) => pn.tiles.setColorAt(i, col));
+    });
+    pans.forEach((pn) => { pn.tiles.instanceColor.needsUpdate = true; });
+    if (!ardoise) {
+      ridgeVar.forEach((v, i) => ridge.setColorAt(i, col.setHSL(hsl.h, hsl.s, clamp01(hsl.l + v))));
+      ridge.instanceColor.needsUpdate = true;
+    }
+  }
+  paint();
+
+  world.add(group);
+  frame(group, new THREE.Vector3(0, 2.4, 0), 20, 1.12, 0.62);
+
+  // Chronologie : charpente, écran, liteaux, couverture, faîtage
+  const rafterFinals = xs.map((x) => ({ p: new THREE.Vector3(x, L / 2, -raf / 2), q: new THREE.Quaternion(), s: new THREE.Vector3(1, 1, 1) }));
+  const battenFinals = battenYs.map((y) => ({ p: new THREE.Vector3(0, y, BATTEN_TOP / 2 + 0.003), q: new THREE.Quaternion(), s: new THREE.Vector3(1, 1, 1) }));
+  const tileFinals = list.map((it) => tileTransform(kind, it, alpha));
+  const tC0 = 0.2, tCstep = 0.05;
+  const tM0 = tC0 + xs.length * tCstep + 0.45, dM = 0.9;
+  const tB0 = tM0 + dM + 0.1, tBstep = Math.min(0.05, 1 / battenYs.length);
+  const tT0 = tB0 + battenYs.length * tBstep + 0.25;
+  const tilesDur = kind === 'mecanique' ? 4.2 : 6.2;
+  const rowDur = tilesDur / layout.rows;
+  const tR0 = tT0 + tilesDur + 0.15;
+  const total = tR0 + ridgeCount * 0.05 + 0.5;
+  const cStarts = xs.map((_, i) => tC0 + i * tCstep);
+  const bStarts = battenYs.map((_, i) => tB0 + i * tBstep);
+  const tStarts = list.map((it) => tT0 + it.row * rowDur + ((it.x + Wt / 2) / Wt) * rowDur * 0.85);
+  const rStarts = ridgeFinals.map((_, i) => tR0 + i * 0.05);
+  const state = { t: REDUCED ? total : 0 };
+
+  const m4 = new THREE.Matrix4();
+  const zero = new THREE.Matrix4().makeScale(0, 0, 0);
+  const pv = new THREE.Vector3(), sv = new THREE.Vector3();
+  // Calcule les matrices sur le premier maillage puis les recopie sur les autres (pan arrière)
+  function animInstances(meshes, finals, starts, dur, drop) {
+    const mesh = meshes[0];
+    let placed = 0;
+    for (let i = 0; i < finals.length; i++) {
+      const k = clamp01((state.t - starts[i]) / dur);
+      if (k <= 0) { mesh.setMatrixAt(i, zero); continue; }
+      placed++;
+      const e = easeOut(k);
+      const f = finals[i];
+      pv.copy(f.p); pv.z += (1 - e) * drop; pv.y += (1 - e) * drop * 0.35;
+      sv.copy(f.s).multiplyScalar(0.7 + 0.3 * e);
+      m4.compose(pv, f.q, sv);
+      mesh.setMatrixAt(i, m4);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    for (let j = 1; j < meshes.length; j++) {
+      meshes[j].instanceMatrix.array.set(mesh.instanceMatrix.array);
+      meshes[j].instanceMatrix.needsUpdate = true;
+    }
+    return placed * meshes.length;
+  }
+
+  const front = pans[0].pan;
+  const mi = MATERIAUX[kind];
+  const unite = ardoise ? 'ardoises' : 'tuiles';
+  addLabel('Charpente', front, new THREE.Vector3(xs[2], L * 0.3, 0.02), { show: () => state.t > tC0 + 0.3 && state.t < tT0 + tilesDur * 0.3 });
+  addLabel('Écran sous-toiture', front, new THREE.Vector3(Wt * 0.22, L * 0.55, 0.01), { show: () => state.t > tM0 + dM * 0.6 && state.t < tT0 + tilesDur * 0.45 });
+  addLabel('Liteaux', front, new THREE.Vector3(Wt / 2, battenYs[Math.floor(battenYs.length * 0.8)], BATTEN_TOP), { show: () => state.t > tB0 + battenYs.length * tBstep * 0.8 && state.t < tT0 + tilesDur * 0.75 });
+  addLabel(mi.nom, front, new THREE.Vector3(-0.6, L * 0.42, 0.08), { show: () => state.t > tT0 + tilesDur * 0.5, cls: 'r3d-label-accent' });
+  addLabel(ardoise ? 'Faîtage zinc' : 'Faîtières', ridgeGroup, new THREE.Vector3(Wt * 0.22, 0, ridgeY + 0.12), { show: () => state.t > tR0 + ridgeCount * 0.03 });
+  addLabel('Gouttière', front, new THREE.Vector3(Wt / 2 - 0.4, 0.02, -0.07), { show: () => state.t >= total });
+
+  const totalCount = 2 * (xs.length + battenYs.length + list.length) + ridgeCount;
+  let lastShown = -1;
+  function updateCaption(placed) {
+    const nom = (COULEURS[kind].find((c) => c.hex === current) || COULEURS[kind][0]).nom;
+    caption.textContent = `Maison de plain-pied, ${mi.nom.toLowerCase()} teinte « ${nom} », pente ${T.pitch}° : charpente, écran, liteaux, ${unite}, ${ardoise ? 'faîtage zinc' : 'faîtières'}. ${fmt(placed)} élément${placed > 1 ? 's' : ''} posé${placed > 1 ? 's' : ''}${placed === totalCount ? '.' : '…'}`;
+  }
+  let done = false;
+
+  return {
+    group,
+    replay() { state.t = 0; done = false; },
+    setColor(h) { current = h; onColor(h); paint(); updateCaption(Math.max(0, lastShown)); },
+    update(dt) {
+      if (done) return false;
+      state.t += dt;
+      const nc = animInstances(pans.map((pn) => pn.rafters), rafterFinals, cStarts, 0.45, 0.9);
+      const m = easeInOut(clamp01((state.t - tM0) / dM));
+      pans.forEach(({ membrane }) => {
+        membrane.visible = m > 0;
+        membrane.scale.y = Math.max(0.001, m * L);
+        membrane.position.y = (m * L) / 2;
+      });
+      const nb = animInstances(pans.map((pn) => pn.battens), battenFinals, bStarts, 0.35, 0.6);
+      const nt = animInstances(pans.map((pn) => pn.tiles), tileFinals, tStarts, 0.38, 0.55);
+      const nr = animInstances([ridge], ridgeFinals, rStarts, 0.3, 0.5);
+      const placed = nc + nb + nt + nr;
+      if (placed !== lastShown) { lastShown = placed; updateCaption(placed); }
+      if (state.t > total) done = true;
+      return true;
+    }
+  };
+}
 
 /* ─────────── Mode 1 : pose de la couverture */
 function buildPose(api, kind) {
@@ -616,21 +882,31 @@ function buildCoupe(api) {
 
 export function init(root) {
   let kind = 'mecanique';
+  const teinte = {};
+  Object.keys(COULEURS).forEach((k) => { teinte[k] = COULEURS[k][0].hex; });
   const syncKind = () => root.querySelectorAll('[data-r3d-kind]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.r3dKind === kind)));
+  const swatchBox = root.querySelector('[data-r3d-teintes]');
+  const syncSwatches = () => {
+    if (!swatchBox) return;
+    swatchBox.innerHTML = COULEURS[kind]
+      .map((c) => `<button type="button" data-r3d-color="${c.hex}" aria-pressed="${c.hex === teinte[kind]}" title="${c.nom}" aria-label="Teinte ${c.nom}" style="background:${c.hex}"></button>`)
+      .join('');
+  };
   createViewer(root, {
-    initial: 'pose',
+    initial: root.dataset.mode || 'maison',
     builders: {
+      maison: (api) => buildMaison(api, kind, teinte[kind], (h) => { teinte[kind] = h; }),
       pose: (api) => buildPose(api, kind),
       demoussage: buildDemoussage,
       fenetre: buildFenetre,
       coupe: buildCoupe
     },
-    info: (m) => (m === 'pose' ? MATERIAUX[kind] : MODES[m]),
-    onShow: syncKind,
+    info: (m) => (m === 'pose' || m === 'maison' ? MATERIAUX[kind] : MODES[m]),
+    onShow: () => { syncKind(); syncSwatches(); },
     onButton(b, api) {
       if (!b.dataset.r3dKind) return false;
       kind = b.dataset.r3dKind;
-      api.show('pose');
+      api.show(api.mode === 'maison' ? 'maison' : 'pose');
       return true;
     }
   });
