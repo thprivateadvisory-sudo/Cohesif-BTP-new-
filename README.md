@@ -13,7 +13,7 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 - `r3d-core.js` — Moteur commun des simulateurs 3D (scène, caméra, étiquettes, interface)
 - `toiture-3d.js` — Simulateur 3D de la page toiture (maison entière avec choix du matériau et de la teinte, pose, démoussage, fenêtre de toit, isolation), chargé à la demande
 - `r3d.css` — Styles communs des simulateurs 3D
-- `facade-3d.js` — Simulateur 3D de la page façade (avant / après ravalement, échafaudage, ITE, fissures), chargé à la demande
+- `facade-3d.js` — Simulateur 3D de la page façade (maison entière avant / après avec teinte de l’enduit et des volets, immeuble avant / après, échafaudage, ITE, fissures), chargé à la demande
 - `vendor/three/` — Three.js 0.169 (licence MIT), hébergé avec le site
 - `mentions-legales.html` — Mentions légales
 - `politique-confidentialite.html` — Politique RGPD

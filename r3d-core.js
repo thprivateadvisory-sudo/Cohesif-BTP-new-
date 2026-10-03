@@ -209,8 +209,9 @@ export function createViewer(root, cfg) {
     }
     wake();
   });
-  const range = root.querySelector('[data-r3d="split"]');
-  if (range) range.addEventListener('input', () => { if (current && current.setSplit) { current.setSplit(range.value / 100); wake(); } });
+  root.querySelectorAll('[data-r3d="split"]').forEach((range) => {
+    range.addEventListener('input', () => { if (current && current.setSplit) { current.setSplit(range.value / 100); wake(); } });
+  });
 
   /* ─────────── Boucle de rendu (uniquement quand le bloc est visible) */
   let visible = true, running = false, last = 0, idleFrames = 0;

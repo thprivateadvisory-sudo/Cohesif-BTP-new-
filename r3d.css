@@ -20,7 +20,11 @@
 .r3d[data-mode="pose"] .r3d-ctl[data-for="pose"],
 .r3d[data-mode="demoussage"] .r3d-ctl[data-for="demoussage"],
 .r3d[data-mode="fenetre"] .r3d-ctl[data-for="fenetre"],
-.r3d[data-mode="coupe"] .r3d-ctl[data-for="coupe"] { display: flex; }
+.r3d[data-mode="coupe"] .r3d-ctl[data-for="coupe"],
+.r3d[data-mode="ravalement"] .r3d-ctl[data-for="ravalement"],
+.r3d[data-mode="echafaudage"] .r3d-ctl[data-for="echafaudage"],
+.r3d[data-mode="ite"] .r3d-ctl[data-for="ite"],
+.r3d[data-mode="fissures"] .r3d-ctl[data-for="fissures"] { display: flex; }
 .r3d-chip {
   display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--grey-300);
   border-radius: var(--pill); background: var(--white); font-size: 14px; font-weight: 600; color: var(--black);
@@ -38,6 +42,9 @@
 .r3d-swatches button:hover { transform: scale(1.08); }
 .r3d-swatches button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--accent); }
 .r3d-hint-inline { font-size: 14px; color: var(--grey-500); }
+.r3d-swatches-named { align-items: center; }
+.r3d-swatches-named span { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--grey-500); margin-right: 2px; }
+.r3d-swatches-named + .r3d-swatches-named { margin-left: 14px; padding-left: 14px; border-left: 1px solid var(--grey-200); }
 
 .r3d-stage {
   position: relative; height: clamp(360px, 52vw, 560px); border-radius: 20px; overflow: hidden;
@@ -107,10 +114,12 @@
   .r3d-ctl::-webkit-scrollbar { display: none; }
   .r3d-chip { flex: 0 0 auto; padding: 9px 14px; font-size: 13px; }
   .r3d[data-mode="demoussage"] .r3d-ctl[data-for="demoussage"],
+  .r3d[data-mode="ravalement"] .r3d-ctl[data-for="ravalement"],
   .r3d[data-mode="maison"] .r3d-ctl[data-for="maison"] { flex-wrap: wrap; }
   .r3d-range { flex: 1 1 100%; padding: 4px 4px 0; }
   .r3d-range input { flex: 1; width: auto; }
   .r3d-swatches { margin-left: 0; }
+  .r3d-swatches-named + .r3d-swatches-named { margin-left: 0; padding-left: 0; border-left: 0; }
   .r3d-hint-inline { display: none; }
   .r3d-stage { height: 400px; border-radius: 16px; }
   .r3d-label { font-size: 11px; padding: 4px 9px 4px 7px; }

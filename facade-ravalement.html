@@ -226,17 +226,39 @@
   <div class="svc-inner">
     <span class="tag">Nouveau · Simulateur 3D</span>
     <h2>Votre façade en 3D, <span class="accent">avant / après ravalement.</span></h2>
-    <p class="svc-desc">Comparez une façade encrassée et la même façade ravalée, choisissez la teinte, regardez l'échafaudage se monter, découvrez l'isolation par l'extérieur et le traitement d'une fissure. Faites pivoter la maquette avec le doigt ou la souris.</p>
+    <p class="svc-desc">Comparez votre maison avant et après ravalement, choisissez la teinte de l'enduit et la couleur des volets, comparez une façade d'immeuble encrassée et ravalée, regardez l'échafaudage se monter, découvrez l'isolation par l'extérieur et le traitement d'une fissure. Faites pivoter la maquette avec le doigt ou la souris.</p>
 
-    <div class="r3d" id="r3d" data-mode="ravalement">
+    <div class="r3d" id="r3d" data-mode="maison">
       <div class="r3d-modes" role="tablist" aria-label="Choisir une vue 3D">
-        <button type="button" role="tab" data-r3d-mode="ravalement" aria-selected="true">Avant / après</button>
+        <button type="button" role="tab" data-r3d-mode="maison" aria-selected="true">Toute la maison</button>
+        <button type="button" role="tab" data-r3d-mode="ravalement" aria-selected="false">Immeuble avant / après</button>
         <button type="button" role="tab" data-r3d-mode="echafaudage" aria-selected="false">Échafaudage</button>
         <button type="button" role="tab" data-r3d-mode="ite" aria-selected="false">Isolation par l'extérieur</button>
         <button type="button" role="tab" data-r3d-mode="fissures" aria-selected="false">Traitement des fissures</button>
       </div>
 
       <div class="r3d-bar">
+        <div class="r3d-ctl" data-for="maison">
+          <button type="button" class="r3d-chip r3d-chip-action" data-r3d="clean">▶ Lancer le ravalement</button>
+          <label class="r3d-range"><span>Avant</span><input type="range" min="0" max="100" value="50" data-r3d="split" aria-label="Curseur avant / après" /><span>Après</span></label>
+          <div class="r3d-swatches r3d-swatches-named" role="group" aria-label="Teinte de l'enduit">
+            <span>Enduit</span>
+            <button type="button" data-r3d-color="#f2eee6" aria-pressed="true" title="Blanc cassé" style="background:#f2eee6"></button>
+            <button type="button" data-r3d-color="#e9dfcb" aria-pressed="false" title="Ton pierre" style="background:#e9dfcb"></button>
+            <button type="button" data-r3d-color="#e4cfa8" aria-pressed="false" title="Sable" style="background:#e4cfa8"></button>
+            <button type="button" data-r3d-color="#d9d9d4" aria-pressed="false" title="Gris perle" style="background:#d9d9d4"></button>
+            <button type="button" data-r3d-color="#dcb886" aria-pressed="false" title="Ocre clair" style="background:#dcb886"></button>
+            <button type="button" data-r3d-color="#e3c4ae" aria-pressed="false" title="Rose ancien" style="background:#e3c4ae"></button>
+          </div>
+          <div class="r3d-swatches r3d-swatches-named" role="group" aria-label="Couleur des volets">
+            <span>Volets</span>
+            <button type="button" data-r3d-volet="#3b3f45" aria-pressed="true" title="Gris anthracite" style="background:#3b3f45"></button>
+            <button type="button" data-r3d-volet="#6d8299" aria-pressed="false" title="Bleu gris" style="background:#6d8299"></button>
+            <button type="button" data-r3d-volet="#8fa58a" aria-pressed="false" title="Vert sauge" style="background:#8fa58a"></button>
+            <button type="button" data-r3d-volet="#f4f2ee" aria-pressed="false" title="Blanc" style="background:#f4f2ee"></button>
+            <button type="button" data-r3d-volet="#8a5a3b" aria-pressed="false" title="Bois" style="background:#8a5a3b"></button>
+          </div>
+        </div>
         <div class="r3d-ctl" data-for="ravalement">
           <button type="button" class="r3d-chip r3d-chip-action" data-r3d="clean">▶ Lancer le ravalement</button>
           <label class="r3d-range"><span>Avant</span><input type="range" min="0" max="100" value="50" data-r3d="split" aria-label="Curseur avant / après" /><span>Après</span></label>
