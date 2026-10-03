@@ -1,0 +1,92 @@
+/* Boutique Cohesif BTP · page laine de roche (galerie, vidéo, densités). Calculateur : styles partagés de ba13.css */
+.lr-hero .bq-hero-p{margin-bottom:1.6rem}
+
+/* galerie photos + vidéo */
+.lr-gal{display:flex;flex-direction:column;gap:.6rem;max-width:620px}
+.lr-gal-main{position:relative;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:#1d1d1d}
+.lr-gal-main img,.lr-gal-main video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lr-gal-main video[hidden]{display:none}
+.lr-gal-tag{position:absolute;left:12px;bottom:12px;background:rgba(10,10,10,.72);color:#fff;font-size:.74rem;font-weight:700;padding:.35rem .7rem;border-radius:999px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lr-gal-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+.lr-gal-thumbs button{position:relative;aspect-ratio:1;border:2px solid transparent;border-radius:12px;overflow:hidden;padding:0;background:#1d1d1d;cursor:pointer;opacity:.62;transition:opacity .15s,border-color .15s}
+.lr-gal-thumbs button:hover{opacity:.9}
+.lr-gal-thumbs button.is-on{opacity:1;border-color:var(--accent)}
+.lr-gal-thumbs button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.lr-gal-thumbs img{width:100%;height:100%;object-fit:cover}
+.lr-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.28)}
+.lr-play svg{width:28px;height:28px;padding:6px;border-radius:50%;background:var(--accent);fill:#fff;stroke:none;box-sizing:content-box}
+
+/* densité dans le calculateur : 5 choix */
+.lr-seg{grid-template-columns:repeat(5,1fr)}
+.lr-seg button{font-size:1rem;font-weight:800;padding:.5rem .1rem}
+.lr-seg button small{font-size:.66rem}
+.lr-dens-hint{display:inline;font-weight:500;color:var(--g500);font-size:.76rem;margin-left:.3rem}
+.lr-dens-hint::before{content:"· "}
+
+/* vidéo */
+.lr-video-sec{background:var(--g50)}
+.lr-video-grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(1.8rem,5vw,4.5rem);align-items:center}
+.lr-video{position:relative;border-radius:24px;overflow:hidden;background:#1d1d1d;aspect-ratio:720/768;box-shadow:0 30px 70px rgba(0,0,0,.18)}
+.lr-video video{width:100%;height:100%;object-fit:cover;display:block}
+.lr-video-btn{position:absolute;right:14px;bottom:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(10,10,10,.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .15s}
+.lr-video-btn:hover{background:var(--accent)}
+.lr-video-btn svg{width:18px;height:18px;stroke-width:2.4}
+.lr-video-btn.is-paused svg{fill:currentColor;stroke:none}
+.lr-video-txt h2{font-size:clamp(1.75rem,3.6vw,2.7rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;margin-bottom:.8rem}
+.lr-video-txt>p{color:var(--g700);font-size:1.02rem;margin-bottom:1.6rem}
+.lr-steps{list-style:none;counter-reset:lr;display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.lr-steps li{counter-increment:lr;background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:1rem 1.1rem}
+.lr-steps li::before{content:"0" counter(lr);display:block;font-size:.72rem;font-weight:800;letter-spacing:.12em;color:var(--accent);margin-bottom:.35rem}
+.lr-steps b{display:block;margin-bottom:.2rem}
+.lr-steps span{font-size:.88rem;color:var(--g700)}
+
+/* cartes densités */
+.lr-dens{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.9rem;align-items:stretch}
+.lr-dcard{position:relative;display:flex;flex-direction:column;border:1px solid var(--g200);border-radius:var(--r);padding:1.3rem 1.1rem 1.1rem;background:#fff;transition:border-color .15s,box-shadow .15s}
+.lr-dcard:hover{border-color:var(--g300);box-shadow:0 14px 34px rgba(0,0,0,.07)}
+.lr-dcard.is-pop{border-color:var(--accent);box-shadow:0 14px 34px rgba(234,91,31,.14)}
+.lr-dcard.is-sel{border-color:var(--black)}
+.lr-dcard.is-pop.is-sel{border-color:var(--accent)}
+.lr-dcard-badge{position:absolute;top:-11px;left:1.1rem;background:var(--accent);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.04em;padding:.2rem .6rem;border-radius:999px}
+.lr-dcard-d{font-size:.9rem;font-weight:700;color:var(--g500)}
+.lr-dcard-d b{font-size:2.2rem;font-weight:900;letter-spacing:-.04em;color:var(--black);margin-right:.15rem}
+.lr-dcard-t{font-weight:800;margin:.1rem 0 .8rem}
+.lr-dcard ul{list-style:none;display:grid;gap:.4rem;font-size:.86rem;color:var(--g700);margin-bottom:1rem}
+.lr-dcard li{position:relative;padding-left:1.1rem}
+.lr-dcard li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.lr-dcard dl{display:grid;gap:.25rem;font-size:.8rem;padding-top:.8rem;border-top:1px solid var(--g200);margin:auto 0 1rem}
+.lr-dcard dl div{display:flex;justify-content:space-between;gap:.5rem}
+.lr-dcard dt{color:var(--g500)}
+.lr-dcard dd{font-weight:700;text-align:right}
+.lr-dcard .bq-btn{font-size:.84rem;padding:.6rem .8rem;white-space:normal}
+.lr-dens-note{font-size:.82rem;color:var(--g500);margin-top:1.2rem}
+.lr-dens-note a{color:var(--accent);font-weight:700}
+.ba-usages p a{color:var(--accent);font-weight:700}
+.lr-hero .ba-calc .bq-btn-full{white-space:normal}
+
+@media (max-width:1100px){
+  .lr-dens{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .lr-gal{max-width:none}
+  .lr-video-grid{grid-template-columns:minmax(0,1fr)}
+  .lr-video{max-width:440px;width:100%;margin:0 auto}
+}
+@media (max-width:640px){
+  /* densités : carrousel horizontal */
+  .lr-dens{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:.75rem;margin:0 calc(-1 * var(--pad));padding:14px var(--pad) 6px;scroll-padding:0 var(--pad);scrollbar-width:none}
+  .lr-dens::-webkit-scrollbar{display:none}
+  .lr-dcard{flex:0 0 74%;scroll-snap-align:start}
+  .lr-steps{grid-template-columns:1fr}
+  .lr-gal-thumbs{gap:.4rem}
+  .lr-gal-thumbs button{border-radius:10px}
+  .lr-play svg{width:20px;height:20px;padding:5px}
+}
+@media (max-width:420px){
+  .lr-seg button{font-size:.9rem}
+  .lr-dens-hint{display:block;margin:.15rem 0 0}
+  .lr-dens-hint::before{content:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .lr-gal-thumbs button,.lr-dcard{transition:none}
+}
