@@ -38,7 +38,7 @@
       row.hidden = false;
       $('ba-prix').textContent = eur(nc * t.prix) + ' HT';
       $('ba-note').textContent = (n < mini ? 'Minimum de commande ' + nf(mini) + ' plaques, prix calculé pour ' + nf(mini) + '. ' : '') +
-        eur(t.prix) + ' HT la plaque (' + eur(t.prix * 1.2) + ' TTC), hors livraison.';
+        eur(t.prix) + ' HT la plaque (' + eur(t.prix * 1.2) + ' TTC), hors livraison. Prix indicatif, confirmé sur devis.';
       calc.querySelectorAll('.ba-paliers li').forEach(function (li) { li.classList.toggle('on', Number(li.getAttribute('data-palier')) === t.q); });
     } else if (paliers.length) row.hidden = true;
     $('ba-cta').textContent = n ? 'Recevoir le prix pour ' + nf(n) + ' plaque' + (n > 1 ? 's' : '') + ' →' : 'Recevoir un prix →';
