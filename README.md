@@ -49,7 +49,8 @@ Site vitrine du pôle BTP du Groupe Cohesif.
 
 `boutique-plaque-platre-ba13.html` est écrite à la main (hors générateur) : calculateur de quantité (`ba13.js`),
 plaque en 3D (`ba13-3d.js`), styles `ba13.css` et `r3d.css`.
-Prix : renseigner l'attribut `data-prix-ht` du bloc `#calcul` (ex. `data-prix-ht="6.90"`, en € HT par plaque).
+Prix : attributs `data-paliers` et `data-min` du bloc `#calcul` (ex. `data-paliers="50:8.50,300:7.90,1200:7.50"` = « dès 50 plaques : 8,50 € HT », etc. ; `data-min="50"` = minimum de commande).
+Penser à reporter les mêmes prix dans la liste `.ba-paliers`, le bandeau du haut, la barre fixe et le JSON-LD (`offers`).
 Vide = « prix sur devis ». Ne jamais y mettre un prix d'achat fournisseur.
 
 ### Laine de roche

@@ -4,12 +4,18 @@
   var KG_PLAQUE = 23.8;  // poids d'une plaque BA13 standard
   var calc = document.getElementById('calcul');
   if (!calc) return;
-  var prixHT = parseFloat((calc.getAttribute('data-prix-ht') || '').replace(',', '.')) || 0;
+  // Paliers « quantité mini:prix € HT » triés par quantité croissante, ex. "50:8.50,300:7.90,1200:7.50"
+  var paliers = (calc.getAttribute('data-paliers') || '').split(',').map(function (p) {
+    var x = p.split(':'); return { q: parseInt(x[0], 10) || 0, prix: parseFloat(String(x[1]).replace(',', '.')) || 0 };
+  }).filter(function (p) { return p.prix > 0; }).sort(function (a, b) { return a.q - b.q; });
+  var mini = parseInt(calc.getAttribute('data-min'), 10) || 1;
+  var palierDe = function (n) { var t = paliers[0]; paliers.forEach(function (p) { if (n >= p.q) t = p; }); return t; };
   var $ = function (id) { return document.getElementById(id); };
   var m2 = $('ba-m2'), L = $('ba-l'), H = $('ba-h'), peau = $('ba-peau'), chute = $('ba-chute');
   var seg = calc.querySelectorAll('.ba-seg button');
   var faces = 2, ouvrage = 'Cloison';
   var nf = function (n, d) { return n.toLocaleString('fr-FR', { maximumFractionDigits: d || 0 }); };
+  var eur = function (n) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; };
   var num = function (el) { return parseFloat(String(el.value).replace(',', '.')) || 0; };
   var lastN = 0, timer = null;
 
@@ -27,11 +33,14 @@
     $('ba-bande').textContent = '≈ ' + nf(Math.ceil(surfacePose * 1.3)) + ' m';
     $('ba-enduit').textContent = '≈ ' + nf(Math.ceil(surfacePose * 0.35)) + ' kg';
     var row = calc.querySelector('.ba-prix-row');
-    if (prixHT > 0) {
+    if (paliers.length && n) {
+      var nc = Math.max(n, mini), t = palierDe(nc);
       row.hidden = false;
-      $('ba-prix').textContent = nf(n * prixHT, 2) + ' € HT';
-      $('ba-note').textContent = 'Prix unitaire ' + nf(prixHT, 2) + ' € HT, hors livraison. Tarif dégressif selon le volume.';
-    }
+      $('ba-prix').textContent = eur(nc * t.prix) + ' HT';
+      $('ba-note').textContent = (n < mini ? 'Minimum de commande ' + nf(mini) + ' plaques, prix calculé pour ' + nf(mini) + '. ' : '') +
+        eur(t.prix) + ' HT la plaque (' + eur(t.prix * 1.2) + ' TTC), hors livraison.';
+      calc.querySelectorAll('.ba-paliers li').forEach(function (li) { li.classList.toggle('on', Number(li.getAttribute('data-palier')) === t.q); });
+    } else if (paliers.length) row.hidden = true;
     $('ba-cta').textContent = n ? 'Recevoir le prix pour ' + nf(n) + ' plaque' + (n > 1 ? 's' : '') + ' →' : 'Recevoir un prix →';
     var sticky = $('ba-sticky');
     if (sticky && n) sticky.textContent = nf(n) + ' plaque' + (n > 1 ? 's' : '') + ' pour ' + nf(surfaceMur, 1) + ' m²';

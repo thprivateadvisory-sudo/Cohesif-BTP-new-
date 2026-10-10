@@ -35,6 +35,11 @@
 .ba-dl dd{font-weight:700;text-align:right}
 .ba-acc .ba-dl{margin-top:.6rem}
 .ba-acc p{font-size:.74rem;color:var(--g500);margin-top:.4rem}
+.ba-paliers{list-style:none;display:grid;gap:.25rem;font-size:.8rem;border-top:1px solid rgba(0,0,0,.08);padding-top:.6rem}
+.ba-paliers li{display:flex;justify-content:space-between;gap:1rem;padding:.3rem .55rem;border-radius:8px;color:var(--g700)}
+.ba-paliers li b{color:var(--black);white-space:nowrap}
+.ba-paliers li.on{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);color:var(--black);font-weight:600}
+.ba-paliers li.on b{color:var(--accent)}
 .ba-note{font-size:.76rem;color:var(--g500);text-align:center;margin-top:-.3rem}
 
 .r3d-section,.ba-hero~main .r3d{scroll-margin-top:110px}
