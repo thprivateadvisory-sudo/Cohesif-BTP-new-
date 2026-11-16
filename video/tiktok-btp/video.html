@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Cohesif BTP TikTok</title>
+<style>
+  :root { --accent:#ea5b1f; --accent2:#ff7a3d; --red:#ef4444; --green:#22c55e; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1080px; height:1920px; overflow:hidden; background:#060606; }
+  body { font-family:'Inter', sans-serif; color:#fff; -webkit-font-smoothing:antialiased; }
+  .bg { position:absolute; inset:0;
+    background: radial-gradient(900px 900px at 50% 32%, #2a1a12 0%, #140d0a 45%, #060606 80%); }
+  .scene { position:absolute; inset:0; opacity:0; will-change:opacity, filter; }
+  .bar { position:absolute; top:0; left:0; height:12px; background:var(--accent); z-index:50; }
+
+  /* photo scenes */
+  .photo { position:absolute; left:0; top:0; width:1080px; height:1180px; overflow:hidden; }
+  .photo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform-origin:50% 45%; }
+  .photo { -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, rgba(0,0,0,.35) 82%, transparent 100%); }
+  .photo::after { content:''; position:absolute; inset:0;
+    background: linear-gradient(to bottom, rgba(6,6,6,.6) 0%, rgba(6,6,6,0) 22%); }
+  .photo-blur { position:absolute; left:0; top:0; width:1080px; height:1920px; overflow:hidden; opacity:.22; }
+  .photo-blur img { width:100%; height:100%; object-fit:cover; filter:blur(70px) brightness(.55); }
+
+  .h1 { font-weight:800; font-size:92px; line-height:1.04; letter-spacing:-2.5px; }
+  .h2 { font-weight:800; font-size:76px; line-height:1.08; letter-spacing:-2px; }
+  .acc { color:var(--accent); }
+  .sub { font-weight:500; font-size:38px; line-height:1.35; color:rgba(255,255,255,.82); margin-top:28px; }
+  .block { position:absolute; left:80px; right:80px; }
+  .logo { position:absolute; left:60px; top:110px; width:470px; }
+
+  /* cards */
+  .card { display:flex; align-items:center; gap:30px; background:rgba(255,255,255,.055);
+    border:2px solid rgba(255,255,255,.09); border-radius:30px; padding:30px 34px; margin-top:38px; }
+  .ico { flex:0 0 76px; height:76px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:42px; color:#fff; }
+  .ico.x { background:var(--red); }
+  .strike { position:relative; font-weight:700; font-size:52px; letter-spacing:-1px; white-space:nowrap; }
+  .strike i { position:absolute; left:-4px; top:54%; height:6px; background:var(--red); border-radius:3px; }
+
+  .step .ico { background:var(--accent); border-radius:18px; flex-basis:70px; height:70px; font-size:38px; }
+  .step { padding:26px 30px; margin-top:26px; }
+  .step b { display:block; font-size:44px; font-weight:700; letter-spacing:-.8px; }
+  .step span { display:block; font-size:31px; font-weight:500; color:rgba(255,255,255,.62); margin-top:6px; }
+
+  .check { display:flex; align-items:center; gap:24px; font-size:46px; font-weight:700; margin-top:30px; letter-spacing:-.6px; }
+  .check .ico { flex-basis:62px; height:62px; background:var(--green); font-size:34px; }
+
+  .cta { display:inline-block; background:var(--accent); color:#fff; font-weight:800; font-size:52px; line-height:1.15;
+    border-radius:28px; padding:34px 60px; text-align:center; box-shadow:0 20px 60px rgba(234,91,31,.35); }
+  .center { text-align:center; left:60px; right:60px; }
+  .contact { font-size:40px; font-weight:700; margin-top:46px; }
+  .contact2 { font-size:36px; font-weight:600; color:var(--accent2); margin-top:22px; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="bar" id="bar"></div>
+
+<!-- S1 hook -->
+<div class="scene" id="s1">
+  <div class="photo-blur"><img src="mp-30.webp"></div>
+  <div class="photo"><img id="p1" src="mp-30.webp" style="object-position:50% 60%"></div>
+  <div class="block" style="top:1150px">
+    <div class="h1" id="s1h">Tu prépares<br>un <span class="acc">chantier</span> ?</div>
+    <div class="sub" id="s1s">Lis ça avant de signer<br>ton prochain devis.</div>
+  </div>
+</div>
+
+<!-- S2 risks -->
+<div class="scene" id="s2">
+  <div class="block" style="top:560px">
+    <div class="h2" id="s2h">Faire seul,<br>c'est risquer :</div>
+    <div id="risks"></div>
+  </div>
+</div>
+
+<!-- S3 brand -->
+<div class="scene" id="s3">
+  <div class="photo-blur"><img src="laine-de-roche-stock.webp"></div>
+  <div class="photo"><img id="p3" src="laine-de-roche-stock.webp" style="object-position:50% 55%"></div>
+  <img class="logo" id="l3" src="logo-white.png">
+  <div class="block" style="top:1210px">
+    <div class="h1" id="s3h">On s'en occupe<br><span class="acc">pour toi.</span></div>
+    <div class="sub" id="s3s">Travaux, matériel et matériaux BTP.</div>
+  </div>
+</div>
+
+<!-- S4 steps -->
+<div class="scene" id="s4">
+  <div class="block" style="top:440px">
+    <div class="h2" id="s4h" style="font-size:70px">Comment ça marche</div>
+    <div id="steps"></div>
+  </div>
+</div>
+
+<!-- S5 benefits -->
+<div class="scene" id="s5">
+  <div class="photo-blur"><img src="mp-20.webp"></div>
+  <div class="photo"><img id="p5" src="mp-20.webp" style="object-position:40% 50%"></div>
+  <div class="block" style="top:1120px">
+    <div class="h1" id="s5h" style="font-size:84px">De la toiture<br>à la <span class="acc">mini-pelle</span>.</div>
+    <div id="checks" style="margin-top:20px"></div>
+  </div>
+</div>
+
+<!-- S6 end card -->
+<div class="scene" id="s6">
+  <div style="position:absolute;inset:0;background:radial-gradient(800px 900px at 50% 48%, rgba(234,91,31,.32), rgba(234,91,31,0) 70%)"></div>
+  <div class="block center" style="top:600px">
+    <img id="l6" src="logo-white.png" style="width:640px">
+    <div class="h2" id="s6h" style="margin-top:70px">Dis-nous ce que<br>tu prépares.</div>
+    <div id="s6c" style="margin-top:56px"><div class="cta">Devis gratuit<br>sous 48 h</div></div>
+    <div id="s6t">
+      <div class="contact">cohesifbtp.fr</div>
+      <div class="contact2">07 56 85 57 27 · WhatsApp</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RISKS = ["L'artisan qui disparaît", "Le devis qui explose", "Le chantier qui traîne", "Les malfaçons"];
+const STEPS = [
+  ["Tu nous décris ton projet", "Travaux, matériel, budget"],
+  ["Devis gratuit sous 48 h", "Clair, détaillé, sans surprise"],
+  ["On réalise ou on livre", "Nos équipes ou livraison sur chantier"],
+  ["Un seul interlocuteur", "Du devis à la fin du chantier"],
+];
+const CHECKS = ["Devis gratuit sous 48 h", "Garantie décennale", "Partout en France"];
+
+document.getElementById('risks').innerHTML = RISKS.map((r, i) =>
+  `<div class="card" id="r${i}"><div class="ico x">✕</div><div class="strike">${r}<i id="ri${i}"></i></div></div>`).join('');
+document.getElementById('steps').innerHTML = STEPS.map((s, i) =>
+  `<div class="card step" id="st${i}"><div class="ico">${i + 1}</div><div><b>${s[0]}</b><span>${s[1]}</span></div></div>`).join('');
+document.getElementById('checks').innerHTML = CHECKS.map((c, i) =>
+  `<div class="check" id="c${i}"><div class="ico">✓</div>${c}</div>`).join('');
+
+// scene timings (seconds)
+const SC = [['s1', 0, 4.2], ['s2', 4.2, 9.2], ['s3', 9.2, 12.6], ['s4', 12.6, 18.8], ['s5', 18.8, 22.6], ['s6', 22.6, 26]];
+const T_END = 26, FADE = 0.45;
+
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const prog = (t, start, dur) => easeOut(clamp((t - start) / dur));
+const $ = id => document.getElementById(id);
+
+// element enters: fade + rise
+function rise(id, t, start, dur = 0.55, dist = 50) {
+  const p = prog(t, start, dur);
+  const el = $(id);
+  el.style.opacity = p;
+  el.style.transform = `translateY(${(1 - p) * dist}px)`;
+}
+
+window.render = function (t) {
+  // scenes opacity with blur crossfade
+  for (const [id, a, b] of SC) {
+    const el = $(id);
+    const fin = a === 0 ? 1 : clamp((t - a) / FADE);
+    const fout = b >= T_END ? 1 : clamp((b - t) / FADE);
+    const o = Math.min(fin, fout);
+    el.style.opacity = o;
+    el.style.filter = o < 1 ? `blur(${(1 - o) * 18}px)` : 'none';
+    el.style.visibility = o <= 0 ? 'hidden' : 'visible';
+  }
+  // progress bar: fills within each scene
+  const cur = SC.find(([, a, b]) => t >= a && t < b) || SC[SC.length - 1];
+  $('bar').style.width = (clamp((t - cur[1]) / (cur[2] - cur[1])) * 1080) + 'px';
+
+  // S1
+  $('p1').style.transform = `scale(${1.04 + t * 0.025})`;
+  rise('s1h', t, 0.15, 0.6);
+  rise('s1s', t, 1.1);
+
+  // S2
+  rise('s2h', t, 4.45);
+  RISKS.forEach((_, i) => {
+    const st = 5.1 + i * 0.85;
+    rise('r' + i, t, st, 0.45, 40);
+    const w = $('ri' + i).parentElement.offsetWidth + 8;
+    $('ri' + i).style.width = (prog(t, st + 0.35, 0.35) * w) + 'px';
+  });
+
+  // S3
+  $('p3').style.transform = `scale(${1.12 - clamp((t - 9.2) / 3.4) * 0.07})`;
+  rise('l3', t, 9.4, 0.6, -30);
+  rise('s3h', t, 9.55, 0.6);
+  rise('s3s', t, 10.4);
+
+  // S4
+  rise('s4h', t, 12.85);
+  STEPS.forEach((_, i) => rise('st' + i, t, 13.4 + i * 1.05, 0.5, 40));
+
+  // S5
+  $('p5').style.transform = `scale(${1.03 + clamp((t - 18.8) / 3.8) * 0.06}) translateX(${clamp((t - 18.8) / 3.8) * -18}px)`;
+  rise('s5h', t, 19.0, 0.6);
+  CHECKS.forEach((_, i) => rise('c' + i, t, 19.75 + i * 0.6, 0.45, 30));
+
+  // S6
+  const lp = prog(t, 22.75, 0.7);
+  $('l6').style.opacity = lp;
+  $('l6').style.transform = `scale(${0.9 + lp * 0.1})`;
+  rise('s6h', t, 23.25);
+  const cp = prog(t, 23.75, 0.5);
+  $('s6c').style.opacity = cp;
+  $('s6c').style.transform = `scale(${0.85 + cp * 0.15 + Math.sin(Math.max(0, t - 24.4) * 5) * 0.012 * (t > 24.4 ? 1 : 0)})`;
+  rise('s6t', t, 24.3);
+};
+render(0);
+</script>
+</body>
+</html>
