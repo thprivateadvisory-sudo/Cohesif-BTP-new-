@@ -1,34 +1,9 @@
 # robots.txt — Cohesif BTP
 # https://cohesifbtp.fr/
 
+# Tous les robots (moteurs de recherche et assistants IA) sont autorisés :
+# être cité par ChatGPT, Claude, Perplexity, etc. apporte des demandes de devis.
 User-agent: *
 Allow: /
 
-# Sitemap
 Sitemap: https://cohesifbtp.fr/sitemap.xml
-
-# Bots autorisés explicitement
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-# Bloquer les bots indésirables (scrapers AI, etc.)
-User-agent: GPTBot
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: anthropic-ai
-Disallow: /
-
-User-agent: Claude-Web
-Disallow: /
