@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+:root{--o:#ea5b1f;--o2:#ff7a3d;--bg:#0a0a0a;--ink:#fff;--mut:#8b8b8b;--line:#2a2a2a}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:#fff;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.scene{position:absolute;inset:0;display:none}
+.abs{position:absolute}
+.disp{font-family:'Inter Display','Inter',sans-serif;font-weight:900;letter-spacing:-0.035em;line-height:.92}
+.mask{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.mask>span{display:block;will-change:transform}
+.o{color:var(--o)}
+.kicker{font-family:'Inter';font-weight:600;font-size:22px;letter-spacing:.32em;text-transform:uppercase;color:var(--mut)}
+.kicker b{color:var(--o);font-weight:700}
+.body{font-family:'Inter';font-weight:400;font-size:34px;line-height:1.35;color:#c9c9c9;letter-spacing:-.005em}
+canvas{position:absolute;inset:0}
+svg{overflow:visible}
+/* problem */
+.card{position:absolute;width:290px;height:96px;border:1.5px solid #3a3a3a;border-radius:14px;padding:16px 20px;background:rgba(20,20,20,.85)}
+.card .t{font-weight:600;font-size:24px;color:#e8e8e8}
+.card .n{font-weight:500;font-size:20px;color:#6f6f6f;margin-top:6px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.card .d{position:absolute;right:18px;top:18px;width:10px;height:10px;border-radius:50%;background:#555}
+/* stats */
+.stat .num{font-family:'Inter Display';font-weight:900;font-size:120px;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stat .lab{font-size:26px;color:#a8a8a8;margin-top:14px;font-weight:500}
+/* product cards */
+.pcard{position:absolute;width:500px;height:640px;border-radius:28px;background:#fff;overflow:hidden;color:#0a0a0a;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+.pcard .img{position:absolute;left:0;top:0;width:100%;height:380px;background:#f1f1f1;overflow:hidden}
+.pcard .img img{width:100%;height:100%;object-fit:cover}
+.pcard .tx{position:absolute;left:36px;right:36px;top:410px}
+.pcard .tag{font-size:17px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#9a9a9a}
+.pcard .nm{font-family:'Inter Display';font-weight:800;font-size:44px;letter-spacing:-.025em;margin-top:10px;line-height:1.02}
+.pcard .sp{font-size:22px;color:#666;margin-top:12px}
+.pcard .pr{position:absolute;left:36px;bottom:34px;font-family:'Inter Display';font-weight:800;font-size:34px;color:var(--o);letter-spacing:-.02em}
+.pcard .pr small{font-size:20px;font-weight:600;color:#9a9a9a;letter-spacing:0;margin-right:8px}
+/* certs */
+.cert{position:absolute;width:250px;text-align:center}
+.cert .tile{width:250px;height:250px;border-radius:30px;background:#fff;display:flex;align-items:center;justify-content:center}
+.cert .tile img{max-width:72%;max-height:72%;object-fit:contain}
+.cert .l1{font-family:'Inter Display';font-weight:800;font-size:30px;margin-top:26px}
+.cert .l2{font-size:20px;color:#8f8f8f;margin-top:6px}
+.pill{display:inline-block;background:var(--o);color:#fff;font-weight:700;font-size:38px;padding:24px 48px;border-radius:999px;letter-spacing:-.01em}
+.hud{position:absolute;font-size:16px;font-weight:600;letter-spacing:.28em;color:#6d6d6d;text-transform:uppercase}
+</style></head><body>
+<div id="stage">
+  <canvas id="grid" width="1920" height="1080"></canvas>
+
+  <!-- S1 PROBLEM -->
+  <div class="scene" id="s1">
+    <div id="cards"></div>
+    <div class="abs" id="words" style="left:0;right:0;top:0;bottom:0"></div>
+    <div class="abs" id="uline" style="height:8px;background:var(--o);top:640px;left:960px;width:0"></div>
+  </div>
+
+  <!-- S2 LOGO -->
+  <div class="scene" id="s2">
+    <svg id="logo2" class="abs" viewBox="15 262 610 115" style="left:285px;top:395px;width:1350px;height:254px"></svg>
+    <div class="abs body" id="s2sub" style="left:0;right:0;top:760px;text-align:center;font-size:36px;color:#bdbdbd"></div>
+  </div>
+
+  <!-- S3 CONSTRUIRE -->
+  <div class="scene" id="s3">
+    <div class="abs" style="left:120px;top:170px;width:700px">
+      <div class="kicker" id="k3"><b>01</b> &nbsp;—&nbsp; Travaux</div>
+      <div class="disp mask" style="font-size:124px;margin-top:34px"><span id="t3">Construire<span class="o">.</span></span></div>
+      <div class="body" id="b3" style="margin-top:44px;width:600px">Du gros œuvre aux finitions, toiture et façade comprises. Tous les corps de métier, sous un seul toit.</div>
+    </div>
+    <svg id="house" class="abs" viewBox="0 0 1330 860" style="left:800px;top:170px;width:1040px;height:672px"></svg>
+  </div>
+
+  <!-- S4 PILOTER -->
+  <div class="scene" id="s4">
+    <div class="abs" style="left:120px;top:150px;width:640px">
+      <div class="kicker" id="k4"><b>02</b> &nbsp;—&nbsp; Pilotage</div>
+      <div class="disp mask" style="font-size:150px;margin-top:34px"><span id="t4">Piloter<span class="o">.</span></span></div>
+      <div class="body" id="b4" style="margin-top:44px;width:560px">Un chef de projet dédié, un planning tenu, un budget ferme et contractuel.</div>
+    </div>
+    <svg id="gantt" class="abs" viewBox="0 0 1000 440" style="left:800px;top:160px;width:1000px;height:440px"></svg>
+    <div class="abs" id="statline" style="left:120px;right:120px;top:700px;height:1px;background:#2c2c2c;transform-origin:left"></div>
+    <div id="stats"></div>
+  </div>
+
+  <!-- S5 LIVRER -->
+  <div class="scene" id="s5">
+    <div class="abs" id="s5a" style="left:0;top:0;right:0;bottom:0">
+      <div class="abs" id="footwrap" style="left:960px;top:0;width:960px;height:1080px;overflow:hidden">
+        <canvas id="foot" width="960" height="1080"></canvas>
+        <div class="abs" style="inset:0;background:linear-gradient(90deg,#0a0a0a 0%,rgba(10,10,10,0) 30%)"></div>
+      </div>
+      <div class="abs" style="left:120px;top:220px;width:820px">
+        <div class="kicker" id="k5"><b>03</b> &nbsp;—&nbsp; Boutique</div>
+        <div class="disp mask" style="font-size:150px;margin-top:34px"><span id="t5">Livrer<span class="o">.</span></span></div>
+        <div class="body" id="b5" style="margin-top:44px;width:660px">Engins, chariots, matériaux : le matériel aussi, livré et mis en service sur votre chantier.</div>
+      </div>
+    </div>
+    <div class="abs" id="s5b" style="inset:0">
+      <div class="abs disp" id="s5h" style="left:120px;top:110px;font-size:72px;font-weight:800">Le bon matériel<span class="o">,</span> au bon prix<span class="o">.</span></div>
+      <div id="pcards"></div>
+    </div>
+  </div>
+
+  <!-- S6 FRANCE -->
+  <div class="scene" id="s6">
+    <canvas id="dots" width="1920" height="1080"></canvas>
+    <svg id="map" class="abs" viewBox="0 0 1920 1080" style="left:0;top:0;width:1920px;height:1080px"></svg>
+    <div class="abs" style="left:120px;top:300px;width:700px">
+      <div class="disp mask" style="font-size:120px"><span id="t6a">Partout</span></div>
+      <div class="disp mask" style="font-size:120px"><span id="t6b">en France<span class="o">.</span></span></div>
+      <div class="body" id="b6" style="margin-top:44px;width:600px">Vos travaux et votre matériel, de Paris à Marseille, de Brest à Strasbourg.</div>
+    </div>
+  </div>
+
+  <!-- S7 CERTIFS -->
+  <div class="scene" id="s7">
+    <div class="abs disp" style="left:0;right:0;top:170px;text-align:center;font-size:96px;font-weight:900">
+      <span class="mask" style="display:inline-block"><span id="t7a">Certifiés.</span></span>
+      <span class="mask" style="display:inline-block"><span id="t7b">Assurés.</span></span>
+      <span class="mask" style="display:inline-block"><span id="t7c" class="o">Garantis.</span></span>
+    </div>
+    <div id="certs"></div>
+  </div>
+
+  <!-- S8 END -->
+  <div class="scene" id="s8">
+    <svg id="logo8" class="abs" viewBox="15 262 610 115" style="left:435px;top:250px;width:1050px;height:198px"></svg>
+    <div class="abs" id="e1" style="left:0;right:0;top:560px;text-align:center"><span class="pill">Devis gratuit sous 48 h</span></div>
+    <div class="abs disp" id="e2" style="left:0;right:0;top:720px;text-align:center;font-size:84px;font-weight:800;letter-spacing:-.03em">cohesifbtp<span class="o">.fr</span></div>
+    <div class="abs" id="e3" style="left:0;right:0;top:850px;text-align:center;font-size:24px;color:#8d8d8d;letter-spacing:.2em;text-transform:uppercase;font-weight:600">Travaux · Matériel · Partout en France</div>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud" id="hudL" style="left:60px;top:48px"></div>
+  <div class="hud" id="hudR" style="right:60px;top:48px;text-align:right"></div>
+  <svg id="crops" class="abs" viewBox="0 0 1920 1080" style="inset:0;width:1920px;height:1080px;pointer-events:none"></svg>
+
+  <!-- wipes -->
+  <div class="abs" id="wO" style="top:0;bottom:0;background:var(--o)"></div>
+  <div class="abs" id="wB" style="top:0;bottom:0;background:#141414"></div>
+
+  <canvas id="grain" width="960" height="540" style="width:1920px;height:1080px;opacity:.07;mix-blend-mode:screen"></canvas>
+  <div class="abs" style="inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);pointer-events:none"></div>
+  <div class="abs" id="fade" style="inset:0;background:#000;opacity:0"></div>
+</div>
+
+<script>
+const LOGO = __LOGO__;
+const FOOT_N = __FOOTN__;
+const W=1920,H=1080;
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,k)=>a+(b-a)*k;
+const E={
+  o3:t=>1-Math.pow(1-t,3), o4:t=>1-Math.pow(1-t,4), o5:t=>1-Math.pow(1-t,5),
+  i3:t=>t*t*t, io3:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,
+  io5:t=>t<.5?16*t*t*t*t*t:1-Math.pow(-2*t+2,5)/2,
+  oX:t=>t>=1?1:1-Math.pow(2,-10*t), iX:t=>t<=0?0:Math.pow(2,10*t-10),
+  ioX:t=>t<=0?0:t>=1?1:t<.5?Math.pow(2,20*t-10)/2:(2-Math.pow(2,-20*t+10))/2,
+  oB:t=>{const c1=1.5,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+};
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs={},parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function rnd(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+// mask text reveal: k in 0..1 in, j in 0..1 out
+function rev(node,k,j=0,dist=110){const y=(1-E.o4(k))*dist - E.i3(j)*dist;node.style.transform=`translate3d(0,${y}%,0)`}
+function fadeUp(node,k,d=30){node.style.opacity=E.o3(k);node.style.transform=`translateY(${(1-E.o4(k))*d}px)`}
+function prepStroke(p){const L=p.getTotalLength();p.style.strokeDasharray=L+' '+L;p.dataset.L=L;p.style.strokeDashoffset=L;return p}
+function draw(p,k){const L=+p.dataset.L;p.style.strokeDashoffset=L*(1-k)}
+
+/* ---------- timeline ---------- */
+const T={s1:[0,6.15],s2:[6.15,10],s3:[10,18],s4:[18,24],s5:[24,32],s6:[32,36],s7:[36,40],s8:[40,46]};
+const WIPES=[10,18,24,32,36,40]; // centre times (scene switch)
+const DUR=46;
+
+/* ---------- grid background ---------- */
+const g=$('grid').getContext('2d');
+function renderGrid(t,alpha,ox,oy){
+  g.clearRect(0,0,W,H); if(alpha<=0)return;
+  g.globalAlpha=alpha; const s=60;
+  g.strokeStyle='#1a1a1a';g.lineWidth=1;g.beginPath();
+  for(let x=(ox%s+s)%s;x<W;x+=s){g.moveTo(x+.5,0);g.lineTo(x+.5,H)}
+  for(let y=(oy%s+s)%s;y<H;y+=s){g.moveTo(0,y+.5);g.lineTo(W,y+.5)}
+  g.stroke();
+  g.strokeStyle='#222';g.beginPath();
+  for(let x=(ox%(s*5)+s*5)%(s*5);x<W;x+=s*5){g.moveTo(x+.5,0);g.lineTo(x+.5,H)}
+  for(let y=(oy%(s*5)+s*5)%(s*5);y<H;y+=s*5){g.moveTo(0,y+.5);g.lineTo(W,y+.5)}
+  g.stroke();g.globalAlpha=1;
+}
+
+/* ---------- S1 ---------- */
+const WORDS=[
+  {txt:'Un chantier<span class="o">.</span>',a:.35,b:1.5,size:170},
+  {txt:'Dix artisans<span class="o">.</span>',a:1.5,b:2.5,size:170},
+  {txt:'Dix devis<span class="o">.</span>',a:2.5,b:3.5,size:170},
+  {txt:'Dix numéros<span class="o">.</span>',a:3.5,b:4.5,size:170},
+  {txt:'Et personne pour<br>tout coordonner<span class="o">.</span>',a:4.5,b:5.55,size:120},
+];
+WORDS.forEach((w,i)=>{
+  const d=document.createElement('div');d.className='abs disp';
+  d.style.cssText=`left:0;right:0;top:${w.size>150?455:400}px;text-align:center;font-size:${w.size}px`;
+  d.innerHTML=w.txt.split('<br>').map(l=>`<span class="mask"><span>${l}</span></span>`).join('');
+  $('words').appendChild(d);w.el=d;w.lines=[...d.querySelectorAll('.mask>span')];
+});
+const TRADES=['Plombier','Électricien','Couvreur','Maçon','Peintre','Plaquiste','Carreleur','Menuisier','Façadier','Chauffagiste','Charpentier','Serrurier'];
+const CPOS=[[90,110],[1540,140],[150,820],[1500,850],[620,70],[1010,90],[70,470],[1560,500],[560,900],[1030,920],[330,300],[1300,290]];
+const cards=TRADES.map((n,i)=>{
+  const r=rnd(i*97+5);const c=document.createElement('div');c.className='card';
+  const ph='06 '+[0,0,0,0].map(()=>String(10+Math.floor(r()*89))).join(' ');
+  c.innerHTML=`<div class="t">${n}</div><div class="n">${ph}</div><div class="d"></div>`;
+  $('cards').appendChild(c);
+  return {el:c,x:CPOS[i][0],y:CPOS[i][1],a:1.55+i*0.2,rot:(r()-.5)*8,ph:r()*6.28};
+});
+function S1(t){
+  renderGrid(t,P(t,0,1.2)*0.6*(1-P(t,5.5,6.1)),-t*8,t*4);
+  WORDS.forEach((w,i)=>{
+    const kin=P(t,w.a,w.a+.38), kout=i<WORDS.length-1?P(t,w.b,w.b+.3):P(t,5.55,5.85);
+    const vis=t>=w.a-0.01&&kout<1;
+    w.el.style.display=vis?'block':'none';
+    w.lines.forEach((ln,li)=>rev(ln,P(t,w.a+li*.08,w.a+li*.08+.4),kout));
+  });
+  const ul=$('uline'), ulw=E.oX(P(t,0.05,0.7))*160*(1-E.i3(P(t,5.45,5.9)));
+  ul.style.width=ulw+'px';ul.style.left=(960-ulw/2)+'px';
+  ul.style.top=(t<4.5?655:lerp(655,700,E.o4(P(t,4.5,4.9))))+'px';
+  // collapse into point -> grows into bar height
+  const coll=P(t,5.45,6.0);
+  cards.forEach((c,i)=>{
+    const k=E.oB(P(t,c.a,c.a+.35));
+    const shake=Math.sin(t*3+c.ph)*6;
+    const cx=c.x+145, cy=c.y+48;
+    const ck=E.iX(coll);
+    const x=lerp(c.x,960-145,ck), y=lerp(c.y+shake,540-48,ck);
+    const sc=(0.6+0.4*k)*(1-ck*0.95);
+    c.el.style.opacity=clamp(k*1.2)*(1-ck)*(t<c.a?0:1);
+    c.el.style.transform=`translate(${x}px,${y}px) rotate(${c.rot*(1-ck)}deg) scale(${sc})`;
+    c.el.style.left='0px';c.el.style.top='0px';
+    // ring a few
+    c.el.querySelector('.d').style.background=(Math.sin(t*14+i)>.6&&t>2&&t<5.5)?'#ea5b1f':'#555';
+  });
+}
+
+/* ---------- logos ---------- */
+function buildLogo(svg){
+  const parts={};
+  for(const k of ['mark','div','word','tag']){
+    const gg=el('g',{},svg);
+    const d=el('path',{d:LOGO[k].dark,fill:'#fff'},gg);
+    const o=el('path',{d:LOGO[k].orange,fill:'#ea5b1f'},gg);
+    parts[k]={g:gg,d,o};
+  }
+  // clip for word reveal
+  const defs=el('defs',{},svg);
+  const cp=el('clipPath',{id:svg.id+'cw'},defs);parts.cwr=el('rect',{x:175,y:280,width:0,height:70},cp);
+  parts.word.g.setAttribute('clip-path',`url(#${svg.id}cw)`);
+  const cp2=el('clipPath',{id:svg.id+'ct'},defs);parts.ctr=el('rect',{x:175,y:340,width:0,height:30},cp2);
+  parts.tag.g.setAttribute('clip-path',`url(#${svg.id}ct)`);
+  const cp3=el('clipPath',{id:svg.id+'cm'},defs);parts.cmr=el('rect',{x:0,y:250,width:140,height:0},cp3);
+  parts.mark.d.setAttribute('clip-path',`url(#${svg.id}cm)`);
+  return parts;
+}
+function animLogo(L,t,t0,sp=1){
+  // mark: dark part wipes up, orange bar grows
+  const k1=E.o5(P(t,t0,t0+.7*sp));
+  L.cmr.setAttribute('y',380-130*k1);L.cmr.setAttribute('height',130*k1);
+  const kb=E.oB(P(t,t0+.15*sp,t0+.65*sp));
+  L.mark.o.style.transformOrigin='108px 330px';L.mark.o.style.transformBox='view-box';
+  L.mark.o.style.transform=`scaleY(${kb})`;
+  const kd=E.o4(P(t,t0+.35*sp,t0+.85*sp));
+  L.div.g.style.transformOrigin='152px 320px';L.div.g.style.transformBox='view-box';L.div.g.style.transform=`scaleY(${kd})`;
+  const kw=E.o5(P(t,t0+.45*sp,t0+1.25*sp));L.cwr.setAttribute('width',460*kw);
+  L.word.g.style.transform=`translateX(${(1-kw)*-14}px)`;
+  const kt=E.io3(P(t,t0+.9*sp,t0+1.7*sp));L.ctr.setAttribute('width',460*kt);
+}
+const L2=buildLogo($('logo2')), L8=buildLogo($('logo8'));
+function S2(t){
+  renderGrid(t,0.35*P(t,6.15,7),0,0);
+  animLogo(L2,t,6.2);
+  const s=1+0.035*E.o3(P(t,6.2,10));
+  $('logo2').style.transform=`scale(${s})`;
+  const sub=$('s2sub');sub.innerHTML='Un seul interlocuteur, du premier plan à la remise des clés.';
+  fadeUp(sub,P(t,7.7,8.4));
+}
+
+/* ---------- S3 house ---------- */
+const HS=$('house');
+const hg=el('g',{transform:'translate(60,40)'},HS);
+const STROKE={fill:'none',stroke:'#fff','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round'};
+const THIN={fill:'none',stroke:'#7a7a7a','stroke-width':1.6,'stroke-linecap':'round'};
+const OR={fill:'none',stroke:'#ea5b1f','stroke-width':2.5,'stroke-linecap':'round','stroke-linejoin':'round'};
+function slopeX(y){const k=(345-y)/225;return [130+k*320,770-k*320]}
+const roofFill=el('path',{d:'M130 345 L450 120 L770 345 Z',fill:'#ea5b1f',opacity:0},hg);
+const wallFill=el('rect',{x:170,y:330,width:560,height:270,fill:'#151515',opacity:0},hg);
+const winFill=[[230,500,120,70],[550,500,120,70],[230,370,120,60],[405,370,90,60],[550,370,120,60]].map(r=>el('rect',{x:r[0],y:r[1],width:r[2],height:r[3],fill:'#ffb26b',opacity:0},hg));
+const groups=[]; // {t0,dur,paths}
+function grp(t0,dur,ds,style){const ps=ds.map(d=>prepStroke(el('path',Object.assign({d},style),hg)));groups.push({t0,dur,ps});return ps}
+// ground
+grp(10.35,.9,['M-20 600 H920'],THIN);
+// hatch under ground
+grp(10.6,.8,Array.from({length:22},(_,i)=>`M${i*42-10} 612 l-16 22`),THIN);
+// foundations
+grp(10.7,.7,['M140 600 V640 H760 V600','M160 640 v34 h64 v-34','M676 640 v34 h64 v-34','M420 640 v34 h64 v-34'],STROKE);
+// walls
+grp(11.5,.8,['M170 600 V330','M730 600 V330','M170 330 H730','M170 460 H730'],STROKE);
+// roof
+grp(12.5,.8,['M130 345 L450 120 L770 345','M590 213 V150 H642 V250'],STROKE);
+grp(12.9,.7,[1,2,3,4,5].map(i=>{const y=345-i*37.5;const [a,b]=slopeX(y);return `M${a+10} ${y} H${b-10}`}),THIN);
+// windows & door
+grp(13.4,.8,['M230 500 h120 v70 h-120 Z','M550 500 h120 v70 h-120 Z','M230 370 h120 v60 h-120 Z','M405 370 h90 v60 h-90 Z','M550 370 h120 v60 h-120 Z','M400 600 V505 H500 V600','M290 500 v70','M610 500 v70','M290 370 v60','M610 370 v60'],STROKE);
+grp(13.6,.5,['M450 228 a22 22 0 1 0 0.01 0'],STROKE);
+// scaffold right
+grp(12.0,.9,['M752 600 V330','M806 600 V330','M744 600 H814','M744 530 H814','M744 460 H814','M744 390 H814','M752 600 L806 530','M806 530 L752 460','M752 460 L806 390'],OR);
+// dims
+const dimB=grp(14.2,.7,['M170 720 H730','M170 706 v28','M730 706 v28','M180 712 l-10 8 l10 8','M720 712 l10 8 l-10 8'],THIN);
+const dimV=grp(14.35,.7,['M40 600 V120','M26 600 h28','M26 120 h28','M32 130 l8 -10 l8 10','M32 590 l8 10 l8 -10'],THIN);
+const dimT1=el('text',{x:450,y:760,'text-anchor':'middle',fill:'#9a9a9a','font-family':'Inter','font-size':22,'font-weight':500,'letter-spacing':'2'},hg);dimT1.textContent='12,40 m';
+const dimT2=el('text',{x:0,y:0,'text-anchor':'middle',fill:'#9a9a9a','font-family':'Inter','font-size':22,'font-weight':500,'letter-spacing':'2',transform:'translate(16 360) rotate(-90)'},hg);dimT2.textContent='9,80 m';
+// callouts
+const CALL=[
+  {t:11.3,ax:450,ay:660,ex:900,ey:690,lab:'Gros œuvre',sub:'Fondations, maçonnerie, béton'},
+  {t:12.3,ax:806,ay:470,ex:900,ey:470,lab:'Façade & ravalement',sub:'Enduits, ITE, échafaudage'},
+  {t:13.2,ax:580,ay:230,ex:900,ey:170,lab:'Toiture & couverture',sub:'Tuiles, ardoise, zinc'},
+  {t:14.0,ax:610,ay:400,ex:900,ey:330,lab:'Second œuvre',sub:'Isolation, plâtrerie, menuiseries'},
+  {t:14.6,ax:450,ay:775,ex:900,ey:820,lab:"Bureau d'études",sub:'Plans, calculs, optimisation'},
+];
+CALL.forEach(c=>{
+  c.g=el('g',{},hg);
+  c.dot=el('circle',{cx:c.ax,cy:c.ay,r:7,fill:'#ea5b1f'},c.g);
+  c.ring=el('circle',{cx:c.ax,cy:c.ay,r:7,fill:'none',stroke:'#ea5b1f','stroke-width':2},c.g);
+  const mx=c.ex-40;
+  c.line=prepStroke(el('path',{d:`M${c.ax} ${c.ay} L${mx} ${c.ey} H${c.ex}`,fill:'none',stroke:'#ea5b1f','stroke-width':2},c.g));
+  c.tg=el('g',{},c.g);
+  c.tx=el('text',{x:c.ex+14,y:c.ey+4,fill:'#fff','font-family':'Inter Display','font-size':32,'font-weight':800,'letter-spacing':'-0.5'},c.tg);c.tx.textContent=c.lab;
+  c.st=el('text',{x:c.ex+14,y:c.ey+36,fill:'#8f8f8f','font-family':'Inter','font-size':21,'font-weight':500},c.tg);c.st.textContent=c.sub;
+});
+function S3(t){
+  renderGrid(t,0.55,-(t-10)*14,0);
+  $('k3').style.opacity=E.o3(P(t,10.25,10.8));
+  rev($('t3'),P(t,10.3,10.95));
+  fadeUp($('b3'),P(t,10.7,11.4));
+  groups.forEach(gp=>gp.ps.forEach((p,i)=>draw(p,E.io3(P(t,gp.t0+i*0.06,gp.t0+i*0.06+gp.dur)))));
+  [dimT1,dimT2].forEach(x=>x.style.opacity=P(t,14.8,15.2));
+  CALL.forEach(c=>{
+    const k=P(t,c.t,c.t+.25);
+    c.dot.setAttribute('r',7*E.oB(k));
+    const rk=P(t,c.t,c.t+.9);c.ring.setAttribute('r',7+rk*26);c.ring.style.opacity=(1-rk)*(k>0?1:0);
+    draw(c.line,E.o4(P(t,c.t+.1,c.t+.55)));
+    const kt=P(t,c.t+.35,c.t+.8);c.tg.style.opacity=E.o3(kt);c.tg.style.transform=`translateX(${(1-E.o4(kt))*-16}px)`;
+  });
+  const lit=E.io3(P(t,15.3,16.3));
+  roofFill.setAttribute('opacity',lit*0.16);wallFill.setAttribute('opacity',lit*0.9);
+  winFill.forEach((w,i)=>w.setAttribute('opacity',E.o3(P(t,15.4+i*.12,15.9+i*.12))*0.9));
+  const sc=1+0.04*E.io3(P(t,10,18));
+  HS.style.transform=`scale(${sc})`;HS.style.transformOrigin='40% 60%';
+}
+
+/* ---------- S4 Gantt ---------- */
+const GS=$('gantt');
+const ROWS=[['Études & plans',0,2.2],['Désamiantage',1.8,1.6],['Gros œuvre',3,3.2],['Toiture & façade',5.4,2.6],['Second œuvre',6.6,3.4],['Remise des clés',10,1.2]];
+const gx0=290,gw=680,weeks=12,rowH=58,gy0=50;
+for(let i=0;i<=weeks;i++){const x=gx0+i*gw/weeks;el('line',{x1:x,y1:gy0-12,x2:x,y2:gy0+ROWS.length*rowH,stroke:'#232323','stroke-width':1},GS);if(i<weeks){const tt=el('text',{x:x+gw/weeks/2,y:gy0-22,'text-anchor':'middle',fill:'#5f5f5f','font-family':'Inter','font-size':15,'font-weight':600,'letter-spacing':'1'},GS);tt.textContent='S'+(i+1)}}
+const GR=ROWS.map((r,i)=>{
+  const y=gy0+i*rowH+14;
+  const lab=el('text',{x:0,y:y+21,fill:'#d6d6d6','font-family':'Inter','font-size':22,'font-weight':600},GS);lab.textContent=r[0];
+  const x=gx0+r[1]*gw/weeks,w=r[2]*gw/weeks;
+  const bg=el('rect',{x,y,width:0,height:30,rx:8,fill:'#2a2a2a'},GS);
+  const fg=el('rect',{x,y,width:0,height:30,rx:8,fill:'#ea5b1f'},GS);
+  const ck=el('path',{d:`M${x+w+14} ${y+15} l7 7 l13 -14`,fill:'none',stroke:'#16a34a','stroke-width':3.5,'stroke-linecap':'round','stroke-linejoin':'round'},GS);prepStroke(ck);
+  return {lab,bg,fg,ck,x,w,i};
+});
+const play=el('line',{x1:gx0,y1:gy0-12,x2:gx0,y2:gy0+ROWS.length*rowH+6,stroke:'#fff','stroke-width':2},GS);
+const playHead=el('path',{d:'M-8 0 h16 l-8 10 z',fill:'#fff'},GS);
+const STATS=[{v:200,pre:'+',suf:'',lab:'chantiers livrés'},{v:48,pre:'',suf:' h',lab:'pour recevoir votre devis'},{v:15,pre:'–',suf:' %',lab:"d'économie moyenne identifiée"},{v:1,pre:'',suf:'',lab:'interlocuteur dédié, de A à Z'}];
+const statEls=STATS.map((s,i)=>{const d=document.createElement('div');d.className='abs stat';d.style.cssText=`left:${120+i*420}px;top:750px;width:400px`;d.innerHTML=`<div class="num"></div><div class="lab">${s.lab}</div>`;$('stats').appendChild(d);
+  if(i>0){const l=document.createElement('div');l.className='abs';l.style.cssText=`left:${120+i*420-30}px;top:750px;width:1px;height:200px;background:#2c2c2c;transform-origin:top`;$('stats').appendChild(l);s.ln=l}
+  return d});
+function S4(t){
+  renderGrid(t,0.4,0,-(t-18)*12);
+  $('k4').style.opacity=E.o3(P(t,18.25,18.8));
+  rev($('t4'),P(t,18.3,18.95));
+  fadeUp($('b4'),P(t,18.7,19.4));
+  GS.style.opacity=E.o3(P(t,18.5,19));
+  GR.forEach(r=>{
+    const k=E.o4(P(t,18.7+r.i*.12,19.4+r.i*.12));
+    r.bg.setAttribute('width',r.w*k);r.lab.style.opacity=k;
+  });
+  const ph=E.io3(P(t,19.3,22.6)); const px=gx0+ph*gw;
+  play.setAttribute('x1',px);play.setAttribute('x2',px);playHead.setAttribute('transform',`translate(${px} ${gy0-12})`);
+  play.style.opacity=playHead.style.opacity=P(t,19.2,19.4);
+  GR.forEach(r=>{const f=clamp((px-r.x)/r.w);r.fg.setAttribute('width',r.w*f);draw(r.ck,E.o3(clamp((f>=1?1:0)*P(t,19.3+((r.x+r.w-gx0)/gw)*3.3,19.6+((r.x+r.w-gx0)/gw)*3.3))))});
+  $('statline').style.transform=`scaleX(${E.io3(P(t,20.4,21.2))})`;
+  STATS.forEach((s,i)=>{
+    const a=20.7+i*.18, k=P(t,a,a+.5);
+    fadeUp(statEls[i],k,40);
+    const c=E.o4(P(t,a,a+1.3));
+    statEls[i].querySelector('.num').innerHTML=`<span class="${i==3?'o':''}">${s.pre}${Math.round(s.v*c)}${s.suf}</span>`;
+    if(s.ln)s.ln.style.transform=`scaleY(${E.o4(P(t,a-.1,a+.5))})`;
+  });
+}
+
+/* ---------- S5 ---------- */
+const fimgs=[];for(let i=1;i<=FOOT_N;i++){const im=new Image();im.src=`f/${String(i).padStart(3,'0')}.jpg`;fimgs.push(im)}
+const fc=$('foot').getContext('2d');
+const PROD=[
+  {img:'a/mp-25.webp',tag:'Engins',nm:'Mini-pelles<br>Kubota',sp:'2 à 3 t · poids réel garanti',pf:'dès',pr:'18 190 € HT',fit:'cover',pos:'50% 60%'},
+  {img:'a/vue-ensemble.webp',tag:'Manutention',nm:'Chariots<br>élévateurs',sp:'Électriques · 1 à 5 t · SAV inclus',pf:'dès',pr:'9 990 € HT',fit:'contain',pos:'50% 50%',bg:'#fff'},
+  {img:'a/laine-de-roche-stock.webp',tag:'Matériaux',nm:'Laine de roche<br>& plaques BA13',sp:'Quantités calculées en ligne',pf:'',pr:'Livré sur chantier',fit:'cover',pos:'50% 60%'},
+];
+const pcs=PROD.map((p,i)=>{const d=document.createElement('div');d.className='pcard';d.style.left=(120+i*580)+'px';d.style.top='290px';
+  d.innerHTML=`<div class="img" style="background:${p.bg||'#eee'}"><img src="${p.img}" style="object-fit:${p.fit};object-position:${p.pos}"></div><div class="tx"><div class="tag">${p.tag}</div><div class="nm">${p.nm}</div><div class="sp">${p.sp}</div></div><div class="pr">${p.pf?`<small>${p.pf}</small>`:''}${p.pr}</div>`;
+  $('pcards').appendChild(d);return d});
+function S5(t){
+  renderGrid(t,0.25*(t<27.6?1:0),0,0);
+  const A=t<27.75;
+  $('s5a').style.display=A?'block':'none';$('s5b').style.display=A?'none':'block';
+  if(A){
+    $('k5').style.opacity=E.o3(P(t,24.25,24.8));
+    rev($('t5'),P(t,24.3,24.95),P(t,27.2,27.6));
+    fadeUp($('b5'),P(t,24.7,25.4));
+    $('b5').style.opacity*=1-P(t,27.1,27.5);
+    // footage: 8.2s at 30fps, play from start
+    const fi=clamp(Math.floor((t-24)*30),0,FOOT_N-1);
+    const im=fimgs[(fi+60)%FOOT_N];
+    const reveal=E.ioX(P(t,24.1,25.0));
+    const sc=1.08-0.06*P(t,24,27.75);
+    fc.clearRect(0,0,960,1080);
+    const iw=720,ih=768, s=Math.max(960/iw,1080/ih)*sc;
+    const dw=iw*s,dh=ih*s;
+    fc.drawImage(im,(960-dw)/2,(1080-dh)/2,dw,dh);
+    $('footwrap').style.clipPath=`inset(0 0 ${(1-reveal)*100}% 0)`;
+    const out=E.iX(P(t,27.2,27.75));
+    $('footwrap').style.transform=`translateX(${out*-960}px)`;
+    $('footwrap').style.width=(960+out*960)+'px';
+  } else {
+    rev($('s5h').parentNode? $('s5h'):$('s5h'),0);
+    fadeUp($('s5h'),P(t,27.8,28.4));
+    pcs.forEach((c,i)=>{
+      const a=27.85+i*.22, k=P(t,a,a+.8);
+      const y=(1-E.o5(k))*700;
+      c.style.transform=`translateY(${y}px) rotate(${(1-E.o5(k))*(i-1)*6}deg)`;
+      c.style.opacity=k>0?1:0;
+      const im=c.querySelector('img');im.style.transform=`scale(${1.15-0.15*E.o3(P(t,a,a+3))})`;
+    });
+    $('pcards').style.transform=`translateX(${-E.io3(P(t,28.5,32))*24}px)`;
+  }
+}
+
+/* ---------- S6 map ---------- */
+const cx6=1340,cy6=560,R6=400;
+const hexPts=[0,1,2,3,4,5].map(i=>{const a=-Math.PI/2+i*Math.PI/3;return [cx6+R6*Math.cos(a),cy6+R6*Math.sin(a)]});
+function inHex(x,y){const dx=Math.abs(x-cx6),dy=Math.abs(y-cy6);const r=R6;return dx<=r*Math.sqrt(3)/2 && dy<= r - dx/Math.sqrt(3)}
+const MS=$('map');
+const hexPath=prepStroke(el('path',{d:'M'+hexPts.map(p=>p.join(' ')).join(' L')+' Z',fill:'none',stroke:'#3a3a3a','stroke-width':2},MS));
+const PARIS=[1330,300];
+const CITIES=[['Lille',1355,200],['Strasbourg',1610,330],['Rennes',1080,360],['Brest',995,345],['Nantes',1060,470],['Dijon',1490,440],['Lyon',1470,590],['Bordeaux',1110,650],['Clermont-Fd',1350,590],['Toulouse',1240,780],['Montpellier',1400,790],['Marseille',1510,800],['Nice',1620,740]];
+const routes=CITIES.map((c,i)=>{
+  const [n,x,y]=c;const mx=(PARIS[0]+x)/2,my=(PARIS[1]+y)/2;const dx=x-PARIS[0],dy=y-PARIS[1];const len=Math.hypot(dx,dy);
+  const nx=-dy/len,ny=dx/len;const bend=len*0.18*(i%2?1:-1);
+  const p=prepStroke(el('path',{d:`M${PARIS[0]} ${PARIS[1]} Q${mx+nx*bend} ${my+ny*bend} ${x} ${y}`,fill:'none',stroke:'#ea5b1f','stroke-width':2.2,'stroke-linecap':'round',opacity:.9},MS));
+  const d=el('circle',{cx:x,cy:y,r:0,fill:'#fff'},MS);
+  const tx=el('text',{x:x+14,y:y+6,fill:'#bdbdbd','font-family':'Inter','font-size':19,'font-weight':600},MS);tx.textContent=n;
+  return {p,d,tx,a:32.85+i*0.09,len};
+});
+const pr=el('circle',{cx:PARIS[0],cy:PARIS[1],r:0,fill:'none',stroke:'#ea5b1f','stroke-width':2},MS);
+const pdot=el('circle',{cx:PARIS[0],cy:PARIS[1],r:0,fill:'#ea5b1f'},MS);
+const ptx=el('text',{x:PARIS[0]+20,y:PARIS[1]-14,fill:'#fff','font-family':'Inter Display','font-size':30,'font-weight':800},MS);ptx.textContent='Paris · Île-de-France';
+const dc=$('dots').getContext('2d');const DOTS=[];
+for(let y=cy6-R6;y<=cy6+R6;y+=20)for(let x=cx6-R6;x<=cx6+R6;x+=20)if(inHex(x,y))DOTS.push([x,y,Math.hypot(x-PARIS[0],y-PARIS[1])]);
+function S6(t){
+  renderGrid(t,0,0,0);
+  rev($('t6a'),P(t,32.3,32.95));rev($('t6b'),P(t,32.42,33.07));
+  fadeUp($('b6'),P(t,32.8,33.5));
+  draw(hexPath,E.io3(P(t,32.1,33.2)));
+  dc.clearRect(0,0,W,H);
+  const wave=(t-32.3)*900;
+  for(const [x,y,d] of DOTS){const k=clamp((wave-d)/200);if(k<=0)continue;dc.globalAlpha=0.35+0.25*k;dc.fillStyle='#6a6a6a';dc.beginPath();dc.arc(x,y,2.2*E.oB(k),0,6.283);dc.fill()}
+  dc.globalAlpha=1;
+  pdot.setAttribute('r',11*E.oB(P(t,32.5,32.9)));
+  const pk=((t-32.5)%1.2)/1.2;pr.setAttribute('r',11+pk*40);pr.style.opacity=t>32.5?(1-pk):0;
+  ptx.style.opacity=E.o3(P(t,32.7,33.2));
+  routes.forEach(r=>{const k=E.io3(P(t,r.a,r.a+.75));draw(r.p,k);r.d.setAttribute('r',6*E.oB(P(t,r.a+.7,r.a+.95)));r.tx.style.opacity=E.o3(P(t,r.a+.75,r.a+1.1))});
+  $('map').style.transform=`scale(${1+0.03*P(t,32,36)})`;$('map').style.transformOrigin='1340px 560px';
+}
+
+/* ---------- S7 ---------- */
+const CERTS=[['a/5f9effb9c4.png','Qualibat','Fiabilité reconnue'],['a/7b04986e9f.png','RGE','Garant environnement'],['a/751db765b2.png','Amiante SS4','Retrait certifié'],['a/72a02d0ad2.png','FFB','Fédération du Bâtiment'],['a/1e70d4d3c5.png','Décennale','Garantie 10 ans']];
+const certEls=CERTS.map((c,i)=>{const d=document.createElement('div');d.className='cert';d.style.left=(185+i*320)+'px';d.style.top='430px';d.innerHTML=`<div class="tile"><img src="${c[0]}"></div><div class="l1">${c[1]}</div><div class="l2">${c[2]}</div>`;$('certs').appendChild(d);return d});
+function S7(t){
+  renderGrid(t,0.3,0,0);
+  rev($('t7a'),P(t,36.3,36.9));rev($('t7b'),P(t,36.55,37.15));rev($('t7c'),P(t,36.8,37.4));
+  certEls.forEach((c,i)=>{const a=37.0+i*.14,k=P(t,a,a+.6);c.style.opacity=E.o3(k);c.style.transform=`translateY(${(1-E.o5(k))*80}px) scale(${0.9+0.1*E.oB(k)})`});
+}
+
+/* ---------- S8 ---------- */
+function S8(t){
+  renderGrid(t,0.3*P(t,40,41),0,0);
+  animLogo(L8,t,40.2,1);
+  fadeUp($('e1'),P(t,41.4,42));
+  const e2=$('e2');fadeUp(e2,P(t,41.7,42.3));
+  fadeUp($('e3'),P(t,42.1,42.7));
+  $('e1').firstChild.style.transform=`scale(${1+0.025*Math.sin(Math.max(0,t-42.2)*4.2)*P(t,42.2,42.6)})`;
+}
+
+/* ---------- HUD / wipes / grain ---------- */
+const CS=$('crops');
+[[60,96,1],[1860,96,-1]].forEach(([x,y,s])=>{});
+const cropEls=[[50,90],[1870,90],[50,990],[1870,990]].map(([x,y],i)=>{const sx=i%2?-1:1,sy=i>1?-1:1;return el('path',{d:`M${x} ${y+sy*28} V${y} H${x+sx*28}`,fill:'none',stroke:'#4a4a4a','stroke-width':2},CS)});
+const SEC=[[10,18,'01 / 03 &nbsp; Construire'],[18,24,'02 / 03 &nbsp; Piloter'],[24,32,'03 / 03 &nbsp; Livrer'],[32,36,'Zone d\'intervention'],[36,40,'Garanties']];
+function HUD(t){
+  const on=t>=10&&t<40;
+  $('hudL').innerHTML='Cohesif <span style="color:#ea5b1f">BTP</span>';
+  $('hudL').style.opacity=on?1:0;
+  const s=SEC.find(s=>t>=s[0]&&t<s[1]);$('hudR').innerHTML=s?s[2]:'';$('hudR').style.opacity=on?1:0;
+  CS.style.opacity=(t>=6.15&&t<46)?0.9:P(t,0,0.8)*0.9;
+}
+function WIPE(t){
+  let o=null;for(const c of WIPES){if(t>c-0.42&&t<c+0.42){o=c;break}}
+  const wO=$('wO'),wB=$('wB');
+  if(o===null){wO.style.display=wB.style.display='none';return}
+  wO.style.display=wB.style.display='block';
+  const f=(t0,dur)=>{const a=E.io3(P(t,t0,t0+dur));return a};
+  // orange: in from left
+  const a1=f(o-0.40,0.36),b1=f(o+0.02,0.36);
+  wO.style.left=(b1*W)+'px';wO.style.width=Math.max(0,(a1-b1)*W)+'px';
+  const a2=f(o-0.33,0.33),b2=f(o+0.0,0.33);
+  wB.style.left=(b2*W)+'px';wB.style.width=Math.max(0,(a2-b2)*W)+'px';
+}
+const gc=$('grain').getContext('2d');const gid=gc.createImageData(960,540);
+function GRAIN(t){const r=rnd(Math.floor(t*30)*7919+1);const d=gid.data;for(let i=0;i<d.length;i+=4){const v=r()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}gc.putImageData(gid,0,0)}
+
+const SCN={s1:S1,s2:S2,s3:S3,s4:S4,s5:S5,s6:S6,s7:S7,s8:S8};
+window.seek=function(t){
+  for(const k in T){const [a,b]=T[k];const on=t>=a&&t<b;$(k).style.display=on?'block':'none';if(on)SCN[k](t)}
+  HUD(t);WIPE(t);GRAIN(t);
+  $('fade').style.opacity=E.io3(P(t,45.1,46));
+};
+window.ready=Promise.all([document.fonts.ready,...[...document.images].map(i=>i.decode().catch(()=>{})),...fimgs.map(i=>i.decode().catch(()=>{}))]);
+window.DUR=DUR;
+</script>
+</body></html>
